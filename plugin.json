@@ -1,0 +1,11 @@
+﻿{
+  "Group": "GBS",
+  "FriendlyName": "Product Management",
+  "SystemName": "GBS.Product.Management",
+  "Version": "1.0",
+  "SupportedVersions": [ "4.10" ],
+  "Author": "GBS",
+  "DisplayOrder": 1,
+  "FileName": "GBS.Plugin.ProductManagement.dll",
+  "Description": "This plugin allow you to manage product group of product"
+}

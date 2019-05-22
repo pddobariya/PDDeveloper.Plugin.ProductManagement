@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Language Name="English">
+  <LocaleResource Name="Plugins.GBS.ProductManagement">
+    <Value>Product management</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Menu.Root">
+    <Value>GBS</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Menu.Root.ProductManagement">
+    <Value>Product management</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentSearch.Name">
+    <Value>Segment Name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentSearch.Name.Hint">
+    <Value>Segment Name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentSearch.Store">
+    <Value>Stores</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentSearch.Store.hint">
+    <Value>Stores</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Fields.Name">
+    <Value>Name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Fields.Name.Hint">
+    <Value>Name of segment</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Fields.Name.Required">
+    <Value>Segment name is required</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Fields.Description">
+    <Value>Description</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Fields.Description.Hint">
+    <Value>Segment description</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Fields.DisplayOrder">
+    <Value>Display order</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Fields.DisplayOrder.Hint">
+    <Value>Display order</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Fields.StoreId">
+    <Value>Store</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Fields.StoreId.Hint">
+    <Value>Store</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.AddNew">
+    <Value>Create a new segment</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.BackToList">
+    <Value>back to product segment list</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.EditSegmentDetail">
+    <Value>Edit product segment details</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Info">
+    <Value>Info</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Added">
+    <Value>The new product segment has been added successfully.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.ActivityLog.CreateSegment">
+    <Value>Added a product segment ('{0}')</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Updated">
+    <Value>The product segment has been updated successfully.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.ActivityLog.EditSegment">
+    <Value>Edited a product segment ('{0}')</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Deleted">
+    <Value>The product segment has been deleted successfully.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.ActivityLog.DeletedSegment">
+    <Value>Deleted a product segment ('{0}')</Value>
+  </LocaleResource>
+  
+</Language>
