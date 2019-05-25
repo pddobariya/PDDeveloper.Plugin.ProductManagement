@@ -57,9 +57,6 @@
   <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.EditSegmentDetail">
     <Value>Edit product segment details</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Info">
-    <Value>Info</Value>
-  </LocaleResource>
   <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Added">
     <Value>The new product segment has been added successfully.</Value>
   </LocaleResource>
@@ -78,5 +75,78 @@
   <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.ActivityLog.DeletedSegment">
     <Value>Deleted a product segment ('{0}')</Value>
   </LocaleResource>
-  
+  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentOption.Fields.ProductSegmentManagerId">
+    <Value>Product segment</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentOption.Fields.ProductSegmentManagerId.Hint">
+    <Value>Product segment</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentOption.Fields.BeginsWith">
+    <Value>Begins with</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentOption.Fields.BeginsWith.Hint">
+    <Value>Begins with</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentOption.Fields.EndsWith">
+    <Value>Ends with</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentOption.Fields.EndsWith.Hint">
+    <Value>Ends with</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentOption.Fields.DoesNotEndWith">
+    <Value>Does not ends with</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentOption.Fields.DoesNotEndWith.Hint">
+    <Value>Does not ends with</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentOption.Fields.Contains">
+    <Value>Contains</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentOption.Fields.Contains.Hint">
+    <Value>Contains</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.IncludeExclude.Product.AddNew">
+    <Value>Select product</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.ExcludeProduct.Fields.Name">
+    <Value>Product name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.ExcludeProduct.Fields.ProductType">
+    <Value>Exclude</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Exclude.Product.AddNew">
+    <Value>Add new Exclude product</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.IncludeProduct.Fields.Name">
+    <Value>Product name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.IncludeProduct.Fields.ProductType">
+    <Value>Include</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Include.Product.AddNew">
+    <Value>Add new Include product</Value>
+  </LocaleResource>
+
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Info">
+    <Value>Info</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Condition">
+    <Value>Condition</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Include">
+    <Value>Include</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Exclude">
+    <Value>Exclude</Value>
+  </LocaleResource>
+
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Condition.Message">
+    <Value>Required to save a segment for add or update condition</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Include.Message">
+    <Value>Required to save a segment for add or remove include product</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Exclude.Message">
+    <Value>Required to save a segment for add or remove exclude product</Value>
+  </LocaleResource>
 </Language>

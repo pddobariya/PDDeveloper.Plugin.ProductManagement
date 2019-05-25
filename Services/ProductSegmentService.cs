@@ -27,7 +27,7 @@ namespace GBS.Plugin.ProductManagement.Services
 
         #region Methods
         /// <summary>
-        /// Gets all pickup points
+        /// Gets all product segment
         /// </summary>
         /// <param name="storeId">The store identifier; pass 0 to load all records</param>
         /// <param name="pageIndex">Page index</param>

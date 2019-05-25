@@ -1,0 +1,132 @@
+@model ProductSegmentModel
+
+<div class="panel-group">
+    @if (Model.Id > 0)
+    {
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div id="productSegmentOpction-grid"></div>
+                <script>
+                    $(document).ready(function() {
+                        $("#productSegmentOpction-grid").kendoGrid({
+                            dataSource: {
+                                type: "json",
+                                transport: {
+                                    read: {
+                                        url: "@Html.Raw(Url.Action("ProductSegmentOpctionList", "ProductSegment"))",
+                                        type: "POST",
+                                        dataType: "json",
+                                        data: function() {
+                                            var data = {
+                                                productSegmentId: @Model.Id,
+                                            };
+                                            addAntiForgeryToken(data);
+                                            return data;
+                                        }
+                                    },
+                                    create: {
+                                        url: "@Html.Raw(Url.Action("ProductFilterOptionAdd", "ProductSegment", new { productSegmentId = Model.Id }))",
+                                        type: "POST",
+                                        dataType: "json",
+                                        data: addAntiForgeryToken
+                                    },
+                                    update: {
+                                        url: "@Html.Raw(Url.Action("ProductFilterOptionUpdate", "ProductSegment"))",
+                                        type: "POST",
+                                        dataType: "json",
+                                        data: addAntiForgeryToken
+                                    },
+                                    destroy: {
+                                        url: "@Html.Raw(Url.Action("ProductFilterOptionDelete", "ProductSegment"))",
+                                        type: "POST",
+                                        dataType: "json",
+                                        data: addAntiForgeryToken
+                                    }
+                                },
+                                schema: {
+                                    data: "Data",
+                                    total: "Total",
+                                    errors: "Errors",
+                                    model: {
+                                        id: "Id",
+                                        fields: {
+                                            Id: { editable: false, type: "number" },
+                                            BeginsWith: { editable: true, type: "string" },
+                                            EndsWith: { editable: true, type: "string" },
+                                            DoesNotEndWith: { editable: true, type: "string" },
+                                            Contains: { editable: true, type: "string" }
+                                        }
+                                    }
+                                },
+                                requestEnd: function(e) {
+                                    if (e.type == "create" || e.type == "update") {
+                                        this.read();
+                                    }
+                                },
+                                error: function(e) {
+                                    display_kendoui_grid_error(e);
+                                    // Cancel the changes
+                                    this.cancelChanges();
+                                },
+                                serverPaging: true,
+                                serverFiltering: true,
+                                serverSorting: true
+                            },
+                            toolbar: [{ name: "create", text: "@T("Admin.Common.AddNewRecord")" }],
+                            editable: {
+                                confirmation: "@T("Admin.Common.DeleteConfirmation")",
+                                mode: "inline"
+                            },
+                            scrollable: false,
+                            columns: [
+                                {
+                                    field: "BeginsWith",
+                                    title: "@T("Plugins.GBS.ProductManagement.SegmentOption.Fields.BeginsWith")",
+                                    width: 300
+                                }, {
+                                    field: "EndsWith",
+                                    title: "@T("Plugins.GBS.ProductManagement.SegmentOption.Fields.EndsWith")",
+                                    width: 300
+
+                                }, {
+                                    field: "DoesNotEndWith",
+                                    title: "@T("Plugins.GBS.ProductManagement.SegmentOption.Fields.DoesNotEndWith")",
+                                    width: 300
+
+                                }, {
+                                    field: "Contains",
+                                    title: "@T("Plugins.GBS.ProductManagement.SegmentOption.Fields.Contains")",
+                                    width: 300
+
+                                }, {
+                                    command: [
+                                        {
+                                            name: "edit",
+                                            text: {
+                                                edit: "@T("Admin.Common.Edit")",
+                                                update: "@T("Admin.Common.Update")",
+                                                cancel: "@T("Admin.Common.Cancel")"
+                                            }
+                                        }, {
+                                            name: "destroy",
+                                            text: "@T("Admin.Common.Delete")"
+                                        }
+                                    ],
+                                    width: 250
+                                }
+                            ]
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="panel panel-default">
+            <div class="panel-body">
+                @T("Plugins.GBS.ProductManagement.Segment.Tab.Condition.Message")
+            </div>
+        </div>
+    }
+</div>

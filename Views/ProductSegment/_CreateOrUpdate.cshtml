@@ -1,4 +1,4 @@
-﻿@model GBS.Plugin.ProductManagement.Models.ProductSegmentModel
+﻿@model ProductSegmentModel
 
 @inject IEventPublisher eventPublisher
 
@@ -9,6 +9,9 @@
     <div class="form-horizontal">
         <nop-tabs id="productSegment-edit">
             <nop-tab asp-name="tab-info" asp-title="@T("Plugins.GBS.ProductManagement.Segment.Tab.Info")" asp-default="true">@await Html.PartialAsync("~/Plugins/GBS.Plugin.ProductManagement/Views/ProductSegment/_CreateOrUpdate.Info.cshtml", Model)</nop-tab>
+            <nop-tab asp-name="tab-Condition" asp-title="@T("Plugins.GBS.ProductManagement.Segment.Tab.Condition")">@await Html.PartialAsync("~/Plugins/GBS.Plugin.ProductManagement/Views/ProductSegment/_CreateOrUpdate.SegmentOption.cshtml", Model)</nop-tab>
+            <nop-tab asp-name="tab-Include" asp-title="@T("Plugins.GBS.ProductManagement.Segment.Tab.Include")">@await Html.PartialAsync("~/Plugins/GBS.Plugin.ProductManagement/Views/ProductSegment/_CreateOrUpdate.IncludeProduct.cshtml", Model)</nop-tab>
+            <nop-tab asp-name="tab-Exclude" asp-title="@T("Plugins.GBS.ProductManagement.Segment.Tab.Exclude")">@await Html.PartialAsync("~/Plugins/GBS.Plugin.ProductManagement/Views/ProductSegment/_CreateOrUpdate.ExcludeProduct.cshtml", Model)</nop-tab>
         </nop-tabs>
     </div>
 </div>

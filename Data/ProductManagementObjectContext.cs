@@ -30,6 +30,8 @@ namespace GBS.Plugin.ProductManagement.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new ProductSegmentMap());
+            modelBuilder.ApplyConfiguration(new ProductFilterOptionsMap());
+            modelBuilder.ApplyConfiguration(new Product_Include_ExcludeMap());
             base.OnModelCreating(modelBuilder);
         }
 
@@ -155,6 +157,8 @@ namespace GBS.Plugin.ProductManagement.Data
         {
             //drop the table
             this.DropPluginTable(nameof(ProductSegment));
+            this.DropPluginTable(nameof(ProductFilterOptions));
+            this.DropPluginTable(nameof(Product_Include_ExcludeMap));
         }
 
         #endregion

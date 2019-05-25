@@ -27,7 +27,7 @@ namespace GBS.Plugin.ProductManagement.Domain
         /// Gets or sets a store identifier
         /// </summary>
         public int StoreId { get; set; }
-
+        
         /// <summary>
         /// Get or set created on
         /// </summary>

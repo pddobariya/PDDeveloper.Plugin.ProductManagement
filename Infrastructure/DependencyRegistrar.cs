@@ -26,14 +26,26 @@ namespace GBS.Plugin.ProductManagement.Infrastructure
         /// <param name="config">Config</param>
         public virtual void Register(ContainerBuilder builder, ITypeFinder typeFinder, NopConfig config)
         {
+            //Factory
             builder.RegisterType<SegmentModelFactory>().As<ISegmentModelFactory>().InstancePerLifetimeScope();
+
+            //Services
             builder.RegisterType<ProductSegmentService>().As<IProductSegmentService>().InstancePerLifetimeScope();
+            builder.RegisterType<ProductFilterOptionService>().As<IProductFilterOptionService>().InstancePerLifetimeScope();
 
             //data context
             builder.RegisterPluginDataContext<ProductManagementObjectContext>("nop_object_context_product_segment");
 
             //override required repository with our custom context
             builder.RegisterType<EfRepository<ProductSegment>>().As<IRepository<ProductSegment>>()
+                .WithParameter(ResolvedParameter.ForNamed<IDbContext>("nop_object_context_product_segment"))
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<EfRepository<ProductFilterOptions>>().As<IRepository<ProductFilterOptions>>()
+                .WithParameter(ResolvedParameter.ForNamed<IDbContext>("nop_object_context_product_segment"))
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<EfRepository<Product_Include_Exclude>>().As<IRepository<Product_Include_Exclude>>()
                 .WithParameter(ResolvedParameter.ForNamed<IDbContext>("nop_object_context_product_segment"))
                 .InstancePerLifetimeScope();
         }
