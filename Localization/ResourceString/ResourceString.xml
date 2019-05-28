@@ -139,6 +139,25 @@
   <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Exclude">
     <Value>Exclude</Value>
   </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Product">
+    <Value>Product</Value>
+  </LocaleResource>
+  
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Products.Fields.Name">
+    <Value>Product Name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Products.Fields.Sku">
+    <Value>SKU</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Products.Fields.Sku">
+    <Value>SKU</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Products.Fields.Exclude">
+    <Value>Exclude</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.Products.Fields.ExcludeConfirmation">
+    <Value>Are you sure you want to exclude this product?</Value>
+  </LocaleResource>
 
   <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Condition.Message">
     <Value>Required to save a segment for add or update condition</Value>
@@ -148,5 +167,8 @@
   </LocaleResource>
   <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Exclude.Message">
     <Value>Required to save a segment for add or remove exclude product</Value>
+  </LocaleResource>
+<LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Product.Message">
+    <Value>Required to save a segment for show products</Value>
   </LocaleResource>
 </Language>

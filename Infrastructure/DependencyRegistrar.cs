@@ -6,6 +6,7 @@ using GBS.Plugin.ProductManagement.Factories;
 using GBS.Plugin.ProductManagement.Services;
 using Nop.Core.Configuration;
 using Nop.Core.Data;
+using Nop.Core.Domain.Catalog;
 using Nop.Core.Infrastructure;
 using Nop.Core.Infrastructure.DependencyManagement;
 using Nop.Data;

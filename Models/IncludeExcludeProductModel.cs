@@ -52,4 +52,13 @@ namespace GBS.Plugin.ProductManagement.Models
 
         public int[] SelectedProductIds { get; set; }
     }
+
+    public class Products
+    {
+        public int Id { get; set; }
+        [NopResourceDisplayName("Plugins.GBS.ProductManagement.Products.Fields.Name")]
+        public string Name { get; set; }
+        [NopResourceDisplayName("Plugins.GBS.ProductManagement.Products.Fields.Sku")]
+        public string Sku { get; set; }
+    }
 }

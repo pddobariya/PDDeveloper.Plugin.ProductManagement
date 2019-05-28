@@ -21,6 +21,7 @@
     <None Remove="Views\ProductSegment\_CreateOrUpdate.ExcludeProduct.cshtml" />
     <None Remove="Views\ProductSegment\_CreateOrUpdate.IncludeProduct.cshtml" />
     <None Remove="Views\ProductSegment\_CreateOrUpdate.Info.cshtml" />
+    <None Remove="Views\ProductSegment\_CreateOrUpdate.Products.cshtml" />
     <None Remove="Views\ProductSegment\_CreateOrUpdate.SegmentOption.cshtml" />
     <None Remove="Views\SegmentList.cshtml" />
     <None Remove="Views\_ViewImports.cshtml" />
@@ -59,6 +60,10 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Views\ProductSegment\_CreateOrUpdate.Products.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
     <Content Include="Views\ProductSegment\_CreateOrUpdate.ExcludeProduct.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -90,9 +95,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="SqlProcedure\GBS_GetProductIdBySegmentId.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Views\ProductSegment\ProductAddPopup.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="SqlProcedure\" />
   </ItemGroup>
   
   <!-- This target execute after "Build" target -->

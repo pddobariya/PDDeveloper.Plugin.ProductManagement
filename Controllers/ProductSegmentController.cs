@@ -77,7 +77,7 @@ namespace GBS.Plugin.ProductManagement.Controllers
         }
         #endregion
 
-        
+
         #region Methods
 
         #region Product Segment
@@ -347,7 +347,7 @@ namespace GBS.Plugin.ProductManagement.Controllers
         #region IncludeExclude-products
 
         [HttpPost]
-        public virtual IActionResult IncludeExcludeProductList(DataSourceRequest command, int productSegmentId,int productType)
+        public virtual IActionResult IncludeExcludeProductList(DataSourceRequest command, int productSegmentId, int productType)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
                 return Content("Access denied");
@@ -452,7 +452,7 @@ namespace GBS.Plugin.ProductManagement.Controllers
 
         [HttpPost]
         [FormValueRequired("save")]
-        public virtual IActionResult ProductAddPopup(int productSegmentId, string btnId, string formId,int productType, AddIncludeExcludeProductModel model)
+        public virtual IActionResult ProductAddPopup(int productSegmentId, string btnId, string formId, int productType, AddIncludeExcludeProductModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
                 return Content("Access denied");
@@ -483,6 +483,48 @@ namespace GBS.Plugin.ProductManagement.Controllers
             ViewBag.btnId = btnId;
             ViewBag.formId = formId;
             return View("~/Plugins/GBS.Plugin.ProductManagement/Views/ProductSegment/ProductAddPopup.cshtml", model);
+        }
+
+        #endregion
+
+        #region Products
+
+        [HttpPost]
+        public virtual IActionResult ProductList(DataSourceRequest command, int productSegmentId)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
+                return Content("Access denied");
+
+            var products = _productFilterOptionService.GetProductsBySegmentId(productSegmentId, command.Page - 1, command.PageSize);
+
+            var gridModel = new DataSourceResult
+            {
+                Data = products.Select(product => new Products
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Sku = product.Sku
+                }),
+                Total = products.TotalCount
+            };
+
+            return Json(gridModel);
+        }
+
+        public virtual IActionResult ProductExclude(int productSegmentId, int id)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
+                return Content("Access denied");
+
+            _productFilterOptionService.InsertIncludeExcludeProduct(
+                    new Product_Include_Exclude
+                    {
+                        ProductSegmentManagerId = productSegmentId,
+                        ProductType = (int)SegmentProductType.Exclude,
+                        ProductId = id,
+                    });
+
+            return new NullJsonResult();
         }
 
         #endregion

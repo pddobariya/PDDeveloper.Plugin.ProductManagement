@@ -1,8 +1,12 @@
 using System;
+using System.Data;
+using System.Data.Common;
+using System.IO;
 using System.Linq;
 using GBS.Plugin.ProductManagement.Domain;
 using Microsoft.EntityFrameworkCore;
 using Nop.Core;
+using Nop.Core.Infrastructure;
 using Nop.Data;
 using Nop.Data.Extensions;
 
@@ -13,6 +17,12 @@ namespace GBS.Plugin.ProductManagement.Data
     /// </summary>
     public class ProductManagementObjectContext : DbContext, IDbContext
     {
+        #region Const
+
+        private const string procedureStringPath = "~/Plugins/GBS.Plugin.ProductManagement/SqlProcedure/GBS_GetProductIdBySegmentId.sql";
+        
+        #endregion
+
         #region Ctor
 
         public ProductManagementObjectContext(DbContextOptions<ProductManagementObjectContext> options) : base(options)
@@ -33,6 +43,30 @@ namespace GBS.Plugin.ProductManagement.Data
             modelBuilder.ApplyConfiguration(new ProductFilterOptionsMap());
             modelBuilder.ApplyConfiguration(new Product_Include_ExcludeMap());
             base.OnModelCreating(modelBuilder);
+        }
+
+        /// <summary>
+        /// Modify the input SQL query by adding passed parameters
+        /// </summary>
+        /// <param name="sql">The raw SQL query</param>
+        /// <param name="parameters">The values to be assigned to parameters</param>
+        /// <returns>Modified raw SQL query</returns>
+        protected virtual string CreateSqlWithParameters(string sql, params object[] parameters)
+        {
+            //add parameters to sql
+            for (var i = 0; i <= (parameters?.Length ?? 0) - 1; i++)
+            {
+                if (!(parameters[i] is DbParameter parameter))
+                    continue;
+
+                sql = $"{sql}{(i > 0 ? "," : string.Empty)} @{parameter.ParameterName}";
+
+                //whether parameter is output
+                if (parameter.Direction == ParameterDirection.InputOutput || parameter.Direction == ParameterDirection.Output)
+                    sql = $"{sql} output";
+            }
+
+            return sql;
         }
 
         #endregion
@@ -78,7 +112,7 @@ namespace GBS.Plugin.ProductManagement.Data
         /// <returns>An IQueryable representing the raw SQL query</returns>
         public virtual IQueryable<TEntity> EntityFromSql<TEntity>(string sql, params object[] parameters) where TEntity : BaseEntity
         {
-            throw new NotImplementedException();
+            return this.Set<TEntity>().FromSql(CreateSqlWithParameters(sql, parameters), parameters);
         }
         
         /// <summary>
@@ -142,6 +176,20 @@ namespace GBS.Plugin.ProductManagement.Data
                     }
                 }
                 dbInstallationScript += "GO";
+                this.ExecuteSqlScript(dbInstallationScript);
+
+                dbInstallationScript = string.Empty;
+                dbInstallationScript += "IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('dbo.GBS_GetProductIdBySegmentId'))";
+                dbInstallationScript += Environment.NewLine;
+                dbInstallationScript += "BEGIN";
+                dbInstallationScript += Environment.NewLine;
+                dbInstallationScript += "DROP PROCEDURE [dbo].[GBS_GetProductIdBySegmentId]";
+                dbInstallationScript += Environment.NewLine;
+                dbInstallationScript += "END";
+                this.ExecuteSqlScript(dbInstallationScript);
+
+                var _fileProvider = EngineContext.Current.Resolve<INopFileProvider>();
+                dbInstallationScript = File.ReadAllText(_fileProvider.MapPath(procedureStringPath));
                 this.ExecuteSqlScript(dbInstallationScript);
             }
             catch (Exception ex)

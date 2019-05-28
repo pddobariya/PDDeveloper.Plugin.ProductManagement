@@ -1,5 +1,7 @@
 ﻿using GBS.Plugin.ProductManagement.Domain;
 using GBS.Plugin.ProductManagement.Domain.Enums;
+using Nop.Core;
+using Nop.Core.Domain.Catalog;
 using System.Collections.Generic;
 
 namespace GBS.Plugin.ProductManagement.Services
@@ -71,6 +73,14 @@ namespace GBS.Plugin.ProductManagement.Services
         /// <returns>Product_Include_Exclude</returns>
         Product_Include_Exclude GetIncludeExcludeProductById(int id);
 
+        /// <summary>
+        /// Get product list by segment id
+        /// </summary>
+        /// <param name="productSegmentManagerId"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        IPagedList<Product> GetProductsBySegmentId(int productSegmentManagerId, int pageIndex = 0, int pageSize = int.MaxValue);
         #endregion
     }
 }

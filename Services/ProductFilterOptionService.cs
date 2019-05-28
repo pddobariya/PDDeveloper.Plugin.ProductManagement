@@ -1,6 +1,11 @@
-﻿using GBS.Plugin.ProductManagement.Domain;
+﻿using GBS.Plugin.ProductManagement.Data;
+using GBS.Plugin.ProductManagement.Domain;
 using GBS.Plugin.ProductManagement.Domain.Enums;
+using Nop.Core;
 using Nop.Core.Data;
+using Nop.Core.Data.Extensions;
+using Nop.Core.Domain.Catalog;
+using Nop.Data;
 using Nop.Services.Events;
 using System;
 using System.Collections.Generic;
@@ -15,17 +20,26 @@ namespace GBS.Plugin.ProductManagement.Services
         private readonly IRepository<ProductFilterOptions> _productFilterOptionRepository;
         private readonly IRepository<Product_Include_Exclude> _product_Include_ExcludeRepository;
         private readonly IEventPublisher _eventPublisher;
+        private readonly IDataProvider _dataProvider;
+        private readonly ProductManagementObjectContext _dbContext;
+        private readonly NopObjectContext _nopObjectContext;
 
         #endregion
 
         #region Ctor
         public ProductFilterOptionService(IRepository<ProductFilterOptions> productFilterOptionRepository,
             IEventPublisher eventPublisher,
-            IRepository<Product_Include_Exclude> product_Include_ExcludeRepository)
+            IRepository<Product_Include_Exclude> product_Include_ExcludeRepository,
+            IDataProvider dataProvider,
+            ProductManagementObjectContext dbContext,
+            NopObjectContext nopObjectContext)
         {
             this._productFilterOptionRepository = productFilterOptionRepository;
             this._eventPublisher = eventPublisher;
             this._product_Include_ExcludeRepository = product_Include_ExcludeRepository;
+            this._dataProvider = dataProvider;
+            this._dbContext = dbContext;
+            this._nopObjectContext = nopObjectContext;
         }
         #endregion
 
@@ -179,6 +193,31 @@ namespace GBS.Plugin.ProductManagement.Services
                 return null;
 
             return _product_Include_ExcludeRepository.GetById(id);
+        }
+        #endregion
+
+        #region Match product
+        /// <summary>
+        /// Get product list by segment id
+        /// </summary>
+        /// <param name="productSegmentManagerId"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        public virtual IPagedList<Product> GetProductsBySegmentId(int productSegmentManagerId,int pageIndex = 0,int pageSize  = int.MaxValue)
+        {
+            var pProductSegmentManagerId = _dataProvider.GetInt32Parameter("ProductSegmentManagerId", productSegmentManagerId);
+            var pPageIndex = _dataProvider.GetInt32Parameter("PageIndex", pageIndex);
+            var pPageSize = _dataProvider.GetInt32Parameter("PageSize", pageSize);
+
+            //prepare output parameters
+            var pTotalRecords = _dataProvider.GetOutputInt32Parameter("TotalRecords");
+            pTotalRecords.Size = int.MaxValue - 1;
+
+            var products = _nopObjectContext.EntityFromSql<Product>("GBS_GetProductIdBySegmentId", pProductSegmentManagerId, pPageIndex, pPageSize, pTotalRecords);
+            
+            var totalRecords = pTotalRecords.Value != DBNull.Value ? Convert.ToInt32(pTotalRecords.Value) : 0;
+            return new PagedList<Product>(products, pageIndex, pageSize, totalRecords);
         }
         #endregion
     }
