@@ -207,6 +207,17 @@ namespace GBS.Plugin.ProductManagement.Data
             this.DropPluginTable(nameof(ProductSegment));
             this.DropPluginTable(nameof(ProductFilterOptions));
             this.DropPluginTable(nameof(Product_Include_ExcludeMap));
+
+            //Drop Prodecure
+            string dbInstallationScript = string.Empty;
+            dbInstallationScript += "IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('dbo.GBS_GetProductIdBySegmentId'))";
+            dbInstallationScript += Environment.NewLine;
+            dbInstallationScript += "BEGIN";
+            dbInstallationScript += Environment.NewLine;
+            dbInstallationScript += "DROP PROCEDURE [dbo].[GBS_GetProductIdBySegmentId]";
+            dbInstallationScript += Environment.NewLine;
+            dbInstallationScript += "END";
+            Database.ExecuteSqlCommand(dbInstallationScript);
         }
 
         #endregion

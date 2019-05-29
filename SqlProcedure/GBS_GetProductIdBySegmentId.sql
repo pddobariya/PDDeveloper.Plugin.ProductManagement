@@ -1,4 +1,4 @@
-ALTER PROCEDURE GBS_GetProductIdBySegmentId
+CREATE PROCEDURE GBS_GetProductIdBySegmentId
 (
 	@ProductSegmentManagerId INT  = 0,
 	@PageIndex			int = 0, 
