@@ -6,7 +6,7 @@ namespace GBS.Plugin.ProductManagement.Domain
     /// <summary>
     /// Represents a segment of product
     /// </summary>
-    public partial class ProductSegment : BaseEntity
+    public partial class GBS_ProductSegment : BaseEntity
     {
         /// <summary>
         /// Gets or sets a name

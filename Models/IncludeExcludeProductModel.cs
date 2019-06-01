@@ -61,4 +61,18 @@ namespace GBS.Plugin.ProductManagement.Models
         [NopResourceDisplayName("Plugins.GBS.ProductManagement.Products.Fields.Sku")]
         public string Sku { get; set; }
     }
+
+    public class ProductAttributes
+    {
+        public int Id { get; set; }
+        [NopResourceDisplayName("Plugins.GBS.ProductManagement.ProductAttributes.Fields.Name")]
+        public string Name { get; set; }
+    }
+
+    public class ProductSpecificationAttributes
+    {
+        public int Id { get; set; }
+        [NopResourceDisplayName("Plugins.GBS.ProductManagement.ProductSpecificationAttributes.Fields.Name")]
+        public string Name { get; set; }
+    }
 }

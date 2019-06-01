@@ -17,8 +17,8 @@ namespace GBS.Plugin.ProductManagement.Services
     {
         #region Fields
 
-        private readonly IRepository<ProductFilterOptions> _productFilterOptionRepository;
-        private readonly IRepository<Product_Include_Exclude> _product_Include_ExcludeRepository;
+        private readonly IRepository<GBS_ProductFilterOptions> _productFilterOptionRepository;
+        private readonly IRepository<GBS_Product_Include_Exclude> _product_Include_ExcludeRepository;
         private readonly IEventPublisher _eventPublisher;
         private readonly IDataProvider _dataProvider;
         private readonly ProductManagementObjectContext _dbContext;
@@ -27,9 +27,9 @@ namespace GBS.Plugin.ProductManagement.Services
         #endregion
 
         #region Ctor
-        public ProductFilterOptionService(IRepository<ProductFilterOptions> productFilterOptionRepository,
+        public ProductFilterOptionService(IRepository<GBS_ProductFilterOptions> productFilterOptionRepository,
             IEventPublisher eventPublisher,
-            IRepository<Product_Include_Exclude> product_Include_ExcludeRepository,
+            IRepository<GBS_Product_Include_Exclude> product_Include_ExcludeRepository,
             IDataProvider dataProvider,
             ProductManagementObjectContext dbContext,
             NopObjectContext nopObjectContext)
@@ -49,10 +49,10 @@ namespace GBS.Plugin.ProductManagement.Services
         /// </summary>
         /// <param name="segmentId">Segment Identity</param>
         /// <returns></returns>
-        public IList<ProductFilterOptions> GetAllFilterOptionBySegmentId(int segmentId = 0)
+        public IList<GBS_ProductFilterOptions> GetAllFilterOptionBySegmentId(int segmentId = 0)
         {
             if (segmentId == 0)
-                return new List<ProductFilterOptions>();
+                return new List<GBS_ProductFilterOptions>();
 
             return _productFilterOptionRepository.Table.Where(p => p.ProductSegmentManagerId == segmentId).OrderByDescending(p => p.Id).ToList();
         }
@@ -61,7 +61,7 @@ namespace GBS.Plugin.ProductManagement.Services
         /// Insert product segment opction
         /// </summary>
         /// <param name="productFilterOption"></param>
-        public void InsertProductFilterOption(ProductFilterOptions productFilterOption)
+        public void InsertProductFilterOption(GBS_ProductFilterOptions productFilterOption)
         {
             if (productFilterOption == null)
                 throw new ArgumentNullException(nameof(productFilterOption));
@@ -76,7 +76,7 @@ namespace GBS.Plugin.ProductManagement.Services
         /// Updte product segment opction
         /// </summary>
         /// <param name="productFilterOption"></param>
-        public void UpdateProductFilterOption(ProductFilterOptions productFilterOption)
+        public void UpdateProductFilterOption(GBS_ProductFilterOptions productFilterOption)
         {
             if (productFilterOption == null)
                 throw new ArgumentNullException(nameof(productFilterOption));
@@ -91,7 +91,7 @@ namespace GBS.Plugin.ProductManagement.Services
         /// Delete product segment opction
         /// </summary>
         /// <param name="productFilterOption"></param>
-        public void DeleteProductFilterOption(ProductFilterOptions productFilterOption)
+        public void DeleteProductFilterOption(GBS_ProductFilterOptions productFilterOption)
         {
             if (productFilterOption == null)
                 throw new ArgumentNullException(nameof(productFilterOption));
@@ -107,7 +107,7 @@ namespace GBS.Plugin.ProductManagement.Services
         /// </summary>
         /// <param name="id">Opction identity</param>
         /// <returns>product segment opction</returns>
-        public ProductFilterOptions GetProductFilterOptionById(int id)
+        public GBS_ProductFilterOptions GetProductFilterOptionById(int id)
         {
             if (id == 0)
                 return null;
@@ -124,10 +124,10 @@ namespace GBS.Plugin.ProductManagement.Services
         /// </summary>
         /// <param name="segmentId">Segment Identity</param>
         /// <returns></returns>
-        public IList<Product_Include_Exclude> GetAllIncludeExcludeProductBySegmentId(int segmentId, SegmentProductType segmentProductType,int productId =0)
+        public IList<GBS_Product_Include_Exclude> GetAllIncludeExcludeProductBySegmentId(int segmentId, SegmentProductType segmentProductType,int productId =0)
         {
             if (segmentId == 0)
-                return new List<Product_Include_Exclude>();
+                return new List<GBS_Product_Include_Exclude>();
 
             var productids =  _product_Include_ExcludeRepository.Table.Where(p => p.ProductSegmentManagerId == segmentId && p.ProductType == (int)segmentProductType).OrderByDescending(p => p.Id).ToList();
 
@@ -141,7 +141,7 @@ namespace GBS.Plugin.ProductManagement.Services
         /// Insert IncludeExcludeProduct
         /// </summary>
         /// <param name="product_Include_Exclude"></param>
-        public void InsertIncludeExcludeProduct(Product_Include_Exclude product_Include_Exclude)
+        public void InsertIncludeExcludeProduct(GBS_Product_Include_Exclude product_Include_Exclude)
         {
             if (product_Include_Exclude == null)
                 throw new ArgumentNullException(nameof(product_Include_Exclude));
@@ -156,7 +156,7 @@ namespace GBS.Plugin.ProductManagement.Services
         /// Updte IncludeExcludeProduct
         /// </summary>
         /// <param name="product_Include_Exclude"></param>
-        public void UpdateIncludeExcludeProduct(Product_Include_Exclude product_Include_Exclude)
+        public void UpdateIncludeExcludeProduct(GBS_Product_Include_Exclude product_Include_Exclude)
         {
             if (product_Include_Exclude == null)
                 throw new ArgumentNullException(nameof(product_Include_Exclude));
@@ -171,7 +171,7 @@ namespace GBS.Plugin.ProductManagement.Services
         /// Delete IncludeExcludeProduct
         /// </summary>
         /// <param name="product_Include_Exclude"></param>
-        public void DeleteIncludeExcludeProduct(Product_Include_Exclude product_Include_Exclude)
+        public void DeleteIncludeExcludeProduct(GBS_Product_Include_Exclude product_Include_Exclude)
         {
             if (product_Include_Exclude == null)
                 throw new ArgumentNullException(nameof(product_Include_Exclude));
@@ -187,7 +187,7 @@ namespace GBS.Plugin.ProductManagement.Services
         /// </summary>
         /// <param name="id">Opction identity</param>
         /// <returns>Product_Include_Exclude</returns>
-        public Product_Include_Exclude GetIncludeExcludeProductById(int id)
+        public GBS_Product_Include_Exclude GetIncludeExcludeProductById(int id)
         {
             if (id == 0)
                 return null;
@@ -204,7 +204,7 @@ namespace GBS.Plugin.ProductManagement.Services
         /// <param name="pageIndex"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        public virtual IPagedList<Product> GetProductsBySegmentId(int productSegmentManagerId,int pageIndex = 0,int pageSize  = int.MaxValue)
+        public virtual IList<Product> GetProductsBySegmentId(int productSegmentManagerId, out int totalRecords, int pageIndex = 0,int pageSize  = int.MaxValue)
         {
             var pProductSegmentManagerId = _dataProvider.GetInt32Parameter("ProductSegmentManagerId", productSegmentManagerId);
             var pPageIndex = _dataProvider.GetInt32Parameter("PageIndex", pageIndex);
@@ -214,10 +214,69 @@ namespace GBS.Plugin.ProductManagement.Services
             var pTotalRecords = _dataProvider.GetOutputInt32Parameter("TotalRecords");
             pTotalRecords.Size = int.MaxValue - 1;
 
-            var products = _nopObjectContext.EntityFromSql<Product>("GBS_GetProductIdBySegmentId", pProductSegmentManagerId, pPageIndex, pPageSize, pTotalRecords);
+            var products = _nopObjectContext.EntityFromSql<Product>("GBS_GetProductBySegmentId", pProductSegmentManagerId, pPageIndex, pPageSize, pTotalRecords);
             
-            var totalRecords = pTotalRecords.Value != DBNull.Value ? Convert.ToInt32(pTotalRecords.Value) : 0;
-            return new PagedList<Product>(products, pageIndex, pageSize, totalRecords);
+            totalRecords = pTotalRecords.Value != DBNull.Value ? Convert.ToInt32(pTotalRecords.Value) : 0;
+            if (products != null)
+                return products.ToList();
+            else
+                return null;
+        }
+        #endregion
+
+        #region Match product attribute
+        /// <summary>
+        /// Get product attribute list by segment id
+        /// </summary>
+        /// <param name="productSegmentManagerId"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        public virtual IList<ProductAttribute> GetProductAttributeBySegmentId(int productSegmentManagerId, out int totalRecords, int pageIndex = 0, int pageSize = int.MaxValue)
+        {
+            var pProductSegmentManagerId = _dataProvider.GetInt32Parameter("ProductSegmentManagerId", productSegmentManagerId);
+            var pPageIndex = _dataProvider.GetInt32Parameter("PageIndex", pageIndex);
+            var pPageSize = _dataProvider.GetInt32Parameter("PageSize", pageSize);
+
+            //prepare output parameters
+            var pTotalRecords = _dataProvider.GetOutputInt32Parameter("TotalRecords");
+            pTotalRecords.Size = int.MaxValue - 1;
+
+            var productAttributes = _nopObjectContext.EntityFromSql<ProductAttribute>("GBS_GetProductAttributeBySegmentId", pProductSegmentManagerId, pPageIndex, pPageSize, pTotalRecords);
+
+            totalRecords = pTotalRecords.Value != DBNull.Value ? Convert.ToInt32(pTotalRecords.Value) : 0;
+            if (productAttributes != null)
+                return productAttributes.ToList();
+            else
+                return null;
+        }
+        #endregion
+
+        #region Match specification attribute
+        /// <summary>
+        /// Get specification attribute list by segment id
+        /// </summary>
+        /// <param name="productSegmentManagerId"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        public virtual IList<SpecificationAttribute> GetProductSpecificationAttributeBySegmentId(int productSegmentManagerId, out int totalRecords, int pageIndex = 0, int pageSize = int.MaxValue)
+        {
+            var pProductSegmentManagerId = _dataProvider.GetInt32Parameter("ProductSegmentManagerId", productSegmentManagerId);
+            var pPageIndex = _dataProvider.GetInt32Parameter("PageIndex", pageIndex);
+            var pPageSize = _dataProvider.GetInt32Parameter("PageSize", pageSize);
+
+            //prepare output parameters
+            var pTotalRecords = _dataProvider.GetOutputInt32Parameter("TotalRecords");
+            pTotalRecords.Size = int.MaxValue - 1;
+
+            var specificationAttributes = _nopObjectContext.EntityFromSql<SpecificationAttribute>("GBS_GetProductSpecificationAttributeBySegmentId", pProductSegmentManagerId, pPageIndex, pPageSize, pTotalRecords);
+
+            totalRecords = pTotalRecords.Value != DBNull.Value ? Convert.ToInt32(pTotalRecords.Value) : 0;
+            if (specificationAttributes != null)
+                return specificationAttributes.ToList();
+            else
+                return null;
         }
         #endregion
     }

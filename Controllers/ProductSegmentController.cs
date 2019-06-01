@@ -133,7 +133,7 @@ namespace GBS.Plugin.ProductManagement.Controllers
 
             if (ModelState.IsValid)
             {
-                var productSegment = new ProductSegment
+                var productSegment = new GBS_ProductSegment
                 {
                     Name = model.Name,
                     Description = model.Description,
@@ -312,7 +312,7 @@ namespace GBS.Plugin.ProductManagement.Controllers
                 return Json(new DataSourceResult { Errors = ModelState.SerializeErrors() });
             }
 
-            var segmentOpction = new ProductFilterOptions
+            var segmentOpction = new GBS_ProductFilterOptions
             {
                 ProductSegmentManagerId = productSegmentId,
                 BeginsWith = model.BeginsWith,
@@ -468,7 +468,7 @@ namespace GBS.Plugin.ProductManagement.Controllers
                         if (existingIncludeProductMapping == 0)
                         {
                             _productFilterOptionService.InsertIncludeExcludeProduct(
-                                new Product_Include_Exclude
+                                new GBS_Product_Include_Exclude
                                 {
                                     ProductSegmentManagerId = productSegmentId,
                                     ProductType = productType,
@@ -495,7 +495,8 @@ namespace GBS.Plugin.ProductManagement.Controllers
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
                 return Content("Access denied");
 
-            var products = _productFilterOptionService.GetProductsBySegmentId(productSegmentId, command.Page - 1, command.PageSize);
+            int totalRecords = 0;
+            var products = _productFilterOptionService.GetProductsBySegmentId(productSegmentId,out totalRecords, command.Page - 1, command.PageSize);
 
             var gridModel = new DataSourceResult
             {
@@ -505,7 +506,7 @@ namespace GBS.Plugin.ProductManagement.Controllers
                     Name = product.Name,
                     Sku = product.Sku
                 }),
-                Total = products.TotalCount
+                Total = totalRecords
             };
 
             return Json(gridModel);
@@ -517,7 +518,7 @@ namespace GBS.Plugin.ProductManagement.Controllers
                 return Content("Access denied");
 
             _productFilterOptionService.InsertIncludeExcludeProduct(
-                    new Product_Include_Exclude
+                    new GBS_Product_Include_Exclude
                     {
                         ProductSegmentManagerId = productSegmentId,
                         ProductType = (int)SegmentProductType.Exclude,
@@ -527,6 +528,54 @@ namespace GBS.Plugin.ProductManagement.Controllers
             return new NullJsonResult();
         }
 
+        #endregion
+
+        #region Products attribute
+        [HttpPost]
+        public virtual IActionResult ProductAttributeList(DataSourceRequest command, int productSegmentId)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
+                return Content("Access denied");
+
+            int totalRecords = 0;
+            var productAttributes = _productFilterOptionService.GetProductAttributeBySegmentId(productSegmentId,out totalRecords, command.Page - 1, command.PageSize);
+
+            var gridModel = new DataSourceResult
+            {
+                Data = productAttributes.Select(productAttribute => new ProductAttributes
+                {
+                    Id = productAttribute.Id,
+                    Name = productAttribute.Name
+                }),
+                Total = totalRecords
+            };
+
+            return Json(gridModel);
+        }
+        #endregion
+
+        #region Products specification attribute
+        [HttpPost]
+        public virtual IActionResult ProductSpecificationAttributeList(DataSourceRequest command, int productSegmentId)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
+                return Content("Access denied");
+
+            int totalRecords = 0;
+            var productSpecificationAttributes = _productFilterOptionService.GetProductSpecificationAttributeBySegmentId(productSegmentId,out totalRecords, command.Page - 1, command.PageSize);
+
+            var gridModel = new DataSourceResult
+            {
+                Data = productSpecificationAttributes.Select(productSpecificationAttribute => new ProductSpecificationAttributes
+                {
+                    Id = productSpecificationAttribute.Id,
+                    Name = productSpecificationAttribute.Name
+                }),
+                Total = totalRecords
+            };
+
+            return Json(gridModel);
+        }
         #endregion
 
         #endregion

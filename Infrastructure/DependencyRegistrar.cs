@@ -38,15 +38,15 @@ namespace GBS.Plugin.ProductManagement.Infrastructure
             builder.RegisterPluginDataContext<ProductManagementObjectContext>("nop_object_context_product_segment");
 
             //override required repository with our custom context
-            builder.RegisterType<EfRepository<ProductSegment>>().As<IRepository<ProductSegment>>()
+            builder.RegisterType<EfRepository<GBS_ProductSegment>>().As<IRepository<GBS_ProductSegment>>()
                 .WithParameter(ResolvedParameter.ForNamed<IDbContext>("nop_object_context_product_segment"))
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<EfRepository<ProductFilterOptions>>().As<IRepository<ProductFilterOptions>>()
+            builder.RegisterType<EfRepository<GBS_ProductFilterOptions>>().As<IRepository<GBS_ProductFilterOptions>>()
                 .WithParameter(ResolvedParameter.ForNamed<IDbContext>("nop_object_context_product_segment"))
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<EfRepository<Product_Include_Exclude>>().As<IRepository<Product_Include_Exclude>>()
+            builder.RegisterType<EfRepository<GBS_Product_Include_Exclude>>().As<IRepository<GBS_Product_Include_Exclude>>()
                 .WithParameter(ResolvedParameter.ForNamed<IDbContext>("nop_object_context_product_segment"))
                 .InstancePerLifetimeScope();
         }

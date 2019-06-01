@@ -6,7 +6,7 @@ namespace GBS.Plugin.ProductManagement.Domain
     /// <summary>
     /// Represents a product segment opction(Condition for getting data)
     /// </summary>
-    public class ProductFilterOptions : BaseEntity
+    public class GBS_ProductFilterOptions : BaseEntity
     {
         /// <summary>
         /// Get or set ProductSegmentManager Identity

@@ -11,13 +11,13 @@ namespace GBS.Plugin.ProductManagement.Services
     {
         #region Fields
 
-        private readonly IRepository<ProductSegment> _productSegmentRepository;
+        private readonly IRepository<GBS_ProductSegment> _productSegmentRepository;
         private readonly IEventPublisher _eventPublisher;
 
         #endregion
 
         #region Ctor
-        public ProductSegmentService(IRepository<ProductSegment> productSegmentRepository,
+        public ProductSegmentService(IRepository<GBS_ProductSegment> productSegmentRepository,
             IEventPublisher eventPublisher)
         {
             this._productSegmentRepository = productSegmentRepository;
@@ -34,7 +34,7 @@ namespace GBS.Plugin.ProductManagement.Services
         /// <param name="pageSize">Page size</param>
         /// <param name="name">Segment name</param>
         /// <returns>Pickup points</returns>
-        public virtual IPagedList<ProductSegment> GetAllProductSegment(string name, int storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
+        public virtual IPagedList<GBS_ProductSegment> GetAllProductSegment(string name, int storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
         {
             var query = _productSegmentRepository.Table;
             if (storeId > 0)
@@ -45,14 +45,14 @@ namespace GBS.Plugin.ProductManagement.Services
 
             query = query.OrderBy(segment => segment.DisplayOrder).ThenBy(segment => segment.Name);
 
-            return new PagedList<ProductSegment>(query, pageIndex, pageSize);
+            return new PagedList<GBS_ProductSegment>(query, pageIndex, pageSize);
         }
 
         /// <summary>
         /// Inserts ProductSegment
         /// </summary>
         /// <param name="productSegment">ProductSegment</param>
-        public virtual void InsertProductSegment(ProductSegment productSegment)
+        public virtual void InsertProductSegment(GBS_ProductSegment productSegment)
         {
             if (productSegment == null)
                 throw new ArgumentNullException(nameof(productSegment));
@@ -67,7 +67,7 @@ namespace GBS.Plugin.ProductManagement.Services
         /// Updates the productSegment
         /// </summary>
         /// <param name="productSegment">productSegment</param>
-        public virtual void UpdateProductSegment(ProductSegment productSegment)
+        public virtual void UpdateProductSegment(GBS_ProductSegment productSegment)
         {
             if (productSegment == null)
                 throw new ArgumentNullException(nameof(productSegment));
@@ -82,7 +82,7 @@ namespace GBS.Plugin.ProductManagement.Services
         /// Deletes a productSegment
         /// </summary>
         /// <param name="productSegment">productSegment</param>
-        public virtual void DeleteProductSegment(ProductSegment productSegment)
+        public virtual void DeleteProductSegment(GBS_ProductSegment productSegment)
         {
             if (productSegment == null)
                 throw new ArgumentNullException(nameof(productSegment));
@@ -98,7 +98,7 @@ namespace GBS.Plugin.ProductManagement.Services
         /// </summary>
         /// <param name="categoryId">Category identifier</param>
         /// <returns>Category</returns>
-        public virtual ProductSegment GetProductSegmentById(int id)
+        public virtual GBS_ProductSegment GetProductSegmentById(int id)
         {
             if (id == 0)
                 return null;

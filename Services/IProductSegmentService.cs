@@ -13,31 +13,31 @@ namespace GBS.Plugin.ProductManagement.Services
         /// <param name="pageSize">Page size</param>
         /// <param name="name">segment name</param>
         /// <returns>Product segmetns</returns>
-        IPagedList<ProductSegment> GetAllProductSegment(string name, int storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue);
+        IPagedList<GBS_ProductSegment> GetAllProductSegment(string name, int storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue);
 
         /// <summary>
         /// Inserts product segment
         /// </summary>
         /// <param name="productSegment">ProductSegment</param>
-        void InsertProductSegment(ProductSegment productSegment);
+        void InsertProductSegment(GBS_ProductSegment productSegment);
 
         /// <summary>
         /// Updates the productSegment
         /// </summary>
         /// <param name="productSegment">productSegment</param>
-        void UpdateProductSegment(ProductSegment productSegment);
+        void UpdateProductSegment(GBS_ProductSegment productSegment);
 
         /// <summary>
         /// Deletes a productSegment
         /// </summary>
         /// <param name="productSegment">productSegment</param>
-        void DeleteProductSegment(ProductSegment productSegment);
+        void DeleteProductSegment(GBS_ProductSegment productSegment);
 
         /// <summary>
         /// Get product segment by id
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Product Segment</returns>
-        ProductSegment GetProductSegmentById(int id);
+        GBS_ProductSegment GetProductSegmentById(int id);
     }
 }

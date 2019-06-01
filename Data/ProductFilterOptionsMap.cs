@@ -8,7 +8,7 @@ namespace GBS.Plugin.ProductManagement.Data
     /// <summary>
     /// Represents a product segment opction(Condition for getting data) mapping cofiguraction
     /// </summary>
-    public partial class ProductFilterOptionsMap : NopEntityTypeConfiguration<ProductFilterOptions>
+    public partial class ProductFilterOptionsMap : NopEntityTypeConfiguration<GBS_ProductFilterOptions>
     {
         #region Methods
 
@@ -16,9 +16,9 @@ namespace GBS.Plugin.ProductManagement.Data
         /// Configures the entity
         /// </summary>
         /// <param name="builder">The builder to be used to configure the entity</param>
-        public override void Configure(EntityTypeBuilder<ProductFilterOptions> builder)
+        public override void Configure(EntityTypeBuilder<GBS_ProductFilterOptions> builder)
         {
-            builder.ToTable(nameof(ProductFilterOptions));
+            builder.ToTable(nameof(GBS_ProductFilterOptions));
             builder.HasKey(segmet => segmet.Id);
         }
 

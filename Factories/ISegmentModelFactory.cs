@@ -25,6 +25,6 @@ namespace GBS.Plugin.ProductManagement.Factories
         /// <param name="model">Product segment model</param>
         /// <param name="productSegment">productSegment</param>
         /// <returns>ProductSegmentModel</returns>
-        ProductSegmentModel PrepareProductSegmentModel(ProductSegmentModel model, ProductSegment productSegment);
+        ProductSegmentModel PrepareProductSegmentModel(ProductSegmentModel model, GBS_ProductSegment productSegment);
     }
 }

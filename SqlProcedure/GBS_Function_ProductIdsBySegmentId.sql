@@ -1,21 +1,13 @@
-CREATE PROCEDURE GBS_GetProductIdBySegmentId
+CREATE FUNCTION GBS_GetProductIdBySegmentId
 (
-	@ProductSegmentManagerId INT  = 0,
-	@PageIndex			int = 0, 
-	@PageSize			int = 2147483644,
-	@TotalRecords		int = null OUTPUT
+	@ProductSegmentManagerId INT  = 0
 )
-AS
+RETURNS @ProductIdsTable TABLE(
+	[IndexId] int IDENTITY (1, 1) NOT NULL,
+	ProductId INT
+)
 BEGIN
-
-	--paging
-	DECLARE @PageLowerBound int
-	DECLARE @PageUpperBound int
-	DECLARE @RowsToReturn int
-	SET @RowsToReturn = @PageSize * (@PageIndex + 1)	
-	SET @PageLowerBound = @PageSize * @PageIndex
-	SET @PageUpperBound = @PageLowerBound + @PageSize + 1
-
+	
 	DECLARE @tmpTable TABLE (
 		Id INT IDENTITY(1,1) PRIMARY KEY,
 		[BeginsWith] [nvarchar](max) NULL,
@@ -23,19 +15,13 @@ BEGIN
 		[DoesNotEndWith] [nvarchar](max) NULL,
 		[Contains] [nvarchar](max) NULL
 	)
-
-	DECLARE @ProductIdsTable TABLE(
-		[IndexId] int IDENTITY (1, 1) NOT NULL,
-		ProductId INT
-	)
-
 	INSERT INTO @tmpTable
 		SELECT 
 			[BeginsWith],
 			[EndsWith],
 			[DoesNotEndWith],
 			[Contains]
-		FROM ProductFilterOptions 
+		FROM GBS_ProductFilterOptions 
 	WHERE ProductSegmentManagerId = @ProductSegmentManagerId
 
 
@@ -73,23 +59,10 @@ BEGIN
 	INSERT INTO @ProductIdsTable 
 	SELECT 
 		ProductId 
-	FROM Product_Include_Exclude WITH(NOLOCK) WHERE ProductType = 1		-- 1 For Include Product
+	FROM GBS_Product_Include_Exclude WITH(NOLOCK) WHERE ProductType = 1		-- 1 For Include Product
 
-	DELETE FROM @ProductIdsTable  WHERE ProductId in (SELECT ProductId FROM Product_Include_Exclude WITH(NOLOCK) WHERE ProductType = 2)
+	DELETE FROM @ProductIdsTable  WHERE ProductId in (SELECT ProductId FROM GBS_Product_Include_Exclude WITH(NOLOCK) WHERE ProductType = 2)
 
-	--total records
-	SELECT @TotalRecords = COUNT(1) from @ProductIdsTable
-
-	--return products
-	SELECT TOP (@RowsToReturn)
-		p.*
-	FROM
-		Product p with (NOLOCK)
-		INNER JOIN @ProductIdsTable [pi] on p.Id = [pi].[ProductId]
-	WHERE
-		[pi].IndexId > @PageLowerBound AND 
-		[pi].IndexId < @PageUpperBound
-	ORDER BY
-		[pi].IndexId
+	RETURN
 END
 GO

@@ -19,8 +19,11 @@ namespace GBS.Plugin.ProductManagement.Data
     {
         #region Const
 
-        private const string procedureStringPath = "~/Plugins/GBS.Plugin.ProductManagement/SqlProcedure/GBS_GetProductIdBySegmentId.sql";
-        
+        private const string procedure_GBS_GetProductAttributeBySegmentId = "~/Plugins/GBS.Plugin.ProductManagement/SqlProcedure/GBS_GetProductAttributeBySegmentId.sql";
+        private const string procedure_GBS_GetProductBySegmentId = "~/Plugins/GBS.Plugin.ProductManagement/SqlProcedure/GBS_GetProductBySegmentId.sql";
+        private const string procedure_GBS_GetProductSpecificationAttributeBySegmentId = "~/Plugins/GBS.Plugin.ProductManagement/SqlProcedure/GBS_GetProductSpecificationAttributeBySegmentId.sql";
+        private const string function_GBS_ProductIdsBySegmentId = "~/Plugins/GBS.Plugin.ProductManagement/SqlProcedure/GBS_Function_ProductIdsBySegmentId.sql";
+
         #endregion
 
         #region Ctor
@@ -175,22 +178,73 @@ namespace GBS.Plugin.ProductManagement.Data
                         dbInstallationScript += Environment.NewLine;
                     }
                 }
+
                 dbInstallationScript += "GO";
                 this.ExecuteSqlScript(dbInstallationScript);
+                //End create the table
 
+                //Drop Function or Procedure Create
                 dbInstallationScript = string.Empty;
-                dbInstallationScript += "IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('dbo.GBS_GetProductIdBySegmentId'))";
+                dbInstallationScript += "IF EXISTS (SELECT * FROM sys.objects WHERE type = 'TF' AND OBJECT_ID = OBJECT_ID('dbo.GBS_GetProductIdBySegmentId'))";
                 dbInstallationScript += Environment.NewLine;
                 dbInstallationScript += "BEGIN";
                 dbInstallationScript += Environment.NewLine;
-                dbInstallationScript += "DROP PROCEDURE [dbo].[GBS_GetProductIdBySegmentId]";
+                dbInstallationScript += "DROP FUNCTION [dbo].[GBS_GetProductIdBySegmentId]";
                 dbInstallationScript += Environment.NewLine;
                 dbInstallationScript += "END";
+                dbInstallationScript += Environment.NewLine;
+                dbInstallationScript += "GO";
+
+                dbInstallationScript += Environment.NewLine;
+                dbInstallationScript += "IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('dbo.GBS_GetProductBySegmentId'))";
+                dbInstallationScript += Environment.NewLine;
+                dbInstallationScript += "BEGIN";
+                dbInstallationScript += Environment.NewLine;
+                dbInstallationScript += "DROP PROCEDURE [dbo].[GBS_GetProductBySegmentId]";
+                dbInstallationScript += Environment.NewLine;
+                dbInstallationScript += "END";
+                dbInstallationScript += Environment.NewLine;
+                dbInstallationScript += "GO";
+
+                dbInstallationScript += Environment.NewLine;
+                dbInstallationScript += "IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('dbo.GBS_GetProductAttributeBySegmentId'))";
+                dbInstallationScript += Environment.NewLine;
+                dbInstallationScript += "BEGIN";
+                dbInstallationScript += Environment.NewLine;
+                dbInstallationScript += "DROP PROCEDURE [dbo].[GBS_GetProductAttributeBySegmentId]";
+                dbInstallationScript += Environment.NewLine;
+                dbInstallationScript += "END";
+                dbInstallationScript += Environment.NewLine;
+                dbInstallationScript += "GO";
+
+                dbInstallationScript += Environment.NewLine;
+                dbInstallationScript += "IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('dbo.GBS_GetProductSpecificationAttributeBySegmentId'))";
+                dbInstallationScript += Environment.NewLine;
+                dbInstallationScript += "BEGIN";
+                dbInstallationScript += Environment.NewLine;
+                dbInstallationScript += "DROP PROCEDURE [dbo].[GBS_GetProductSpecificationAttributeBySegmentId]";
+                dbInstallationScript += Environment.NewLine;
+                dbInstallationScript += "END";
+                dbInstallationScript += Environment.NewLine;
+                dbInstallationScript += "GO";
+                
+                this.ExecuteSqlScript(dbInstallationScript);
+                
+                var _fileProvider = EngineContext.Current.Resolve<INopFileProvider>();
+                dbInstallationScript = File.ReadAllText(_fileProvider.MapPath(function_GBS_ProductIdsBySegmentId));
                 this.ExecuteSqlScript(dbInstallationScript);
 
-                var _fileProvider = EngineContext.Current.Resolve<INopFileProvider>();
-                dbInstallationScript = File.ReadAllText(_fileProvider.MapPath(procedureStringPath));
+                dbInstallationScript = File.ReadAllText(_fileProvider.MapPath(procedure_GBS_GetProductBySegmentId));
                 this.ExecuteSqlScript(dbInstallationScript);
+
+                dbInstallationScript = File.ReadAllText(_fileProvider.MapPath(procedure_GBS_GetProductAttributeBySegmentId));
+                this.ExecuteSqlScript(dbInstallationScript);
+                
+                dbInstallationScript = File.ReadAllText(_fileProvider.MapPath(procedure_GBS_GetProductSpecificationAttributeBySegmentId));
+                this.ExecuteSqlScript(dbInstallationScript);
+
+                //End Function or Procedure
+
             }
             catch (Exception ex)
             {
@@ -204,20 +258,59 @@ namespace GBS.Plugin.ProductManagement.Data
         public void Uninstall()
         {
             //drop the table
-            this.DropPluginTable(nameof(ProductSegment));
-            this.DropPluginTable(nameof(ProductFilterOptions));
+            this.DropPluginTable(nameof(GBS_ProductSegment));
+            this.DropPluginTable(nameof(GBS_ProductFilterOptions));
             this.DropPluginTable(nameof(Product_Include_ExcludeMap));
 
-            //Drop Prodecure
+            //Drop Function or Procedure Create
             string dbInstallationScript = string.Empty;
-            dbInstallationScript += "IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('dbo.GBS_GetProductIdBySegmentId'))";
+            
+            dbInstallationScript = string.Empty;
+            dbInstallationScript += "IF EXISTS (SELECT * FROM sys.objects WHERE type = 'TF' AND OBJECT_ID = OBJECT_ID('dbo.GBS_GetProductIdBySegmentId'))";
             dbInstallationScript += Environment.NewLine;
             dbInstallationScript += "BEGIN";
             dbInstallationScript += Environment.NewLine;
-            dbInstallationScript += "DROP PROCEDURE [dbo].[GBS_GetProductIdBySegmentId]";
+            dbInstallationScript += "DROP FUNCTION [dbo].[GBS_GetProductIdBySegmentId]";
             dbInstallationScript += Environment.NewLine;
             dbInstallationScript += "END";
-            Database.ExecuteSqlCommand(dbInstallationScript);
+            dbInstallationScript += Environment.NewLine;
+            dbInstallationScript += "GO";
+
+            dbInstallationScript += Environment.NewLine;
+            dbInstallationScript += "IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('dbo.GBS_GetProductBySegmentId'))";
+            dbInstallationScript += Environment.NewLine;
+            dbInstallationScript += "BEGIN";
+            dbInstallationScript += Environment.NewLine;
+            dbInstallationScript += "DROP PROCEDURE [dbo].[GBS_GetProductBySegmentId]";
+            dbInstallationScript += Environment.NewLine;
+            dbInstallationScript += "END";
+            dbInstallationScript += Environment.NewLine;
+            dbInstallationScript += "GO";
+
+            dbInstallationScript += Environment.NewLine;
+            dbInstallationScript += "IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('dbo.GBS_GetProductAttributeBySegmentId'))";
+            dbInstallationScript += Environment.NewLine;
+            dbInstallationScript += "BEGIN";
+            dbInstallationScript += Environment.NewLine;
+            dbInstallationScript += "DROP PROCEDURE [dbo].[GBS_GetProductAttributeBySegmentId]";
+            dbInstallationScript += Environment.NewLine;
+            dbInstallationScript += "END";
+            dbInstallationScript += Environment.NewLine;
+            dbInstallationScript += "GO";
+
+            dbInstallationScript += Environment.NewLine;
+            dbInstallationScript += "IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('dbo.GBS_GetProductSpecificationAttributeBySegmentId'))";
+            dbInstallationScript += Environment.NewLine;
+            dbInstallationScript += "BEGIN";
+            dbInstallationScript += Environment.NewLine;
+            dbInstallationScript += "DROP PROCEDURE [dbo].[GBS_GetProductSpecificationAttributeBySegmentId]";
+            dbInstallationScript += Environment.NewLine;
+            dbInstallationScript += "END";
+            dbInstallationScript += Environment.NewLine;
+            dbInstallationScript += "GO";
+
+            this.ExecuteSqlScript(dbInstallationScript);
+
         }
 
         #endregion

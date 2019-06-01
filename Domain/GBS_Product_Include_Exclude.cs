@@ -5,7 +5,7 @@ namespace GBS.Plugin.ProductManagement.Domain
     /// <summary>
     /// Represents a product segment opction(Condition for getting data)
     /// </summary>
-    public class Product_Include_Exclude : BaseEntity
+    public class GBS_Product_Include_Exclude : BaseEntity
     {
         /// <summary>
         /// Get or set ProductSegmentManager Identity
