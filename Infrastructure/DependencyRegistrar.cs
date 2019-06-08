@@ -49,6 +49,10 @@ namespace GBS.Plugin.ProductManagement.Infrastructure
             builder.RegisterType<EfRepository<GBS_Product_Include_Exclude>>().As<IRepository<GBS_Product_Include_Exclude>>()
                 .WithParameter(ResolvedParameter.ForNamed<IDbContext>("nop_object_context_product_segment"))
                 .InstancePerLifetimeScope();
+
+            builder.RegisterType<EfRepository<GBS_ProductAttributeMap>>().As<IRepository<GBS_ProductAttributeMap>>()
+                .WithParameter(ResolvedParameter.ForNamed<IDbContext>("nop_object_context_product_segment"))
+                .InstancePerLifetimeScope();
         }
 
         /// <summary>

@@ -45,6 +45,7 @@ namespace GBS.Plugin.ProductManagement.Data
             modelBuilder.ApplyConfiguration(new ProductSegmentMap());
             modelBuilder.ApplyConfiguration(new ProductFilterOptionsMap());
             modelBuilder.ApplyConfiguration(new Product_Include_ExcludeMap());
+            modelBuilder.ApplyConfiguration(new GBS_ProductAttributeMap_Map());
             base.OnModelCreating(modelBuilder);
         }
 
@@ -261,6 +262,7 @@ namespace GBS.Plugin.ProductManagement.Data
             this.DropPluginTable(nameof(GBS_ProductSegment));
             this.DropPluginTable(nameof(GBS_ProductFilterOptions));
             this.DropPluginTable(nameof(Product_Include_ExcludeMap));
+            this.DropPluginTable(nameof(GBS_ProductAttributeMap_Map));
 
             //Drop Function or Procedure Create
             string dbInstallationScript = string.Empty;

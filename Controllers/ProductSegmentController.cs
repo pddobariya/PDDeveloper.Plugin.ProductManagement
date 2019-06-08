@@ -15,6 +15,7 @@ using Nop.Services.Security;
 using Nop.Services.Stores;
 using Nop.Services.Vendors;
 using Nop.Web.Areas.Admin.Controllers;
+using Nop.Web.Areas.Admin.Factories;
 using Nop.Web.Areas.Admin.Helpers;
 using Nop.Web.Areas.Admin.Infrastructure.Mapper.Extensions;
 using Nop.Web.Areas.Admin.Models.Catalog;
@@ -46,6 +47,10 @@ namespace GBS.Plugin.ProductManagement.Controllers
         private readonly IManufacturerService _manufacturerService;
         private readonly IStoreService _storeService;
         private readonly IVendorService _vendorService;
+        private readonly IProductAttributeService _productAttributeService;
+        private readonly ILanguageService _languageService;
+        private readonly ILocalizedEntityService _localizedEntityService;
+        private readonly IProductModelFactory _productModelFactory;
         #endregion
 
         #region Ctor
@@ -60,7 +65,11 @@ namespace GBS.Plugin.ProductManagement.Controllers
             IStaticCacheManager cacheManager,
             IManufacturerService manufacturerService,
             IStoreService storeService,
-            IVendorService vendorService)
+            IVendorService vendorService,
+            IProductAttributeService productAttributeService,
+            ILanguageService languageService,
+            ILocalizedEntityService localizedEntityService,
+            IProductModelFactory productModelFactory)
         {
             this._permissionService = permissionService;
             this._segmentModelFactory = segmentModelFactory;
@@ -74,8 +83,36 @@ namespace GBS.Plugin.ProductManagement.Controllers
             this._manufacturerService = manufacturerService;
             this._storeService = storeService;
             this._vendorService = vendorService;
+            this._productAttributeService = productAttributeService;
+            this._languageService = languageService;
+            this._localizedEntityService = localizedEntityService;
+            this._productModelFactory = productModelFactory;
         }
         #endregion
+
+        #region Utilities
+        protected virtual void UpdateLocales(ProductAttributeMapping pam, Models.ProductAttributeMappingModel model)
+        {
+            foreach (var localized in model.Locales)
+            {
+                _localizedEntityService.SaveLocalizedValue(pam,
+                    x => x.TextPrompt,
+                    localized.TextPrompt,
+                    localized.LanguageId);
+            }
+        }
+
+        protected virtual void UpdateLocales(ProductAttributeValue pav, Models.ProductAttributeValueModel model)
+        {
+            foreach (var localized in model.Locales)
+            {
+                _localizedEntityService.SaveLocalizedValue(pav,
+                    x => x.Name,
+                    localized.Name,
+                    localized.LanguageId);
+            }
+        }
+        #endregion 
 
 
         #region Methods
@@ -496,7 +533,7 @@ namespace GBS.Plugin.ProductManagement.Controllers
                 return Content("Access denied");
 
             int totalRecords = 0;
-            var products = _productFilterOptionService.GetProductsBySegmentId(productSegmentId,out totalRecords, command.Page - 1, command.PageSize);
+            var products = _productFilterOptionService.GetProductsBySegmentId(productSegmentId, out totalRecords, command.Page - 1, command.PageSize);
 
             var gridModel = new DataSourceResult
             {
@@ -538,19 +575,630 @@ namespace GBS.Plugin.ProductManagement.Controllers
                 return Content("Access denied");
 
             int totalRecords = 0;
-            var productAttributes = _productFilterOptionService.GetProductAttributeBySegmentId(productSegmentId,out totalRecords, command.Page - 1, command.PageSize);
+            var productAttributes = _productFilterOptionService.GetProductAttributeBySegmentId(productSegmentId, out totalRecords, command.Page - 1, command.PageSize);
 
             var gridModel = new DataSourceResult
             {
                 Data = productAttributes.Select(productAttribute => new ProductAttributes
                 {
                     Id = productAttribute.Id,
-                    Name = productAttribute.Name
+                    Name = productAttribute.Name,
+                    isAttributeAdded = _productFilterOptionService.GetProductAttributeMapWithSegment(productAttribute.Id, EntityTypeEnum.ProductAttributeMap, productSegmentId).Count() > 0
                 }),
                 Total = totalRecords
             };
 
             return Json(gridModel);
+        }
+
+        public IActionResult ProductAttributeMappingCreate(int productSegmentId, int productAttributeId)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
+                return Content("Access denied");
+
+            //prepare model
+            var model = _segmentModelFactory.PrepareProductAttributeMappingModel(new Models.ProductAttributeMappingModel(), productSegmentId, productAttributeId, null);
+
+            if (model.ProductAttributeId == 0)
+                return RedirectToAction("Edit", new { id = model.ProductSegmentId });
+
+            return View("~/Plugins/GBS.Plugin.ProductManagement/Views/ProductAttribute/ProductAttributeMappingCreate.cshtml", model);
+        }
+
+        [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
+        public virtual IActionResult ProductAttributeMappingCreate(Models.ProductAttributeMappingModel model, bool continueEditing)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
+                return Content("Access denied");
+
+            var productAttributeSegmentMapping = _productFilterOptionService.GetProductAttributeMapWithSegment(model.ProductAttributeId, EntityTypeEnum.ProductAttributeMap, model.ProductSegmentId);
+            if (productAttributeSegmentMapping != null && productAttributeSegmentMapping.Count > 0)
+            {
+                //redisplay form
+                ErrorNotification(_localizationService.GetResource("Admin.Catalog.Products.ProductAttributes.Attributes.AlreadyExists"));
+                
+                model = _segmentModelFactory.PrepareProductAttributeMappingModel(model, model.ProductAttributeId, model.ProductSegmentId, null, true);
+
+                return View("~/Plugins/GBS.Plugin.ProductManagement/Views/ProductAttribute/ProductAttributeMappingCreate.cshtml", model);
+            }
+
+            int totalRecords = 0;
+            var products = _productFilterOptionService.GetProductsBySegmentId(model.ProductSegmentId, out totalRecords);
+
+            string attributeMappingId = "";
+            for (int i = 0; i < products.Count; i++)
+            {
+                //ensure this attribute is not mapped yet
+                var productAttributeMap = _productAttributeService.GetProductAttributeMappingsByProductId(products[i].Id)
+                    .Where(x => x.ProductAttributeId == model.ProductAttributeId).ToList();
+                if (productAttributeMap.Count == 0)
+                {
+                    //insert mapping
+                    var productAttributeMapping = new ProductAttributeMapping
+                    {
+                        ProductId = products[i].Id,
+                        ProductAttributeId = model.ProductAttributeId,
+                        TextPrompt = model.TextPrompt,
+                        IsRequired = model.IsRequired,
+                        AttributeControlTypeId = model.AttributeControlTypeId,
+                        DisplayOrder = model.DisplayOrder,
+                        ValidationMinLength = model.ValidationMinLength,
+                        ValidationMaxLength = model.ValidationMaxLength,
+                        ValidationFileAllowedExtensions = model.ValidationFileAllowedExtensions,
+                        ValidationFileMaximumSize = model.ValidationFileMaximumSize,
+                        DefaultValue = model.DefaultValue
+                    };
+                    _productAttributeService.InsertProductAttributeMapping(productAttributeMapping);
+
+                    //Comma seprated attribute mapping list
+                    attributeMappingId = attributeMappingId + productAttributeMapping.Id.ToString() + ",";
+
+                    UpdateLocales(productAttributeMapping, model);
+
+                    //predefined values
+                    var predefinedValues = _productAttributeService.GetPredefinedProductAttributeValues(model.ProductAttributeId);
+                    foreach (var predefinedValue in predefinedValues)
+                    {
+                        var pav = new ProductAttributeValue
+                        {
+                            ProductAttributeMappingId = productAttributeMapping.Id,
+                            AttributeValueType = AttributeValueType.Simple,
+                            Name = predefinedValue.Name,
+                            PriceAdjustment = predefinedValue.PriceAdjustment,
+                            PriceAdjustmentUsePercentage = predefinedValue.PriceAdjustmentUsePercentage,
+                            WeightAdjustment = predefinedValue.WeightAdjustment,
+                            Cost = predefinedValue.Cost,
+                            IsPreSelected = predefinedValue.IsPreSelected,
+                            DisplayOrder = predefinedValue.DisplayOrder
+                        };
+                        _productAttributeService.InsertProductAttributeValue(pav);
+
+                        //locales
+                        var languages = _languageService.GetAllLanguages(true);
+
+                        //localization
+                        foreach (var lang in languages)
+                        {
+                            var name = _localizationService.GetLocalized(predefinedValue, x => x.Name, lang.Id, false, false);
+                            if (!string.IsNullOrEmpty(name))
+                                _localizedEntityService.SaveLocalizedValue(pav, x => x.Name, name, lang.Id);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int j = 0; j < productAttributeMap.Count; j++)
+                    {
+                        //Comma seprated attribute mapping list
+                        attributeMappingId = attributeMappingId + productAttributeMap[j].Id.ToString() + ",";
+                    }
+                }
+            }
+
+            if (!string.IsNullOrEmpty(attributeMappingId))
+                attributeMappingId = attributeMappingId.Substring(0, attributeMappingId.Length - 1);
+
+            //Insert attribute mapping with segment
+            var mapper = new GBS_ProductAttributeMap()
+            {
+                EntityType = EntityTypeEnum.ProductAttributeMap.ToString(),
+                EntityId = model.ProductAttributeId,
+                SegmentId = model.ProductSegmentId,
+                AttributeMapperId = attributeMappingId
+            };
+            _productFilterOptionService.InsertProductAttributeMapWithSegment(mapper);
+
+            SuccessNotification(_localizationService.GetResource("Admin.Catalog.Products.ProductAttributes.Attributes.Added"));
+
+            if (!continueEditing)
+            {
+                SaveSelectedTabName("tab-ProductAttributes");
+
+                return RedirectToAction("Edit", new { id = model.ProductSegmentId });
+            }
+
+            //selected tab
+            SaveSelectedTabName("tab-ProductAttributes");
+
+            return RedirectToAction("Edit", new { id = model.ProductSegmentId });
+        }
+
+        public IActionResult ProductAttributeMappingEdit(int productSegmentId, int productAttributeId)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
+                return Content("Access denied");
+
+            //try to get a product attribute mapping with the specified id
+            var productAttributeSegmentMapping = _productFilterOptionService.GetProductAttributeMapWithSegment(productAttributeId, EntityTypeEnum.ProductAttributeMap, productSegmentId).FirstOrDefault()
+                ?? throw new ArgumentException("No product attribute mapping found with the specified id");
+            
+            var productAttributeMapping = _productAttributeService.GetProductAttributeMappingById(productAttributeSegmentMapping.AttributeMapperIdList.FirstOrDefault())
+                ?? throw new ArgumentException("No product attribute mapping found with the specified id");
+
+            //prepare model
+            var model = _segmentModelFactory.PrepareProductAttributeMappingModel(null, productSegmentId, productAttributeId, productAttributeMapping);
+            model.AttributeMappedIds = productAttributeSegmentMapping.AttributeMapperId;
+            model.GBS_ProductAttributeMapId = productAttributeSegmentMapping.Id;
+
+            if (model.ProductAttributeId == 0)
+                return RedirectToAction("Edit", new { id = model.ProductSegmentId });
+
+            return View("~/Plugins/GBS.Plugin.ProductManagement/Views/ProductAttribute/ProductAttributeMappingEdit.cshtml", model);
+        }
+
+        [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
+        public virtual IActionResult ProductAttributeMappingEdit(Models.ProductAttributeMappingModel model, bool continueEditing)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
+                return Content("Access denied");
+
+            //try to get a product attribute mapping with the specified id
+            var productAttributeSegmentMapping = _productFilterOptionService.GetProductAttributeMapWithSegment(model.ProductAttributeId, EntityTypeEnum.ProductAttributeMap, model.ProductSegmentId).FirstOrDefault();
+            
+            string attributeMappingId = "";
+
+            int totalRecords = 0;
+            var products = _productFilterOptionService.GetProductsBySegmentId(model.ProductSegmentId, out totalRecords);
+            
+            for (int i = 0; i < products.Count; i++)
+            {
+                //ensure this attribute is not mapped yet
+                var productAttributeMap = _productAttributeService.GetProductAttributeMappingsByProductId(products[i].Id)
+                    .Where(x=> productAttributeSegmentMapping.AttributeMapperIdList.Contains(x.Id)).ToList();
+                if (productAttributeMap.Count == 0)
+                {
+                    //insert mapping
+                    var productAttributeMapping = new ProductAttributeMapping
+                    {
+                        ProductId = products[i].Id,
+                        ProductAttributeId = model.ProductAttributeId,
+                        TextPrompt = model.TextPrompt,
+                        IsRequired = model.IsRequired,
+                        AttributeControlTypeId = model.AttributeControlTypeId,
+                        DisplayOrder = model.DisplayOrder,
+                        ValidationMinLength = model.ValidationMinLength,
+                        ValidationMaxLength = model.ValidationMaxLength,
+                        ValidationFileAllowedExtensions = model.ValidationFileAllowedExtensions,
+                        ValidationFileMaximumSize = model.ValidationFileMaximumSize,
+                        DefaultValue = model.DefaultValue
+                    };
+                    _productAttributeService.InsertProductAttributeMapping(productAttributeMapping);
+
+                    //Comma seprated attribute mapping list
+                    attributeMappingId = attributeMappingId + productAttributeMapping.Id.ToString() + ",";
+
+                    UpdateLocales(productAttributeMapping, model);
+                }
+                else
+                {
+
+                    //try to get a product attribute mapping with the specified id
+                    var productAttributeMapping = productAttributeMap.FirstOrDefault();
+                    
+                    productAttributeMapping.ProductAttributeId = model.ProductAttributeId;
+                    productAttributeMapping.TextPrompt = model.TextPrompt;
+                    productAttributeMapping.IsRequired = model.IsRequired;
+                    productAttributeMapping.AttributeControlTypeId = model.AttributeControlTypeId;
+                    productAttributeMapping.DisplayOrder = model.DisplayOrder;
+                    productAttributeMapping.ValidationMinLength = model.ValidationMinLength;
+                    productAttributeMapping.ValidationMaxLength = model.ValidationMaxLength;
+                    productAttributeMapping.ValidationFileAllowedExtensions = model.ValidationFileAllowedExtensions;
+                    productAttributeMapping.ValidationFileMaximumSize = model.ValidationFileMaximumSize;
+                    productAttributeMapping.DefaultValue = model.DefaultValue;
+
+                    _productAttributeService.UpdateProductAttributeMapping(productAttributeMapping);
+
+                    //Comma seprated attribute mapping list
+                    attributeMappingId = attributeMappingId + productAttributeMapping.Id.ToString() + ",";
+
+                    UpdateLocales(productAttributeMapping, model);
+                }
+            }
+            
+            if (!string.IsNullOrEmpty(attributeMappingId))
+                attributeMappingId = attributeMappingId.Substring(0, attributeMappingId.Length - 1);
+
+            //Updte attribute mapping with segment
+            productAttributeSegmentMapping.AttributeMapperId = attributeMappingId;
+
+            _productFilterOptionService.UpdateProductAttributeMapWithSegment(productAttributeSegmentMapping);
+
+            SuccessNotification(_localizationService.GetResource("Admin.Catalog.Products.ProductAttributes.Attributes.Updated"));
+
+            if (!continueEditing)
+            {
+                SaveSelectedTabName("tab-ProductAttributes");
+
+                return RedirectToAction("Edit", new { id = model.ProductSegmentId });
+            }
+
+            //selected tab
+            SaveSelectedTabName("tab-ProductAttributes");
+
+            return RedirectToAction("Edit", new { id = model.ProductSegmentId });
+        }
+
+        [HttpPost]
+        public virtual IActionResult ProductAttributeMappingDelete(int id)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
+                return Content("Access denied");
+
+            var segmentMap = _productFilterOptionService.GetProductAttributeMapWithSegmentById(id);
+            for (int i = 0; i < segmentMap.AttributeMapperIdList.Count; i++)
+            {
+                //try to get a product attribute mapping with the specified id
+                var productAttributeMapping = _productAttributeService.GetProductAttributeMappingById(segmentMap.AttributeMapperIdList[i]);
+                if (productAttributeMapping != null)
+                {
+                    //try to get a product with the specified id
+                    var product = _productService.GetProductById(productAttributeMapping.ProductId);
+                    if (product != null)
+                        _productAttributeService.DeleteProductAttributeMapping(productAttributeMapping);
+                }
+            }
+            var segmentValueMap = _productFilterOptionService.GetProductAttributeMapWithSegment(segmentMap.EntityId, EntityTypeEnum.ProductAttributeMapValue, segmentMap.SegmentId);
+            for (int i = 0; i < segmentValueMap.Count; i++)
+            {
+                _productFilterOptionService.DeleteProductAttributeMapWithSegment(segmentValueMap[i]);
+            }
+            _productFilterOptionService.DeleteProductAttributeMapWithSegment(segmentMap);
+
+            SuccessNotification(_localizationService.GetResource("Admin.Catalog.Products.ProductAttributes.Attributes.Deleted"));
+
+            //selected tab
+            SaveSelectedTabName("tab-ProductAttributes");
+
+            return RedirectToAction("Edit", new { id = segmentMap.SegmentId });
+        }
+
+
+        [HttpPost]
+        public virtual IActionResult ProductAttributeValueList(string attributeMappedIds)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
+                return Content("Access denied");
+
+            List<int> attributeMapIds = attributeMappedIds.Split(',').Select(int.Parse).ToList();
+
+            if (attributeMapIds != null && attributeMapIds.Count > 0)
+            {
+                ProductAttributeValueSearchModel searchModel = null;
+                ProductAttributeMapping productAttributeMapping = null;
+
+                for (int i = 0; i < attributeMapIds.Count; i++)
+                {
+                    searchModel = new ProductAttributeValueSearchModel()
+                    {
+                        ProductAttributeMappingId = attributeMapIds[i]
+                    };
+
+                    //try to get a product attribute mapping with the specified id
+                    productAttributeMapping = _productAttributeService.GetProductAttributeMappingById(attributeMapIds[i]);
+
+                    if (productAttributeMapping != null)
+                        break;
+                }
+
+                //prepare model
+                var model = _productModelFactory.PrepareProductAttributeValueListModel(searchModel, productAttributeMapping);
+
+                return Json(model);
+            }
+            else
+                return null;
+        }
+
+        public virtual IActionResult ProductAttributeValueCreatePopup(int productSegmentId, int productAttributeId)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
+                return Content("Access denied");
+
+            //try to get a product attribute mapping with the specified id
+            var productAttributeSegmentMapping = _productFilterOptionService.GetProductAttributeMapWithSegment(productAttributeId, EntityTypeEnum.ProductAttributeMap, productSegmentId).FirstOrDefault()
+                ?? throw new ArgumentException("No product attribute mapping found with the specified id");
+
+            
+            var productAttributeMapping = _productAttributeService.GetProductAttributeMappingById(productAttributeSegmentMapping.AttributeMapperIdList.FirstOrDefault())
+                ?? throw new ArgumentException("No product attribute mapping found with the specified id");
+
+            //prepare model
+            var model = _segmentModelFactory.PrepareProductAttributeValueModel(new Models.ProductAttributeValueModel(), productAttributeMapping, null);
+            model.ProductSegmentId = productSegmentId;
+            model.AttributeMappedIds = productAttributeSegmentMapping.AttributeMapperId;
+            model.ProductAttributeId = productAttributeId;
+            
+            return View("~/Plugins/GBS.Plugin.ProductManagement/Views/ProductAttribute/ProductAttributeValueCreatePopup.cshtml", model);
+        }
+
+        [HttpPost]
+        public virtual IActionResult ProductAttributeValueCreatePopup(Models.ProductAttributeValueModel model)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
+                return Content("Access denied");
+
+            List<int> attributeMapIds = model.AttributeMappedIds.Split(',').Select(int.Parse).ToList();
+
+            string attributeValuesId = "";
+            for (int i = 0; i < attributeMapIds.Count; i++)
+            {
+                //try to get a product attribute mapping with the specified id
+                var productAttributeMapping = _productAttributeService.GetProductAttributeMappingById(attributeMapIds[i]);
+                if (productAttributeMapping == null)
+                    return RedirectToAction("Edit", new { id = model.ProductSegmentId });
+
+                if (productAttributeMapping.AttributeControlType == AttributeControlType.ColorSquares)
+                {
+                    //ensure valid color is chosen/entered
+                    if (string.IsNullOrEmpty(model.ColorSquaresRgb))
+                        ModelState.AddModelError(string.Empty, "Color is required");
+                    try
+                    {
+                        //ensure color is valid (can be instantiated)
+                        System.Drawing.ColorTranslator.FromHtml(model.ColorSquaresRgb);
+                    }
+                    catch (Exception exc)
+                    {
+                        ModelState.AddModelError(string.Empty, exc.Message);
+                    }
+                }
+
+                //ensure a picture is uploaded
+                if (productAttributeMapping.AttributeControlType == AttributeControlType.ImageSquares && model.ImageSquaresPictureId == 0)
+                {
+                    ModelState.AddModelError(string.Empty, "Image is required");
+                }
+
+                var pav = new ProductAttributeValue
+                {
+                    ProductAttributeMappingId = attributeMapIds[i],
+                    AttributeValueTypeId = model.AttributeValueTypeId,
+                    AssociatedProductId = model.AssociatedProductId,
+                    Name = model.Name,
+                    ColorSquaresRgb = model.ColorSquaresRgb,
+                    ImageSquaresPictureId = model.ImageSquaresPictureId,
+                    PriceAdjustment = model.PriceAdjustment,
+                    PriceAdjustmentUsePercentage = model.PriceAdjustmentUsePercentage,
+                    WeightAdjustment = model.WeightAdjustment,
+                    Cost = model.Cost,
+                    CustomerEntersQty = model.CustomerEntersQty,
+                    Quantity = model.CustomerEntersQty ? 1 : model.Quantity,
+                    IsPreSelected = model.IsPreSelected,
+                    DisplayOrder = model.DisplayOrder,
+                    PictureId = model.PictureId
+                };
+
+                _productAttributeService.InsertProductAttributeValue(pav);
+                UpdateLocales(pav, model);
+                attributeValuesId = attributeValuesId + pav.Id + ",";
+            }
+
+            if (!string.IsNullOrEmpty(attributeValuesId))
+                attributeValuesId = attributeValuesId.Substring(0, attributeValuesId.Length - 1);
+
+            //Insert attribute mapping with segment
+            var mapper = new GBS_ProductAttributeMap()
+            {
+                EntityType = EntityTypeEnum.ProductAttributeMapValue.ToString(),
+                EntityId = model.ProductAttributeId,
+                SegmentId = model.ProductSegmentId,
+                AttributeMapperId = attributeValuesId
+            };
+            _productFilterOptionService.InsertProductAttributeMapWithSegment(mapper);
+
+            SuccessNotification(_localizationService.GetResource("Admin.Catalog.Products.ProductAttributes.Attributes.Added"));
+            ViewBag.RefreshPage = true;
+            return View("~/Plugins/GBS.Plugin.ProductManagement/Views/ProductAttribute/ProductAttributeValueCreatePopup.cshtml", model);
+        }
+
+        public virtual IActionResult ProductAttributeValueEditPopup(int id, int productSegmentId, int productAttributeId)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
+                return Content("Access denied");
+
+            //try to get a product attribute mapping with the specified id
+            var productAttributeSegmentMapping = _productFilterOptionService.GetProductAttributeMapWithSegmentByAttributeMapperId(id,productAttributeId, EntityTypeEnum.ProductAttributeMapValue, productSegmentId)
+                ?? throw new ArgumentException("No product attribute mapping found with the specified id");
+
+            
+            //try to get a product attribute value with the specified id
+            var productAttributeValue = _productAttributeService.GetProductAttributeValueById(productAttributeSegmentMapping.AttributeMapperIdList.FirstOrDefault());
+            if (productAttributeValue == null)
+                return RedirectToAction("Edit", "ProductSegment", new { id = productSegmentId });
+
+            
+            var productAttributeMapping = _productAttributeService.GetProductAttributeMappingById(productAttributeValue.ProductAttributeMappingId)
+                ?? throw new ArgumentException("No product attribute mapping found with the specified id");
+            
+            //prepare model
+            var model = _segmentModelFactory.PrepareProductAttributeValueModel(null, productAttributeMapping, productAttributeValue);
+            model.ProductSegmentId = productSegmentId;
+            model.AttributeMappedIds = productAttributeSegmentMapping.AttributeMapperId;
+            model.ProductAttributeId = productAttributeId;
+            model.GBS_ProductAttributeMapId = productAttributeSegmentMapping.Id;
+
+            return View("~/Plugins/GBS.Plugin.ProductManagement/Views/ProductAttribute/ProductAttributeValueEditPopup.cshtml", model);
+        }
+
+        [HttpPost]
+        public virtual IActionResult ProductAttributeValueEditPopup(Models.ProductAttributeValueModel model)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
+                return Content("Access denied");
+
+            List<int> attributeValueMapIds = model.AttributeMappedIds.Split(',').Select(int.Parse).ToList();
+
+            var productAttributeSegmentMapping = _productFilterOptionService.GetProductAttributeMapWithSegment(model.ProductAttributeId, EntityTypeEnum.ProductAttributeMap, model.ProductSegmentId).FirstOrDefault();
+
+            string attributeValuesId = "";
+            for (int i = 0; i < productAttributeSegmentMapping.AttributeMapperIdList.Count; i++)
+            {
+                //try to get a product attribute mapping with the specified id
+                var productAttributeMapping = _productAttributeService.GetProductAttributeMappingById(productAttributeSegmentMapping.AttributeMapperIdList[i]);
+                if (productAttributeMapping == null)
+                    return RedirectToAction("Edit", new { id = model.ProductSegmentId });
+
+                var productAttributeValue = productAttributeMapping.ProductAttributeValues.Where(p => attributeValueMapIds.Contains(p.Id)).FirstOrDefault();
+                if (productAttributeValue != null)
+                {
+                    if (productAttributeMapping.AttributeControlType == AttributeControlType.ColorSquares)
+                    {
+                        //ensure valid color is chosen/entered
+                        if (string.IsNullOrEmpty(model.ColorSquaresRgb))
+                            ModelState.AddModelError(string.Empty, "Color is required");
+                        try
+                        {
+                            //ensure color is valid (can be instantiated)
+                            System.Drawing.ColorTranslator.FromHtml(model.ColorSquaresRgb);
+                        }
+                        catch (Exception exc)
+                        {
+                            ModelState.AddModelError(string.Empty, exc.Message);
+                        }
+                    }
+
+                    //ensure a picture is uploaded
+                    if (productAttributeMapping.AttributeControlType == AttributeControlType.ImageSquares && model.ImageSquaresPictureId == 0)
+                    {
+                        ModelState.AddModelError(string.Empty, "Image is required");
+                    }
+
+                    productAttributeValue.ProductAttributeMappingId = productAttributeSegmentMapping.AttributeMapperIdList[i];
+                    productAttributeValue.AttributeValueTypeId = model.AttributeValueTypeId;
+                    productAttributeValue.AssociatedProductId = model.AssociatedProductId;
+                    productAttributeValue.Name = model.Name;
+                    productAttributeValue.ColorSquaresRgb = model.ColorSquaresRgb;
+                    productAttributeValue.ImageSquaresPictureId = model.ImageSquaresPictureId;
+                    productAttributeValue.PriceAdjustment = model.PriceAdjustment;
+                    productAttributeValue.PriceAdjustmentUsePercentage = model.PriceAdjustmentUsePercentage;
+                    productAttributeValue.WeightAdjustment = model.WeightAdjustment;
+                    productAttributeValue.Cost = model.Cost;
+                    productAttributeValue.CustomerEntersQty = model.CustomerEntersQty;
+                    productAttributeValue.Quantity = model.CustomerEntersQty ? 1 : model.Quantity;
+                    productAttributeValue.IsPreSelected = model.IsPreSelected;
+                    productAttributeValue.DisplayOrder = model.DisplayOrder;
+                    productAttributeValue.PictureId = model.PictureId;
+
+                    _productAttributeService.UpdateProductAttributeValue(productAttributeValue);
+                    UpdateLocales(productAttributeValue, model);
+                    attributeValuesId = attributeValuesId + productAttributeValue.Id + ",";
+                }
+                else
+                {
+                    if (productAttributeMapping.AttributeControlType == AttributeControlType.ColorSquares)
+                    {
+                        //ensure valid color is chosen/entered
+                        if (string.IsNullOrEmpty(model.ColorSquaresRgb))
+                            ModelState.AddModelError(string.Empty, "Color is required");
+                        try
+                        {
+                            //ensure color is valid (can be instantiated)
+                            System.Drawing.ColorTranslator.FromHtml(model.ColorSquaresRgb);
+                        }
+                        catch (Exception exc)
+                        {
+                            ModelState.AddModelError(string.Empty, exc.Message);
+                        }
+                    }
+
+                    //ensure a picture is uploaded
+                    if (productAttributeMapping.AttributeControlType == AttributeControlType.ImageSquares && model.ImageSquaresPictureId == 0)
+                    {
+                        ModelState.AddModelError(string.Empty, "Image is required");
+                    }
+
+                    var pav = new ProductAttributeValue
+                    {
+                        ProductAttributeMappingId = productAttributeSegmentMapping.AttributeMapperIdList[i],
+                        AttributeValueTypeId = model.AttributeValueTypeId,
+                        AssociatedProductId = model.AssociatedProductId,
+                        Name = model.Name,
+                        ColorSquaresRgb = model.ColorSquaresRgb,
+                        ImageSquaresPictureId = model.ImageSquaresPictureId,
+                        PriceAdjustment = model.PriceAdjustment,
+                        PriceAdjustmentUsePercentage = model.PriceAdjustmentUsePercentage,
+                        WeightAdjustment = model.WeightAdjustment,
+                        Cost = model.Cost,
+                        CustomerEntersQty = model.CustomerEntersQty,
+                        Quantity = model.CustomerEntersQty ? 1 : model.Quantity,
+                        IsPreSelected = model.IsPreSelected,
+                        DisplayOrder = model.DisplayOrder,
+                        PictureId = model.PictureId
+                    };
+
+                    _productAttributeService.InsertProductAttributeValue(pav);
+                    UpdateLocales(pav, model);
+                    attributeValuesId = attributeValuesId + pav.Id + ",";
+                }
+            }
+            
+            if (!string.IsNullOrEmpty(attributeValuesId))
+                attributeValuesId = attributeValuesId.Substring(0, attributeValuesId.Length - 1);
+
+            var mapper = _productFilterOptionService.GetProductAttributeMapWithSegmentById(model.GBS_ProductAttributeMapId);
+            //Update attribute mapping with segment
+            mapper.AttributeMapperId = attributeValuesId;
+
+            _productFilterOptionService.UpdateProductAttributeMapWithSegment(mapper);
+
+            SuccessNotification(_localizationService.GetResource("Admin.Catalog.Products.ProductAttributes.Attributes.Added"));
+            ViewBag.RefreshPage = true;
+            return View("~/Plugins/GBS.Plugin.ProductManagement/Views/ProductAttribute/ProductAttributeValueCreatePopup.cshtml", model);
+        }
+
+        [HttpPost]
+        public virtual IActionResult ProductAttributeValueDelete(int id, int productSegmentId, int productAttributeId)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
+                return Content("Access denied");
+
+            //try to get a product attribute mapping with the specified id
+            var productAttributeSegmentMapping = _productFilterOptionService.GetProductAttributeMapWithSegmentByAttributeMapperId(id, productAttributeId, EntityTypeEnum.ProductAttributeMapValue, productSegmentId);
+
+            for (int i = 0; i < productAttributeSegmentMapping.AttributeMapperIdList.Count; i++)
+            {
+                //try to get a product attribute value with the specified id
+                var productAttributeValue = _productAttributeService.GetProductAttributeValueById(productAttributeSegmentMapping.AttributeMapperIdList[i]);
+
+                if (productAttributeValue != null)
+                {
+                    //try to get a product attribute mapping with the specified id
+                    var productAttributeMapping = _productAttributeService.GetProductAttributeMappingById(productAttributeValue.ProductAttributeMappingId);
+
+                    if (productAttributeMapping != null)
+                    {
+                        //try to get a product with the specified id
+                        var product = _productService.GetProductById(productAttributeMapping.ProductId);
+
+                        if (product != null)
+                            _productAttributeService.DeleteProductAttributeValue(productAttributeValue);
+                    }
+                }
+            }
+
+            _productFilterOptionService.DeleteProductAttributeMapWithSegment(productAttributeSegmentMapping);
+
+            return new NullJsonResult();
         }
         #endregion
 
@@ -562,7 +1210,7 @@ namespace GBS.Plugin.ProductManagement.Controllers
                 return Content("Access denied");
 
             int totalRecords = 0;
-            var productSpecificationAttributes = _productFilterOptionService.GetProductSpecificationAttributeBySegmentId(productSegmentId,out totalRecords, command.Page - 1, command.PageSize);
+            var productSpecificationAttributes = _productFilterOptionService.GetProductSpecificationAttributeBySegmentId(productSegmentId, out totalRecords, command.Page - 1, command.PageSize);
 
             var gridModel = new DataSourceResult
             {

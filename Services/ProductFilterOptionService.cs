@@ -19,6 +19,7 @@ namespace GBS.Plugin.ProductManagement.Services
 
         private readonly IRepository<GBS_ProductFilterOptions> _productFilterOptionRepository;
         private readonly IRepository<GBS_Product_Include_Exclude> _product_Include_ExcludeRepository;
+        private readonly IRepository<GBS_ProductAttributeMap> _productAttributeMapRepository;
         private readonly IEventPublisher _eventPublisher;
         private readonly IDataProvider _dataProvider;
         private readonly ProductManagementObjectContext _dbContext;
@@ -28,15 +29,17 @@ namespace GBS.Plugin.ProductManagement.Services
 
         #region Ctor
         public ProductFilterOptionService(IRepository<GBS_ProductFilterOptions> productFilterOptionRepository,
-            IEventPublisher eventPublisher,
             IRepository<GBS_Product_Include_Exclude> product_Include_ExcludeRepository,
+            IRepository<GBS_ProductAttributeMap> productAttributeMapRepository,
+            IEventPublisher eventPublisher,
             IDataProvider dataProvider,
             ProductManagementObjectContext dbContext,
             NopObjectContext nopObjectContext)
         {
             this._productFilterOptionRepository = productFilterOptionRepository;
-            this._eventPublisher = eventPublisher;
             this._product_Include_ExcludeRepository = product_Include_ExcludeRepository;
+            this._productAttributeMapRepository = productAttributeMapRepository;
+            this._eventPublisher = eventPublisher;
             this._dataProvider = dataProvider;
             this._dbContext = dbContext;
             this._nopObjectContext = nopObjectContext;
@@ -206,17 +209,20 @@ namespace GBS.Plugin.ProductManagement.Services
         /// <returns></returns>
         public virtual IList<Product> GetProductsBySegmentId(int productSegmentManagerId, out int totalRecords, int pageIndex = 0,int pageSize  = int.MaxValue)
         {
+            //some databases don't support int.MaxValue
+            if (pageSize == int.MaxValue)
+                pageSize = int.MaxValue - 1;
+
             var pProductSegmentManagerId = _dataProvider.GetInt32Parameter("ProductSegmentManagerId", productSegmentManagerId);
             var pPageIndex = _dataProvider.GetInt32Parameter("PageIndex", pageIndex);
             var pPageSize = _dataProvider.GetInt32Parameter("PageSize", pageSize);
 
             //prepare output parameters
-            var pTotalRecords = _dataProvider.GetOutputInt32Parameter("TotalRecords");
-            pTotalRecords.Size = int.MaxValue - 1;
+            var totalRecordsParameter = _dataProvider.GetOutputInt32Parameter("TotalRecords");
 
-            var products = _nopObjectContext.EntityFromSql<Product>("GBS_GetProductBySegmentId", pProductSegmentManagerId, pPageIndex, pPageSize, pTotalRecords);
+            var products = _nopObjectContext.EntityFromSql<Product>("GBS_GetProductBySegmentId", pProductSegmentManagerId, pPageIndex, pPageSize, totalRecordsParameter);
             
-            totalRecords = pTotalRecords.Value != DBNull.Value ? Convert.ToInt32(pTotalRecords.Value) : 0;
+            totalRecords = totalRecordsParameter.Value != DBNull.Value ? Convert.ToInt32(totalRecordsParameter.Value) : 0;
             if (products != null)
                 return products.ToList();
             else
@@ -278,6 +284,94 @@ namespace GBS.Plugin.ProductManagement.Services
             else
                 return null;
         }
+        #endregion
+
+        #region Product attrbute Mapping
+        /// <summary>
+        /// Insert attribute mapping with segment
+        /// </summary>
+        /// <param name="gbs_ProductAttributeMap"></param>
+        public void InsertProductAttributeMapWithSegment(GBS_ProductAttributeMap gbs_ProductAttributeMap)
+        {
+            if (gbs_ProductAttributeMap == null)
+                throw new ArgumentNullException(nameof(gbs_ProductAttributeMap));
+
+            _productAttributeMapRepository.Insert(gbs_ProductAttributeMap);
+
+            //event notification
+            _eventPublisher.EntityInserted(gbs_ProductAttributeMap);
+        }
+
+        /// <summary>
+        /// Update gbs_ProductAttributeMap
+        /// </summary>
+        /// <param name="gbs_ProductAttributeMap"></param>
+        public void UpdateProductAttributeMapWithSegment(GBS_ProductAttributeMap gbs_ProductAttributeMap)
+        {
+            if (gbs_ProductAttributeMap == null)
+                throw new ArgumentNullException(nameof(gbs_ProductAttributeMap));
+
+            _productAttributeMapRepository.Update(gbs_ProductAttributeMap);
+
+            //event notification
+            _eventPublisher.EntityUpdated(gbs_ProductAttributeMap);
+        }
+
+        /// <summary>
+        /// Get prduct attribute with segment
+        /// </summary>
+        /// <param name="entityId"></param>
+        /// <param name="entityTypeEnum"></param>
+        /// <param name="segmentId"></param>
+        /// <returns></returns>
+        public List<GBS_ProductAttributeMap> GetProductAttributeMapWithSegment(int entityId, EntityTypeEnum entityTypeEnum, int segmentId)
+        {
+            return _productAttributeMapRepository.Table.Where(p => p.EntityId == entityId && p.EntityType == entityTypeEnum.ToString() && p.SegmentId == segmentId).ToList();
+        }
+
+        /// <summary>
+        /// Get prduct attribute with segment
+        /// </summary>
+        /// <param name="attributeMapperId"></param>
+        /// <param name="entityId"></param>
+        /// <param name="entityTypeEnum"></param>
+        /// <param name="segmentId"></param>
+        /// <returns></returns>
+        public GBS_ProductAttributeMap GetProductAttributeMapWithSegmentByAttributeMapperId(int attributeMapperId,int entityId, EntityTypeEnum entityTypeEnum, int segmentId)
+        {
+            var productAttributeMap = _productAttributeMapRepository.Table.Where(p => p.EntityId == entityId && p.EntityType == entityTypeEnum.ToString() && p.SegmentId == segmentId);
+
+            return productAttributeMap.Where(p => p.AttributeMapperIdList.Contains(attributeMapperId)).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Get prduct attribute with segment
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public GBS_ProductAttributeMap GetProductAttributeMapWithSegmentById(int id)
+        {
+            if (id == 0)
+                return null;
+
+            return _productAttributeMapRepository.GetById(id);
+        }
+
+        /// <summary>
+        /// Delete segment attribute map
+        /// </summary>
+        /// <param name="gBS_ProductAttributeMap"></param>
+        public void DeleteProductAttributeMapWithSegment(GBS_ProductAttributeMap gBS_ProductAttributeMap)
+        {
+            if (gBS_ProductAttributeMap == null)
+                throw new ArgumentNullException(nameof(gBS_ProductAttributeMap));
+
+            _productAttributeMapRepository.Delete(gBS_ProductAttributeMap);
+
+            //event notification
+            _eventPublisher.EntityDeleted(gBS_ProductAttributeMap);
+        }
+        
         #endregion
     }
 }

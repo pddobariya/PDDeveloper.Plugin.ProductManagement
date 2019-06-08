@@ -67,6 +67,7 @@ namespace GBS.Plugin.ProductManagement.Models
         public int Id { get; set; }
         [NopResourceDisplayName("Plugins.GBS.ProductManagement.ProductAttributes.Fields.Name")]
         public string Name { get; set; }
+        public bool isAttributeAdded { get; set; }
     }
 
     public class ProductSpecificationAttributes

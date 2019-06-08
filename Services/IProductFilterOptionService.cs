@@ -99,6 +99,48 @@ namespace GBS.Plugin.ProductManagement.Services
         /// <param name="pageSize"></param>
         /// <returns></returns>
         IList<SpecificationAttribute> GetProductSpecificationAttributeBySegmentId(int productSegmentManagerId, out int totalRecords, int pageIndex = 0, int pageSize = int.MaxValue);
+
+        /// <summary>
+        /// Insert attribute mapping with segment
+        /// </summary>
+        /// <param name="gbs_ProductAttributeMap"></param>
+        void InsertProductAttributeMapWithSegment(GBS_ProductAttributeMap gbs_ProductAttributeMap);
+
+        /// <summary>
+        /// Update gbs_ProductAttributeMap
+        /// </summary>
+        /// <param name="gbs_ProductAttributeMap"></param>
+        void UpdateProductAttributeMapWithSegment(GBS_ProductAttributeMap gbs_ProductAttributeMap);
+
+        /// <summary>
+        /// Get prduct attribute with segment
+        /// </summary>
+        /// <param name="Attributed"></param>
+        /// <param name="SegmentId"></param>
+        List<GBS_ProductAttributeMap> GetProductAttributeMapWithSegment(int entityId, EntityTypeEnum entityTypeEnum, int segmentId);
+
+        /// <summary>
+        /// Get prduct attribute with segment
+        /// </summary>
+        /// <param name="attributeMapperId"></param>
+        /// <param name="entityId"></param>
+        /// <param name="entityTypeEnum"></param>
+        /// <param name="segmentId"></param>
+        /// <returns></returns>
+        GBS_ProductAttributeMap GetProductAttributeMapWithSegmentByAttributeMapperId(int attributeMapperId, int entityId, EntityTypeEnum entityTypeEnum, int segmentId);
+
+        /// <summary>
+        /// Get prduct attribute with segment
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        GBS_ProductAttributeMap GetProductAttributeMapWithSegmentById(int id);
+
+        /// <summary>
+        /// Delete segment attribute map
+        /// </summary>
+        /// <param name="gBS_ProductAttributeMap"></param>
+        void DeleteProductAttributeMapWithSegment(GBS_ProductAttributeMap gBS_ProductAttributeMap);
         #endregion
     }
 }

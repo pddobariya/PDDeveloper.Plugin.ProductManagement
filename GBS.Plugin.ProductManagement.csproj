@@ -15,6 +15,13 @@
     <None Remove="Localization\ResourceString\ResourceString.xml" />
     <None Remove="logo.jpg" />
     <None Remove="plugin.json" />
+    <None Remove="Views\ProductAttribute\ProductAttributeMappingCreate.cshtml" />
+    <None Remove="Views\ProductAttribute\ProductAttributeMappingEdit.cshtml" />
+    <None Remove="Views\ProductAttribute\ProductAttributeValueCreatePopup.cshtml" />
+    <None Remove="Views\ProductAttribute\ProductAttributeValueEditPopup.cshtml" />
+    <None Remove="Views\ProductAttribute\_CreateOrUpdateProductAttributeMapping.cshtml" />
+    <None Remove="Views\ProductAttribute\_CreateOrUpdateProductAttributeMapping.Values.cshtml" />
+    <None Remove="Views\ProductAttribute\_CreateOrUpdateProductAttributeValue.cshtml" />
     <None Remove="Views\ProductSegment\Create.cshtml" />
     <None Remove="Views\ProductSegment\Edit.cshtml" />
     <None Remove="Views\ProductSegment\_CreateOrUpdate.cshtml" />
@@ -25,6 +32,7 @@
     <None Remove="Views\ProductSegment\_CreateOrUpdate.Products.cshtml" />
     <None Remove="Views\ProductSegment\_CreateOrUpdate.ProductSpecificationAttributes.cshtml" />
     <None Remove="Views\ProductSegment\_CreateOrUpdate.SegmentOption.cshtml" />
+    <None Remove="Views\ProductSegment\_CreateOrUpdateProductAttributeMapping.Info.cshtml" />
     <None Remove="Views\SegmentList.cshtml" />
     <None Remove="Views\_ViewImports.cshtml" />
   </ItemGroup>
@@ -48,6 +56,34 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="plugin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\ProductAttribute\ProductAttributeMappingCreate.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\ProductAttribute\ProductAttributeMappingEdit.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\ProductAttribute\ProductAttributeValueCreatePopup.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\ProductAttribute\ProductAttributeValueEditPopup.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\ProductAttribute\_CreateOrUpdateProductAttributeMapping.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\ProductAttribute\_CreateOrUpdateProductAttributeMapping.Values.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\ProductAttribute\_CreateOrUpdateProductAttributeValue.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Views\ProductSegment\Create.cshtml">
@@ -94,6 +130,10 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Views\ProductAttribute\_CreateOrUpdateProductAttributeMapping.Info.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Views\_ViewImports.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -112,9 +152,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="SqlProcedure\GBS_GetProductBySegmentId.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="SqlProcedure\GBS_GetProductIdBySegmentId.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="SqlProcedure\GBS_GetProductSpecificationAttributeBySegmentId.sql">
