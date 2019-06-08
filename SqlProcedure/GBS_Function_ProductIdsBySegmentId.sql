@@ -1,6 +1,7 @@
 CREATE FUNCTION GBS_GetProductIdBySegmentId
 (
-	@ProductSegmentManagerId INT  = 0
+	@ProductSegmentManagerId INT  = 0,
+	@VendorId INT = 0
 )
 RETURNS @ProductIdsTable TABLE(
 	[IndexId] int IDENTITY (1, 1) NOT NULL,
@@ -53,6 +54,7 @@ BEGIN
 		AND (ISNULL(@DoesNotEndWith,'') = '' OR  p.Sku not like '%' + @DoesNotEndWith)
 		AND (ISNULL(@Contains,'') = '' OR  p.Sku not like '%' + @Contains + '%')
 		AND p.Published = 1 AND p.Deleted  = 0
+		AND(@VendorId = 0 OR p.VendorId = @VendorId)
 
 		SET @id = @id + 1
 	END

@@ -71,6 +71,13 @@
                                     headerAttributes: { style: "text-align:center" },
                                     attributes: { style: "text-align:center" },
                                     template: '<a class="btn btn-default" href="@Url.Action("Edit", "SpecificationAttribute")/#=Id#"><i class="fa fa-eye"></i>@T("Admin.Common.View")</a>'
+                                },{
+                                    field: "Id",
+                                    title: "@T("Plugins.GBS.ProductManagement.ProductSpecificationAttributes.Button.Add")",
+                                    width: 100,
+                                    headerAttributes: { style: "text-align:center" },
+                                    attributes: { style: "text-align:center" },
+                                    template: '<a class="btn btn-default" href="@Url.Content("~/Admin/ProductSegment/AddSpecificationAttributeToProduct?productSegmentId=" + Model.Id+ "&productSpecificationId=")#=Id#"><i class="fa fa-plus-square"></i>@T("Plugins.GBS.ProductManagement.ProductSpecificationAttributes.Button.Add")</a>'
                                 }
                             ]
                         });

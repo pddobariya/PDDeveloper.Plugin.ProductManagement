@@ -2,6 +2,7 @@
 using GBS.Plugin.ProductManagement.Models;
 using Nop.Core.Domain.Catalog;
 using Nop.Web.Areas.Admin.Models.Catalog;
+using System.Collections.Generic;
 
 namespace GBS.Plugin.ProductManagement.Factories
 {
@@ -50,5 +51,14 @@ namespace GBS.Plugin.ProductManagement.Factories
         /// <returns>Product attribute value model</returns>
         Models.ProductAttributeValueModel PrepareProductAttributeValueModel(Models.ProductAttributeValueModel model,
             ProductAttributeMapping productAttributeMapping, ProductAttributeValue productAttributeValue, bool excludeProperties = false);
+
+        /// <summary>
+        /// Prepare paged product specification attribute list model
+        /// </summary>
+        /// <param name="searchModel">Product specification attribute search model</param>
+        /// <param name="product">Product</param>
+        /// <returns>Product specification attribute list model</returns>
+        Models.ProductSpecificationAttributeListModel PrepareProductSpecificationAttributeListModel(
+            Models.ProductSpecificationAttributeModel searchModel, IList<Product> products);
     }
 }

@@ -3,6 +3,7 @@ CREATE PROCEDURE GBS_GetProductBySegmentId
 	@ProductSegmentManagerId INT  = 0,
 	@PageIndex			int = 0, 
 	@PageSize			int = 2147483644,
+	@VendorId			INT = 0,
 	@TotalRecords		int = null OUTPUT
 )
 AS
@@ -25,7 +26,7 @@ BEGIN
 	SELECT 
 		IndexId,
 		ProductId 
-	FROM GBS_GetProductIdBySegmentId(@ProductSegmentManagerId)
+	FROM GBS_GetProductIdBySegmentId(@ProductSegmentManagerId,@VendorId)
 	
 	--total records
 	SELECT @TotalRecords = COUNT(1) from @ProductIdsTable

@@ -6,6 +6,7 @@
     public enum EntityTypeEnum
     {
         ProductAttributeMap,
-        ProductAttributeMapValue
+        ProductAttributeMapValue,
+        ProductSpecificationMapValue
     }
 }

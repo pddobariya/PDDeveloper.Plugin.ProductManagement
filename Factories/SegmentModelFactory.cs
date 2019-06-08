@@ -12,7 +12,9 @@ using Nop.Web.Areas.Admin.Models.Catalog;
 using Nop.Web.Framework.Extensions;
 using Nop.Web.Framework.Factories;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 
 namespace GBS.Plugin.ProductManagement.Factories
 {
@@ -28,6 +30,8 @@ namespace GBS.Plugin.ProductManagement.Factories
         private readonly IProductAttributeParser _productAttributeParser;
         private readonly IProductService _productService;
         private readonly IPictureService _pictureService;
+        private readonly ISpecificationAttributeService _specificationAttributeService;
+        private readonly IProductFilterOptionService _productFilterOptionService;
         #endregion
 
         #region Ctor
@@ -39,7 +43,9 @@ namespace GBS.Plugin.ProductManagement.Factories
             IProductAttributeService productAttributeService,
             IProductAttributeParser productAttributeParser,
             IProductService productService,
-            IPictureService pictureService)
+            IPictureService pictureService,
+            ISpecificationAttributeService specificationAttributeService,
+            IProductFilterOptionService productFilterOptionService)
         {
             this._baseAdminModelFactory = baseAdminModelFactory;
             this._productSegmentService = productSegmentService;
@@ -50,6 +56,8 @@ namespace GBS.Plugin.ProductManagement.Factories
             this._productAttributeParser = productAttributeParser;
             this._productService = productService;
             this._pictureService = pictureService;
+            this._specificationAttributeService = specificationAttributeService;
+            this._productFilterOptionService = productFilterOptionService;
         }
         #endregion
 
@@ -487,6 +495,102 @@ namespace GBS.Plugin.ProductManagement.Factories
                     return productAttributeValueModel;
                 }),
                 Total = productAttributeValues.Count
+            };
+
+            return model;
+        }
+
+        /// <summary>
+        /// Prepare paged product specification attribute list model
+        /// </summary>
+        /// <param name="searchModel">Product specification attribute search model</param>
+        /// <param name="product">Product</param>
+        /// <returns>Product specification attribute list model</returns>
+        public virtual Models.ProductSpecificationAttributeListModel PrepareProductSpecificationAttributeListModel(
+            Models.ProductSpecificationAttributeModel searchModel, IList<Product> products)
+        {
+            if (searchModel == null)
+                throw new ArgumentNullException(nameof(searchModel));
+
+            if (products == null)
+                throw new ArgumentNullException(nameof(products));
+
+            var productSpecificationAttributes = new List<ProductSpecificationAttribute>();
+            //get product specification attributes
+            for (int i = 0; i < products.Count; i++)
+            {
+                productSpecificationAttributes.AddRange(_specificationAttributeService.GetProductSpecificationAttributes(products[i].Id));
+            }
+
+            productSpecificationAttributes = productSpecificationAttributes.Where(p => p.SpecificationAttributeOption.SpecificationAttributeId == searchModel.ProductSpecificationId).ToList();
+
+            bool isRecordAdd = true;
+            List<int> gBS_ProductAttributeMapIdList = new List<int>();
+            var productSpecificationAttributeModelList = new List<Models.ProductSpecificationAttributeModel>();
+            foreach (var attribute in productSpecificationAttributes)
+            {
+                var specificationMapper = _productFilterOptionService.GetProductAttributeMapWithSegmentByAttributeMapperId(attribute.Id, searchModel.ProductSpecificationId, Domain.Enums.EntityTypeEnum.ProductSpecificationMapValue, searchModel.ProductSegmentId);
+
+                var gBS_ProductAttributeMapId = 0;
+
+                if (specificationMapper != null)
+                {
+                    if (!gBS_ProductAttributeMapIdList.Contains(specificationMapper.Id))
+                    {
+                        isRecordAdd = true;
+                        gBS_ProductAttributeMapId = specificationMapper.Id;
+                        gBS_ProductAttributeMapIdList.Add(specificationMapper.Id);
+                    }
+
+                }
+                else
+                    isRecordAdd = true;
+
+                if (isRecordAdd)
+                {
+                    isRecordAdd = false;
+                    //fill in model values from the entity
+                    var productSpecificationAttributeModel = new Models.ProductSpecificationAttributeModel
+                    {
+                        Id = attribute.Id,
+                        AttributeTypeId = attribute.AttributeTypeId,
+                        AllowFiltering = attribute.AllowFiltering,
+                        ShowOnProductPage = attribute.ShowOnProductPage,
+                        DisplayOrder = attribute.DisplayOrder,
+                        ProductSegmentId = searchModel.ProductSegmentId,
+                        ProductSpecificationId = searchModel.ProductSpecificationId,
+                        GBS_ProductAttributeMapId = gBS_ProductAttributeMapId
+                    };
+
+                    //fill in additional values (not existing in the entity)
+                    productSpecificationAttributeModel.AttributeTypeName = _localizationService.GetLocalizedEnum(attribute.AttributeType);
+                    productSpecificationAttributeModel.AttributeId = attribute.SpecificationAttributeOption.SpecificationAttribute.Id;
+                    productSpecificationAttributeModel.AttributeName = attribute.SpecificationAttributeOption.SpecificationAttribute.Name;
+                    switch (attribute.AttributeType)
+                    {
+                        case SpecificationAttributeType.Option:
+                            productSpecificationAttributeModel.ValueRaw = WebUtility.HtmlEncode(attribute.SpecificationAttributeOption.Name);
+                            productSpecificationAttributeModel.SpecificationAttributeOptionId = attribute.SpecificationAttributeOptionId;
+                            break;
+                        case SpecificationAttributeType.CustomText:
+                            productSpecificationAttributeModel.ValueRaw = WebUtility.HtmlEncode(attribute.CustomValue);
+                            break;
+                        case SpecificationAttributeType.CustomHtmlText:
+                            productSpecificationAttributeModel.ValueRaw = WebUtility.HtmlEncode(attribute.CustomValue);
+                            break;
+                        case SpecificationAttributeType.Hyperlink:
+                            productSpecificationAttributeModel.ValueRaw = attribute.CustomValue;
+                            break;
+                    }
+                    productSpecificationAttributeModelList.Add(productSpecificationAttributeModel);
+                }
+            }
+
+            //prepare grid model
+            var model = new Models.ProductSpecificationAttributeListModel
+            {
+                Data = productSpecificationAttributeModelList,
+                Total = productSpecificationAttributeModelList.Count
             };
 
             return model;

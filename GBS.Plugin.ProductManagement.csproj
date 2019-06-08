@@ -34,6 +34,7 @@
     <None Remove="Views\ProductSegment\_CreateOrUpdate.SegmentOption.cshtml" />
     <None Remove="Views\ProductSegment\_CreateOrUpdateProductAttributeMapping.Info.cshtml" />
     <None Remove="Views\SegmentList.cshtml" />
+    <None Remove="Views\SpecificationAttribute\CreateOrUpdateSpecificationAttributes.cshtml" />
     <None Remove="Views\_ViewImports.cshtml" />
   </ItemGroup>
   
@@ -131,6 +132,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Views\ProductAttribute\_CreateOrUpdateProductAttributeMapping.Info.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\SpecificationAttribute\CreateOrUpdateSpecificationAttributes.cshtml">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

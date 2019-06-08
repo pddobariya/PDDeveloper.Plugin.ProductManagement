@@ -146,9 +146,6 @@
   <LocaleResource Name="Plugins.GBS.ProductManagement.ProductAttributes.Fields.Name">
     <Value>Name</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.ProductAttributes.Button.AddSeleted">
-    <Value>Add to product (selected)</Value>
-  </LocaleResource>
   <LocaleResource Name="Plugins.GBS.ProductManagement.ProductAttributes.Button.Add">
     <Value>Add to product</Value>
   </LocaleResource>
@@ -161,6 +158,9 @@
   
   <LocaleResource Name="Plugins.GBS.ProductManagement.ProductSpecificationAttributes.Fields.Name">
     <Value>Name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.GBS.ProductManagement.ProductSpecificationAttributes.Button.Add">
+    <Value>Add to product</Value>
   </LocaleResource>
   
   <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Info">

@@ -207,7 +207,7 @@ namespace GBS.Plugin.ProductManagement.Services
         /// <param name="pageIndex"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        public virtual IList<Product> GetProductsBySegmentId(int productSegmentManagerId, out int totalRecords, int pageIndex = 0,int pageSize  = int.MaxValue)
+        public virtual IList<Product> GetProductsBySegmentId(int productSegmentManagerId, out int totalRecords, int pageIndex = 0,int pageSize  = int.MaxValue,int vendorId = 0)
         {
             //some databases don't support int.MaxValue
             if (pageSize == int.MaxValue)
@@ -216,11 +216,12 @@ namespace GBS.Plugin.ProductManagement.Services
             var pProductSegmentManagerId = _dataProvider.GetInt32Parameter("ProductSegmentManagerId", productSegmentManagerId);
             var pPageIndex = _dataProvider.GetInt32Parameter("PageIndex", pageIndex);
             var pPageSize = _dataProvider.GetInt32Parameter("PageSize", pageSize);
+            var pVendorId = _dataProvider.GetInt32Parameter("VendorId", vendorId);
 
             //prepare output parameters
             var totalRecordsParameter = _dataProvider.GetOutputInt32Parameter("TotalRecords");
 
-            var products = _nopObjectContext.EntityFromSql<Product>("GBS_GetProductBySegmentId", pProductSegmentManagerId, pPageIndex, pPageSize, totalRecordsParameter);
+            var products = _nopObjectContext.EntityFromSql<Product>("GBS_GetProductBySegmentId", pProductSegmentManagerId, pPageIndex, pPageSize, pVendorId, totalRecordsParameter);
             
             totalRecords = totalRecordsParameter.Value != DBNull.Value ? Convert.ToInt32(totalRecordsParameter.Value) : 0;
             if (products != null)
@@ -238,17 +239,18 @@ namespace GBS.Plugin.ProductManagement.Services
         /// <param name="pageIndex"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        public virtual IList<ProductAttribute> GetProductAttributeBySegmentId(int productSegmentManagerId, out int totalRecords, int pageIndex = 0, int pageSize = int.MaxValue)
+        public virtual IList<ProductAttribute> GetProductAttributeBySegmentId(int productSegmentManagerId, out int totalRecords, int pageIndex = 0, int pageSize = int.MaxValue,int vendorId =0)
         {
             var pProductSegmentManagerId = _dataProvider.GetInt32Parameter("ProductSegmentManagerId", productSegmentManagerId);
             var pPageIndex = _dataProvider.GetInt32Parameter("PageIndex", pageIndex);
             var pPageSize = _dataProvider.GetInt32Parameter("PageSize", pageSize);
+            var pVendorId = _dataProvider.GetInt32Parameter("VendorId", vendorId);
 
             //prepare output parameters
             var pTotalRecords = _dataProvider.GetOutputInt32Parameter("TotalRecords");
             pTotalRecords.Size = int.MaxValue - 1;
 
-            var productAttributes = _nopObjectContext.EntityFromSql<ProductAttribute>("GBS_GetProductAttributeBySegmentId", pProductSegmentManagerId, pPageIndex, pPageSize, pTotalRecords);
+            var productAttributes = _nopObjectContext.EntityFromSql<ProductAttribute>("GBS_GetProductAttributeBySegmentId", pProductSegmentManagerId, pPageIndex, pPageSize, pVendorId, pTotalRecords);
 
             totalRecords = pTotalRecords.Value != DBNull.Value ? Convert.ToInt32(pTotalRecords.Value) : 0;
             if (productAttributes != null)
@@ -266,17 +268,18 @@ namespace GBS.Plugin.ProductManagement.Services
         /// <param name="pageIndex"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        public virtual IList<SpecificationAttribute> GetProductSpecificationAttributeBySegmentId(int productSegmentManagerId, out int totalRecords, int pageIndex = 0, int pageSize = int.MaxValue)
+        public virtual IList<SpecificationAttribute> GetProductSpecificationAttributeBySegmentId(int productSegmentManagerId, out int totalRecords, int pageIndex = 0, int pageSize = int.MaxValue,int vendorId = 0)
         {
             var pProductSegmentManagerId = _dataProvider.GetInt32Parameter("ProductSegmentManagerId", productSegmentManagerId);
             var pPageIndex = _dataProvider.GetInt32Parameter("PageIndex", pageIndex);
             var pPageSize = _dataProvider.GetInt32Parameter("PageSize", pageSize);
+            var pVendorId = _dataProvider.GetInt32Parameter("VendorId", vendorId);
 
             //prepare output parameters
             var pTotalRecords = _dataProvider.GetOutputInt32Parameter("TotalRecords");
             pTotalRecords.Size = int.MaxValue - 1;
 
-            var specificationAttributes = _nopObjectContext.EntityFromSql<SpecificationAttribute>("GBS_GetProductSpecificationAttributeBySegmentId", pProductSegmentManagerId, pPageIndex, pPageSize, pTotalRecords);
+            var specificationAttributes = _nopObjectContext.EntityFromSql<SpecificationAttribute>("GBS_GetProductSpecificationAttributeBySegmentId", pProductSegmentManagerId, pPageIndex, pPageSize, pVendorId, pTotalRecords);
 
             totalRecords = pTotalRecords.Value != DBNull.Value ? Convert.ToInt32(pTotalRecords.Value) : 0;
             if (specificationAttributes != null)
@@ -372,6 +375,7 @@ namespace GBS.Plugin.ProductManagement.Services
             _eventPublisher.EntityDeleted(gBS_ProductAttributeMap);
         }
         
+
         #endregion
     }
 }
