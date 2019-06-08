@@ -261,8 +261,8 @@ namespace GBS.Plugin.ProductManagement.Data
             //drop the table
             this.DropPluginTable(nameof(GBS_ProductSegment));
             this.DropPluginTable(nameof(GBS_ProductFilterOptions));
-            this.DropPluginTable(nameof(Product_Include_ExcludeMap));
-            this.DropPluginTable(nameof(GBS_ProductAttributeMap_Map));
+            this.DropPluginTable(nameof(GBS_Product_Include_Exclude));
+            this.DropPluginTable(nameof(GBS_ProductAttributeMap));
 
             //Drop Function or Procedure Create
             string dbInstallationScript = string.Empty;

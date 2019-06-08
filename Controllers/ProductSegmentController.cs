@@ -713,14 +713,14 @@ namespace GBS.Plugin.ProductManagement.Controllers
             if (!continueEditing)
             {
                 SaveSelectedTabName("tab-ProductAttributes");
-
+                
                 return RedirectToAction("Edit", new { id = model.ProductSegmentId });
             }
 
             //selected tab
-            SaveSelectedTabName("tab-ProductAttributes");
+            SaveSelectedTabName("tab-info");
 
-            return RedirectToAction("Edit", new { id = model.ProductSegmentId });
+            return RedirectToAction("ProductAttributeMappingEdit", new { productSegmentId = model.ProductSegmentId, productAttributeId = model.ProductAttributeId });
         }
 
         public IActionResult ProductAttributeMappingEdit(int productSegmentId, int productAttributeId)
@@ -833,9 +833,9 @@ namespace GBS.Plugin.ProductManagement.Controllers
             }
 
             //selected tab
-            SaveSelectedTabName("tab-ProductAttributes");
+            SaveSelectedTabName("tab-info");
 
-            return RedirectToAction("Edit", new { id = model.ProductSegmentId });
+            return RedirectToAction("ProductAttributeMappingEdit", new { productSegmentId = model.ProductSegmentId, productAttributeId = model.ProductAttributeId });
         }
 
         [HttpPost]
