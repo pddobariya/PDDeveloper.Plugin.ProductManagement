@@ -1446,10 +1446,10 @@ namespace GBS.Plugin.ProductManagement.Controllers
             }
             else
             {
+                var psa = _specificationAttributeService.GetProductSpecificationAttributeById(model.Id);
+                
                 for (int i = 0; i < products.Count; i++)
                 {
-                    var isMapWithProduct = _specificationAttributeService.GetProductSpecificationAttributeCount(productId: products[i].Id);
-
                     string customValue = "";
                     //we allow filtering only for "Option" attribute type
                     if (model.AttributeTypeId != (int)SpecificationAttributeType.Option)
@@ -1458,20 +1458,37 @@ namespace GBS.Plugin.ProductManagement.Controllers
                     //we don't allow CustomValue for "Option" attribute type
                     if (model.AttributeTypeId == (int)SpecificationAttributeType.Option)
                         customValue = null;
-
-                    var psa = new ProductSpecificationAttribute
+                    
+                    if (psa != null && psa.ProductId == products[i].Id)
                     {
-                        AttributeTypeId = model.AttributeTypeId,
-                        SpecificationAttributeOptionId = model.SpecificationAttributeOptionId,
-                        ProductId = products[i].Id,
-                        CustomValue = customValue,
-                        AllowFiltering = model.AllowFiltering,
-                        ShowOnProductPage = model.ShowOnProductPage,
-                        DisplayOrder = model.DisplayOrder
-                    };
-                    _specificationAttributeService.InsertProductSpecificationAttribute(psa);
+                        //we allow filtering and change option only for "Option" attribute type
+                        if (model.AttributeTypeId == (int)SpecificationAttributeType.Option)
+                        {
+                            psa.AllowFiltering = model.AllowFiltering;
+                            psa.SpecificationAttributeOptionId = model.SpecificationAttributeOptionId;
+                        }
 
-                    specificationValuesId = specificationValuesId + psa.Id + ",";
+                        psa.ShowOnProductPage = model.ShowOnProductPage;
+                        psa.DisplayOrder = model.DisplayOrder;
+                        _specificationAttributeService.UpdateProductSpecificationAttribute(psa);
+
+                        specificationValuesId = specificationValuesId + psa.Id + ",";
+                    }
+                    else
+                    {
+                        var psanew = new ProductSpecificationAttribute
+                        {
+                            AttributeTypeId = model.AttributeTypeId,
+                            SpecificationAttributeOptionId = model.SpecificationAttributeOptionId,
+                            ProductId = products[i].Id,
+                            CustomValue = customValue,
+                            AllowFiltering = model.AllowFiltering,
+                            ShowOnProductPage = model.ShowOnProductPage,
+                            DisplayOrder = model.DisplayOrder
+                        };
+                        _specificationAttributeService.InsertProductSpecificationAttribute(psanew);
+                        specificationValuesId = specificationValuesId + psanew.Id + ",";
+                    }
                 }
 
                 if (!string.IsNullOrEmpty(specificationValuesId))
@@ -1489,6 +1506,34 @@ namespace GBS.Plugin.ProductManagement.Controllers
 
             }
 
+            return new NullJsonResult();
+        }
+
+        [HttpPost]
+        public virtual IActionResult ProductSpecAttrDelete(Models.ProductSpecificationAttributeModel model)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
+                return Content("Access denied");
+
+            if (model.GBS_ProductAttributeMapId > 0)
+            {
+                var segmentMap = _productFilterOptionService.GetProductAttributeMapWithSegmentById(model.GBS_ProductAttributeMapId);
+
+                for (int i = 0; i < segmentMap.AttributeMapperIdList.Count; i++)
+                {
+                    //try to get a product specification attribute with the specified id
+                    var psa = _specificationAttributeService.GetProductSpecificationAttributeById(segmentMap.AttributeMapperIdList[i]);
+                    if (psa != null)
+                        _specificationAttributeService.DeleteProductSpecificationAttribute(psa);
+                }
+            }
+            else
+            {
+                //try to get a product specification attribute with the specified id
+                var psa = _specificationAttributeService.GetProductSpecificationAttributeById(model.Id);
+                if (psa != null)
+                    _specificationAttributeService.DeleteProductSpecificationAttribute(psa);
+            }
             return new NullJsonResult();
         }
 
