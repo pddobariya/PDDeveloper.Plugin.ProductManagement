@@ -1,14 +1,14 @@
-﻿using GBS.Plugin.ProductManagement.Domain;
+﻿using PDDeveloper.Plugin.ProductManagement.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Nop.Data.Mapping;
 
-namespace GBS.Plugin.ProductManagement.Data
+namespace PDDeveloper.Plugin.ProductManagement.Data
 {
     /// <summary>
     /// Represents a product segment opction(Condition for getting data) mapping cofiguraction
     /// </summary>
-    public partial class ProductFilterOptionsMap : NopEntityTypeConfiguration<GBS_ProductFilterOptions>
+    public partial class ProductFilterOptionsMap : NopEntityTypeConfiguration<PDD_ProductFilterOptions>
     {
         #region Methods
 
@@ -16,9 +16,9 @@ namespace GBS.Plugin.ProductManagement.Data
         /// Configures the entity
         /// </summary>
         /// <param name="builder">The builder to be used to configure the entity</param>
-        public override void Configure(EntityTypeBuilder<GBS_ProductFilterOptions> builder)
+        public override void Configure(EntityTypeBuilder<PDD_ProductFilterOptions> builder)
         {
-            builder.ToTable(nameof(GBS_ProductFilterOptions));
+            builder.ToTable(nameof(PDD_ProductFilterOptions));
             builder.HasKey(segmet => segmet.Id);
         }
 

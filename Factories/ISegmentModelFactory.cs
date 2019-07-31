@@ -1,10 +1,10 @@
-﻿using GBS.Plugin.ProductManagement.Domain;
-using GBS.Plugin.ProductManagement.Models;
+﻿using PDDeveloper.Plugin.ProductManagement.Domain;
+using PDDeveloper.Plugin.ProductManagement.Models;
 using Nop.Core.Domain.Catalog;
 using Nop.Web.Areas.Admin.Models.Catalog;
 using System.Collections.Generic;
 
-namespace GBS.Plugin.ProductManagement.Factories
+namespace PDDeveloper.Plugin.ProductManagement.Factories
 {
     public interface ISegmentModelFactory
     {
@@ -28,7 +28,7 @@ namespace GBS.Plugin.ProductManagement.Factories
         /// <param name="model">Product segment model</param>
         /// <param name="productSegment">productSegment</param>
         /// <returns>ProductSegmentModel</returns>
-        ProductSegmentModel PrepareProductSegmentModel(ProductSegmentModel model, GBS_ProductSegment productSegment);
+        ProductSegmentModel PrepareProductSegmentModel(ProductSegmentModel model, PDD_ProductSegment productSegment);
 
         /// <summary>
         /// Prepare product attribute mapping model

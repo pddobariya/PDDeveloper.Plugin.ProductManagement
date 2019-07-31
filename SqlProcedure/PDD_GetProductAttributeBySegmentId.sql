@@ -1,4 +1,4 @@
-CREATE PROCEDURE GBS_GetProductAttributeBySegmentId
+CREATE PROCEDURE PDD_GetProductAttributeBySegmentId
 (
 	@ProductSegmentManagerId INT  = 0,
 	@PageIndex			int = 0, 
@@ -27,7 +27,7 @@ BEGIN
 		DISTINCT 
 		pm.ProductAttributeId
 	FROM Product_ProductAttribute_Mapping pm
-	INNER JOIN  GBS_GetProductIdBySegmentId(@ProductSegmentManagerId,@VendorId) ps on pm.ProductId = ps.ProductId
+	INNER JOIN  PDD_GetProductIdBySegmentId(@ProductSegmentManagerId,@VendorId) ps on pm.ProductId = ps.ProductId
 	
 	--total records
 	SELECT @TotalRecords = COUNT(1) from @ProductAttributeIdsTable

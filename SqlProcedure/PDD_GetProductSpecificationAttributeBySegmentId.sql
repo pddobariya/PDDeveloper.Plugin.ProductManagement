@@ -1,4 +1,4 @@
-CREATE PROCEDURE GBS_GetProductSpecificationAttributeBySegmentId
+CREATE PROCEDURE PDD_GetProductSpecificationAttributeBySegmentId
 (
 	@ProductSegmentManagerId INT  = 0,
 	@PageIndex			int = 0, 
@@ -27,7 +27,7 @@ BEGIN
 		DISTINCT
 		sao.SpecificationAttributeId
 	FROM Product_SpecificationAttribute_Mapping psa
-	INNER JOIN GBS_GetProductIdBySegmentId(@ProductSegmentManagerId,@VendorId) ps on ps.ProductId = psa.ProductId
+	INNER JOIN PDD_GetProductIdBySegmentId(@ProductSegmentManagerId,@VendorId) ps on ps.ProductId = psa.ProductId
 	INNER JOIN  SpecificationAttributeOption sao on sao.Id = psa.SpecificationAttributeOptionId
 	
 	--total records

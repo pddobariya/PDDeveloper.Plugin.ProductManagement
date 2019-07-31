@@ -1,4 +1,4 @@
-﻿namespace GBS.Plugin.ProductManagement.Domain.Enums
+﻿namespace PDDeveloper.Plugin.ProductManagement.Domain.Enums
 {
     /// <summary>
     /// Product type include or excluded

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace GBS.Plugin.ProductManagement.Domain
+namespace PDDeveloper.Plugin.ProductManagement.Domain
 {
     /// <summary>
     /// Represents a product attribute Map with segment
     /// </summary>
-    public class GBS_ProductAttributeMap : BaseEntity
+    public class PDD_ProductAttributeMap : BaseEntity
     {
         /// <summary>
         /// Get or set  segment identity

@@ -1,4 +1,4 @@
-CREATE FUNCTION GBS_GetProductIdBySegmentId
+CREATE FUNCTION PDD_GetProductIdBySegmentId
 (
 	@ProductSegmentManagerId INT  = 0,
 	@VendorId INT = 0
@@ -22,7 +22,7 @@ BEGIN
 			[EndsWith],
 			[DoesNotEndWith],
 			[Contains]
-		FROM GBS_ProductFilterOptions 
+		FROM PDD_ProductFilterOptions 
 	WHERE ProductSegmentManagerId = @ProductSegmentManagerId
 
 
@@ -61,9 +61,9 @@ BEGIN
 	INSERT INTO @ProductIdsTable 
 	SELECT 
 		ProductId 
-	FROM GBS_Product_Include_Exclude WITH(NOLOCK) WHERE ProductType = 1		-- 1 For Include Product
+	FROM PDD_Product_Include_Exclude WITH(NOLOCK) WHERE ProductType = 1		-- 1 For Include Product
 
-	DELETE FROM @ProductIdsTable  WHERE ProductId in (SELECT ProductId FROM GBS_Product_Include_Exclude WITH(NOLOCK) WHERE ProductType = 2)
+	DELETE FROM @ProductIdsTable  WHERE ProductId in (SELECT ProductId FROM PDD_Product_Include_Exclude WITH(NOLOCK) WHERE ProductType = 2)
 
 	RETURN
 END

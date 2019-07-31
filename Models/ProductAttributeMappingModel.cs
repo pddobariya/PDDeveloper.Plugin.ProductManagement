@@ -1,8 +1,8 @@
-﻿namespace GBS.Plugin.ProductManagement.Models
+﻿namespace PDDeveloper.Plugin.ProductManagement.Models
 {
     public class ProductAttributeMappingModel : Nop.Web.Areas.Admin.Models.Catalog.ProductAttributeMappingModel
     {
-        public int GBS_ProductAttributeMapId { get; set; }
+        public int PDD_ProductAttributeMapId { get; set; }
 
         public int ProductSegmentId { get; set; }
 

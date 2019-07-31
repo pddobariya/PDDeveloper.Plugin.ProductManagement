@@ -1,8 +1,8 @@
-﻿using GBS.Plugin.ProductManagement.Domain;
-using GBS.Plugin.ProductManagement.Domain.Enums;
-using GBS.Plugin.ProductManagement.Factories;
-using GBS.Plugin.ProductManagement.Models;
-using GBS.Plugin.ProductManagement.Services;
+﻿using PDDeveloper.Plugin.ProductManagement.Domain;
+using PDDeveloper.Plugin.ProductManagement.Domain.Enums;
+using PDDeveloper.Plugin.ProductManagement.Factories;
+using PDDeveloper.Plugin.ProductManagement.Models;
+using PDDeveloper.Plugin.ProductManagement.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Core;
@@ -30,7 +30,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GBS.Plugin.ProductManagement.Controllers
+namespace PDDeveloper.Plugin.ProductManagement.Controllers
 {
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
@@ -223,7 +223,7 @@ namespace GBS.Plugin.ProductManagement.Controllers
 
             if (ModelState.IsValid)
             {
-                var productSegment = new GBS_ProductSegment
+                var productSegment = new PDD_ProductSegment
                 {
                     Name = model.Name,
                     Description = model.Description,
@@ -402,7 +402,7 @@ namespace GBS.Plugin.ProductManagement.Controllers
                 return Json(new DataSourceResult { Errors = ModelState.SerializeErrors() });
             }
 
-            var segmentOpction = new GBS_ProductFilterOptions
+            var segmentOpction = new PDD_ProductFilterOptions
             {
                 ProductSegmentManagerId = productSegmentId,
                 BeginsWith = model.BeginsWith,
@@ -558,7 +558,7 @@ namespace GBS.Plugin.ProductManagement.Controllers
                         if (existingIncludeProductMapping == 0)
                         {
                             _productFilterOptionService.InsertIncludeExcludeProduct(
-                                new GBS_Product_Include_Exclude
+                                new PDD_Product_Include_Exclude
                                 {
                                     ProductSegmentManagerId = productSegmentId,
                                     ProductType = productType,
@@ -609,7 +609,7 @@ namespace GBS.Plugin.ProductManagement.Controllers
                 return Content("Access denied");
 
             _productFilterOptionService.InsertIncludeExcludeProduct(
-                    new GBS_Product_Include_Exclude
+                    new PDD_Product_Include_Exclude
                     {
                         ProductSegmentManagerId = productSegmentId,
                         ProductType = (int)SegmentProductType.Exclude,
@@ -755,7 +755,7 @@ namespace GBS.Plugin.ProductManagement.Controllers
                 attributeMappingId = attributeMappingId.Substring(0, attributeMappingId.Length - 1);
 
             //Insert attribute mapping with segment
-            var mapper = new GBS_ProductAttributeMap()
+            var mapper = new PDD_ProductAttributeMap()
             {
                 EntityType = EntityTypeEnum.ProductAttributeMap.ToString(),
                 EntityId = model.ProductAttributeId,
@@ -794,7 +794,7 @@ namespace GBS.Plugin.ProductManagement.Controllers
             //prepare model
             var model = _segmentModelFactory.PrepareProductAttributeMappingModel(null, productSegmentId, productAttributeId, productAttributeMapping);
             model.AttributeMappedIds = productAttributeSegmentMapping.AttributeMapperId;
-            model.GBS_ProductAttributeMapId = productAttributeSegmentMapping.Id;
+            model.PDD_ProductAttributeMapId = productAttributeSegmentMapping.Id;
 
             if (model.ProductAttributeId == 0)
                 return RedirectToAction("Edit", new { id = model.ProductSegmentId });
@@ -1054,7 +1054,7 @@ namespace GBS.Plugin.ProductManagement.Controllers
                 attributeValuesId = attributeValuesId.Substring(0, attributeValuesId.Length - 1);
 
             //Insert attribute mapping with segment
-            var mapper = new GBS_ProductAttributeMap()
+            var mapper = new PDD_ProductAttributeMap()
             {
                 EntityType = EntityTypeEnum.ProductAttributeMapValue.ToString(),
                 EntityId = model.ProductAttributeId,
@@ -1092,7 +1092,7 @@ namespace GBS.Plugin.ProductManagement.Controllers
             model.ProductSegmentId = productSegmentId;
             model.AttributeMappedIds = productAttributeSegmentMapping.AttributeMapperId;
             model.ProductAttributeId = productAttributeId;
-            model.GBS_ProductAttributeMapId = productAttributeSegmentMapping.Id;
+            model.PDD_ProductAttributeMapId = productAttributeSegmentMapping.Id;
 
             return View("~/Plugins/GBS.Plugin.ProductManagement/Views/ProductAttribute/ProductAttributeValueEditPopup.cshtml", model);
         }
@@ -1212,7 +1212,7 @@ namespace GBS.Plugin.ProductManagement.Controllers
             if (!string.IsNullOrEmpty(attributeValuesId))
                 attributeValuesId = attributeValuesId.Substring(0, attributeValuesId.Length - 1);
 
-            var mapper = _productFilterOptionService.GetProductAttributeMapWithSegmentById(model.GBS_ProductAttributeMapId);
+            var mapper = _productFilterOptionService.GetProductAttributeMapWithSegmentById(model.PDD_ProductAttributeMapId);
             //Update attribute mapping with segment
             mapper.AttributeMapperId = attributeValuesId;
 
@@ -1357,7 +1357,7 @@ namespace GBS.Plugin.ProductManagement.Controllers
                 specificationValuesId = specificationValuesId.Substring(0, specificationValuesId.Length - 1);
 
             //Insert attribute mapping with segment
-            var mapper = new GBS_ProductAttributeMap()
+            var mapper = new PDD_ProductAttributeMap()
             {
                 EntityType = EntityTypeEnum.ProductSpecificationMapValue.ToString(),
                 EntityId = productSpecificationId,
@@ -1380,7 +1380,7 @@ namespace GBS.Plugin.ProductManagement.Controllers
             var products = _productFilterOptionService.GetProductsBySegmentId(model.ProductSegmentId, out totalRecord, vendorId: vendorId);
 
             string specificationValuesId = "";
-            if (model.GBS_ProductAttributeMapId > 0)
+            if (model.PDD_ProductAttributeMapId > 0)
             {
                 for (int i = 0; i < products.Count; i++)
                 {
@@ -1412,7 +1412,7 @@ namespace GBS.Plugin.ProductManagement.Controllers
                     }
                 }
 
-                var segmentMap = _productFilterOptionService.GetProductAttributeMapWithSegmentById(model.GBS_ProductAttributeMapId);
+                var segmentMap = _productFilterOptionService.GetProductAttributeMapWithSegmentById(model.PDD_ProductAttributeMapId);
 
                 for (int i = 0; i < segmentMap.AttributeMapperIdList.Count; i++)
                 {
@@ -1495,7 +1495,7 @@ namespace GBS.Plugin.ProductManagement.Controllers
                     specificationValuesId = specificationValuesId.Substring(0, specificationValuesId.Length - 1);
 
                 //Insert attribute mapping with segment
-                var mapper = new GBS_ProductAttributeMap()
+                var mapper = new PDD_ProductAttributeMap()
                 {
                     EntityType = EntityTypeEnum.ProductSpecificationMapValue.ToString(),
                     EntityId = model.ProductSpecificationId,
@@ -1515,9 +1515,9 @@ namespace GBS.Plugin.ProductManagement.Controllers
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
                 return Content("Access denied");
 
-            if (model.GBS_ProductAttributeMapId > 0)
+            if (model.PDD_ProductAttributeMapId > 0)
             {
-                var segmentMap = _productFilterOptionService.GetProductAttributeMapWithSegmentById(model.GBS_ProductAttributeMapId);
+                var segmentMap = _productFilterOptionService.GetProductAttributeMapWithSegmentById(model.PDD_ProductAttributeMapId);
 
                 for (int i = 0; i < segmentMap.AttributeMapperIdList.Count; i++)
                 {

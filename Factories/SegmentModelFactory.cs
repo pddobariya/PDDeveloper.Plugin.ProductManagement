@@ -1,6 +1,6 @@
-﻿using GBS.Plugin.ProductManagement.Domain;
-using GBS.Plugin.ProductManagement.Models;
-using GBS.Plugin.ProductManagement.Services;
+﻿using PDDeveloper.Plugin.ProductManagement.Domain;
+using PDDeveloper.Plugin.ProductManagement.Models;
+using PDDeveloper.Plugin.ProductManagement.Services;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Core.Domain.Catalog;
 using Nop.Services.Catalog;
@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 
-namespace GBS.Plugin.ProductManagement.Factories
+namespace PDDeveloper.Plugin.ProductManagement.Factories
 {
     public class SegmentModelFactory : ISegmentModelFactory
     {
@@ -251,7 +251,7 @@ namespace GBS.Plugin.ProductManagement.Factories
         /// <param name="model">Product segment model</param>
         /// <param name="productSegment">productSegment</param>
         /// <returns>ProductSegmentModel</returns>
-        public virtual ProductSegmentModel PrepareProductSegmentModel(ProductSegmentModel model, GBS_ProductSegment productSegment)
+        public virtual ProductSegmentModel PrepareProductSegmentModel(ProductSegmentModel model, PDD_ProductSegment productSegment)
         {
             if (productSegment != null)
             {
@@ -525,21 +525,21 @@ namespace GBS.Plugin.ProductManagement.Factories
             productSpecificationAttributes = productSpecificationAttributes.Where(p => p.SpecificationAttributeOption.SpecificationAttributeId == searchModel.ProductSpecificationId).ToList();
 
             bool isRecordAdd = true;
-            List<int> gBS_ProductAttributeMapIdList = new List<int>();
+            List<int> PDD_ProductAttributeMapIdList = new List<int>();
             var productSpecificationAttributeModelList = new List<Models.ProductSpecificationAttributeModel>();
             foreach (var attribute in productSpecificationAttributes)
             {
                 var specificationMapper = _productFilterOptionService.GetProductAttributeMapWithSegmentByAttributeMapperId(attribute.Id, searchModel.ProductSpecificationId, Domain.Enums.EntityTypeEnum.ProductSpecificationMapValue, searchModel.ProductSegmentId);
 
-                var gBS_ProductAttributeMapId = 0;
+                var PDD_ProductAttributeMapId = 0;
 
                 if (specificationMapper != null)
                 {
-                    if (!gBS_ProductAttributeMapIdList.Contains(specificationMapper.Id))
+                    if (!PDD_ProductAttributeMapIdList.Contains(specificationMapper.Id))
                     {
                         isRecordAdd = true;
-                        gBS_ProductAttributeMapId = specificationMapper.Id;
-                        gBS_ProductAttributeMapIdList.Add(specificationMapper.Id);
+                        PDD_ProductAttributeMapId = specificationMapper.Id;
+                        PDD_ProductAttributeMapIdList.Add(specificationMapper.Id);
                     }
 
                 }
@@ -559,7 +559,7 @@ namespace GBS.Plugin.ProductManagement.Factories
                         DisplayOrder = attribute.DisplayOrder,
                         ProductSegmentId = searchModel.ProductSegmentId,
                         ProductSpecificationId = searchModel.ProductSpecificationId,
-                        GBS_ProductAttributeMapId = gBS_ProductAttributeMapId
+                        PDD_ProductAttributeMapId = PDD_ProductAttributeMapId
                     };
 
                     //fill in additional values (not existing in the entity)

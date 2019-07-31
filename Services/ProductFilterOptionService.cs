@@ -1,6 +1,6 @@
-﻿using GBS.Plugin.ProductManagement.Data;
-using GBS.Plugin.ProductManagement.Domain;
-using GBS.Plugin.ProductManagement.Domain.Enums;
+﻿using PDDeveloper.Plugin.ProductManagement.Data;
+using PDDeveloper.Plugin.ProductManagement.Domain;
+using PDDeveloper.Plugin.ProductManagement.Domain.Enums;
 using Nop.Core;
 using Nop.Core.Data;
 using Nop.Core.Data.Extensions;
@@ -11,15 +11,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GBS.Plugin.ProductManagement.Services
+namespace PDDeveloper.Plugin.ProductManagement.Services
 {
     public class ProductFilterOptionService : IProductFilterOptionService
     {
         #region Fields
 
-        private readonly IRepository<GBS_ProductFilterOptions> _productFilterOptionRepository;
-        private readonly IRepository<GBS_Product_Include_Exclude> _product_Include_ExcludeRepository;
-        private readonly IRepository<GBS_ProductAttributeMap> _productAttributeMapRepository;
+        private readonly IRepository<PDD_ProductFilterOptions> _productFilterOptionRepository;
+        private readonly IRepository<PDD_Product_Include_Exclude> _product_Include_ExcludeRepository;
+        private readonly IRepository<PDD_ProductAttributeMap> _productAttributeMapRepository;
         private readonly IEventPublisher _eventPublisher;
         private readonly IDataProvider _dataProvider;
         private readonly ProductManagementObjectContext _dbContext;
@@ -28,9 +28,9 @@ namespace GBS.Plugin.ProductManagement.Services
         #endregion
 
         #region Ctor
-        public ProductFilterOptionService(IRepository<GBS_ProductFilterOptions> productFilterOptionRepository,
-            IRepository<GBS_Product_Include_Exclude> product_Include_ExcludeRepository,
-            IRepository<GBS_ProductAttributeMap> productAttributeMapRepository,
+        public ProductFilterOptionService(IRepository<PDD_ProductFilterOptions> productFilterOptionRepository,
+            IRepository<PDD_Product_Include_Exclude> product_Include_ExcludeRepository,
+            IRepository<PDD_ProductAttributeMap> productAttributeMapRepository,
             IEventPublisher eventPublisher,
             IDataProvider dataProvider,
             ProductManagementObjectContext dbContext,
@@ -52,10 +52,10 @@ namespace GBS.Plugin.ProductManagement.Services
         /// </summary>
         /// <param name="segmentId">Segment Identity</param>
         /// <returns></returns>
-        public IList<GBS_ProductFilterOptions> GetAllFilterOptionBySegmentId(int segmentId = 0)
+        public IList<PDD_ProductFilterOptions> GetAllFilterOptionBySegmentId(int segmentId = 0)
         {
             if (segmentId == 0)
-                return new List<GBS_ProductFilterOptions>();
+                return new List<PDD_ProductFilterOptions>();
 
             return _productFilterOptionRepository.Table.Where(p => p.ProductSegmentManagerId == segmentId).OrderByDescending(p => p.Id).ToList();
         }
@@ -64,7 +64,7 @@ namespace GBS.Plugin.ProductManagement.Services
         /// Insert product segment opction
         /// </summary>
         /// <param name="productFilterOption"></param>
-        public void InsertProductFilterOption(GBS_ProductFilterOptions productFilterOption)
+        public void InsertProductFilterOption(PDD_ProductFilterOptions productFilterOption)
         {
             if (productFilterOption == null)
                 throw new ArgumentNullException(nameof(productFilterOption));
@@ -79,7 +79,7 @@ namespace GBS.Plugin.ProductManagement.Services
         /// Updte product segment opction
         /// </summary>
         /// <param name="productFilterOption"></param>
-        public void UpdateProductFilterOption(GBS_ProductFilterOptions productFilterOption)
+        public void UpdateProductFilterOption(PDD_ProductFilterOptions productFilterOption)
         {
             if (productFilterOption == null)
                 throw new ArgumentNullException(nameof(productFilterOption));
@@ -94,7 +94,7 @@ namespace GBS.Plugin.ProductManagement.Services
         /// Delete product segment opction
         /// </summary>
         /// <param name="productFilterOption"></param>
-        public void DeleteProductFilterOption(GBS_ProductFilterOptions productFilterOption)
+        public void DeleteProductFilterOption(PDD_ProductFilterOptions productFilterOption)
         {
             if (productFilterOption == null)
                 throw new ArgumentNullException(nameof(productFilterOption));
@@ -110,7 +110,7 @@ namespace GBS.Plugin.ProductManagement.Services
         /// </summary>
         /// <param name="id">Opction identity</param>
         /// <returns>product segment opction</returns>
-        public GBS_ProductFilterOptions GetProductFilterOptionById(int id)
+        public PDD_ProductFilterOptions GetProductFilterOptionById(int id)
         {
             if (id == 0)
                 return null;
@@ -127,10 +127,10 @@ namespace GBS.Plugin.ProductManagement.Services
         /// </summary>
         /// <param name="segmentId">Segment Identity</param>
         /// <returns></returns>
-        public IList<GBS_Product_Include_Exclude> GetAllIncludeExcludeProductBySegmentId(int segmentId, SegmentProductType segmentProductType,int productId =0)
+        public IList<PDD_Product_Include_Exclude> GetAllIncludeExcludeProductBySegmentId(int segmentId, SegmentProductType segmentProductType,int productId =0)
         {
             if (segmentId == 0)
-                return new List<GBS_Product_Include_Exclude>();
+                return new List<PDD_Product_Include_Exclude>();
 
             var productids =  _product_Include_ExcludeRepository.Table.Where(p => p.ProductSegmentManagerId == segmentId && p.ProductType == (int)segmentProductType).OrderByDescending(p => p.Id).ToList();
 
@@ -144,7 +144,7 @@ namespace GBS.Plugin.ProductManagement.Services
         /// Insert IncludeExcludeProduct
         /// </summary>
         /// <param name="product_Include_Exclude"></param>
-        public void InsertIncludeExcludeProduct(GBS_Product_Include_Exclude product_Include_Exclude)
+        public void InsertIncludeExcludeProduct(PDD_Product_Include_Exclude product_Include_Exclude)
         {
             if (product_Include_Exclude == null)
                 throw new ArgumentNullException(nameof(product_Include_Exclude));
@@ -159,7 +159,7 @@ namespace GBS.Plugin.ProductManagement.Services
         /// Updte IncludeExcludeProduct
         /// </summary>
         /// <param name="product_Include_Exclude"></param>
-        public void UpdateIncludeExcludeProduct(GBS_Product_Include_Exclude product_Include_Exclude)
+        public void UpdateIncludeExcludeProduct(PDD_Product_Include_Exclude product_Include_Exclude)
         {
             if (product_Include_Exclude == null)
                 throw new ArgumentNullException(nameof(product_Include_Exclude));
@@ -174,7 +174,7 @@ namespace GBS.Plugin.ProductManagement.Services
         /// Delete IncludeExcludeProduct
         /// </summary>
         /// <param name="product_Include_Exclude"></param>
-        public void DeleteIncludeExcludeProduct(GBS_Product_Include_Exclude product_Include_Exclude)
+        public void DeleteIncludeExcludeProduct(PDD_Product_Include_Exclude product_Include_Exclude)
         {
             if (product_Include_Exclude == null)
                 throw new ArgumentNullException(nameof(product_Include_Exclude));
@@ -190,7 +190,7 @@ namespace GBS.Plugin.ProductManagement.Services
         /// </summary>
         /// <param name="id">Opction identity</param>
         /// <returns>Product_Include_Exclude</returns>
-        public GBS_Product_Include_Exclude GetIncludeExcludeProductById(int id)
+        public PDD_Product_Include_Exclude GetIncludeExcludeProductById(int id)
         {
             if (id == 0)
                 return null;
@@ -221,7 +221,7 @@ namespace GBS.Plugin.ProductManagement.Services
             //prepare output parameters
             var totalRecordsParameter = _dataProvider.GetOutputInt32Parameter("TotalRecords");
 
-            var products = _nopObjectContext.EntityFromSql<Product>("GBS_GetProductBySegmentId", pProductSegmentManagerId, pPageIndex, pPageSize, pVendorId, totalRecordsParameter);
+            var products = _nopObjectContext.EntityFromSql<Product>("PDD_GetProductBySegmentId", pProductSegmentManagerId, pPageIndex, pPageSize, pVendorId, totalRecordsParameter);
             
             totalRecords = totalRecordsParameter.Value != DBNull.Value ? Convert.ToInt32(totalRecordsParameter.Value) : 0;
             if (products != null)
@@ -250,7 +250,7 @@ namespace GBS.Plugin.ProductManagement.Services
             var pTotalRecords = _dataProvider.GetOutputInt32Parameter("TotalRecords");
             pTotalRecords.Size = int.MaxValue - 1;
 
-            var productAttributes = _nopObjectContext.EntityFromSql<ProductAttribute>("GBS_GetProductAttributeBySegmentId", pProductSegmentManagerId, pPageIndex, pPageSize, pVendorId, pTotalRecords);
+            var productAttributes = _nopObjectContext.EntityFromSql<ProductAttribute>("PDD_GetProductAttributeBySegmentId", pProductSegmentManagerId, pPageIndex, pPageSize, pVendorId, pTotalRecords);
 
             totalRecords = pTotalRecords.Value != DBNull.Value ? Convert.ToInt32(pTotalRecords.Value) : 0;
             if (productAttributes != null)
@@ -279,7 +279,7 @@ namespace GBS.Plugin.ProductManagement.Services
             var pTotalRecords = _dataProvider.GetOutputInt32Parameter("TotalRecords");
             pTotalRecords.Size = int.MaxValue - 1;
 
-            var specificationAttributes = _nopObjectContext.EntityFromSql<SpecificationAttribute>("GBS_GetProductSpecificationAttributeBySegmentId", pProductSegmentManagerId, pPageIndex, pPageSize, pVendorId, pTotalRecords);
+            var specificationAttributes = _nopObjectContext.EntityFromSql<SpecificationAttribute>("PDD_GetProductSpecificationAttributeBySegmentId", pProductSegmentManagerId, pPageIndex, pPageSize, pVendorId, pTotalRecords);
 
             totalRecords = pTotalRecords.Value != DBNull.Value ? Convert.ToInt32(pTotalRecords.Value) : 0;
             if (specificationAttributes != null)
@@ -293,31 +293,31 @@ namespace GBS.Plugin.ProductManagement.Services
         /// <summary>
         /// Insert attribute mapping with segment
         /// </summary>
-        /// <param name="gbs_ProductAttributeMap"></param>
-        public void InsertProductAttributeMapWithSegment(GBS_ProductAttributeMap gbs_ProductAttributeMap)
+        /// <param name="PDD_ProductAttributeMap"></param>
+        public void InsertProductAttributeMapWithSegment(PDD_ProductAttributeMap pdd_ProductAttributeMap)
         {
-            if (gbs_ProductAttributeMap == null)
-                throw new ArgumentNullException(nameof(gbs_ProductAttributeMap));
+            if (pdd_ProductAttributeMap == null)
+                throw new ArgumentNullException(nameof(pdd_ProductAttributeMap));
 
-            _productAttributeMapRepository.Insert(gbs_ProductAttributeMap);
+            _productAttributeMapRepository.Insert(pdd_ProductAttributeMap);
 
             //event notification
-            _eventPublisher.EntityInserted(gbs_ProductAttributeMap);
+            _eventPublisher.EntityInserted(pdd_ProductAttributeMap);
         }
 
         /// <summary>
-        /// Update gbs_ProductAttributeMap
+        /// Update PDD_ProductAttributeMap
         /// </summary>
-        /// <param name="gbs_ProductAttributeMap"></param>
-        public void UpdateProductAttributeMapWithSegment(GBS_ProductAttributeMap gbs_ProductAttributeMap)
+        /// <param name="PDD_ProductAttributeMap"></param>
+        public void UpdateProductAttributeMapWithSegment(PDD_ProductAttributeMap pdd_ProductAttributeMap)
         {
-            if (gbs_ProductAttributeMap == null)
-                throw new ArgumentNullException(nameof(gbs_ProductAttributeMap));
+            if (pdd_ProductAttributeMap == null)
+                throw new ArgumentNullException(nameof(pdd_ProductAttributeMap));
 
-            _productAttributeMapRepository.Update(gbs_ProductAttributeMap);
+            _productAttributeMapRepository.Update(pdd_ProductAttributeMap);
 
             //event notification
-            _eventPublisher.EntityUpdated(gbs_ProductAttributeMap);
+            _eventPublisher.EntityUpdated(pdd_ProductAttributeMap);
         }
 
         /// <summary>
@@ -327,7 +327,7 @@ namespace GBS.Plugin.ProductManagement.Services
         /// <param name="entityTypeEnum"></param>
         /// <param name="segmentId"></param>
         /// <returns></returns>
-        public List<GBS_ProductAttributeMap> GetProductAttributeMapWithSegment(int entityId, EntityTypeEnum entityTypeEnum, int segmentId)
+        public List<PDD_ProductAttributeMap> GetProductAttributeMapWithSegment(int entityId, EntityTypeEnum entityTypeEnum, int segmentId)
         {
             return _productAttributeMapRepository.Table.Where(p => p.EntityId == entityId && p.EntityType == entityTypeEnum.ToString() && p.SegmentId == segmentId).ToList();
         }
@@ -340,7 +340,7 @@ namespace GBS.Plugin.ProductManagement.Services
         /// <param name="entityTypeEnum"></param>
         /// <param name="segmentId"></param>
         /// <returns></returns>
-        public GBS_ProductAttributeMap GetProductAttributeMapWithSegmentByAttributeMapperId(int attributeMapperId,int entityId, EntityTypeEnum entityTypeEnum, int segmentId)
+        public PDD_ProductAttributeMap GetProductAttributeMapWithSegmentByAttributeMapperId(int attributeMapperId,int entityId, EntityTypeEnum entityTypeEnum, int segmentId)
         {
             var productAttributeMap = _productAttributeMapRepository.Table.Where(p => p.EntityId == entityId && p.EntityType == entityTypeEnum.ToString() && p.SegmentId == segmentId);
 
@@ -352,7 +352,7 @@ namespace GBS.Plugin.ProductManagement.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public GBS_ProductAttributeMap GetProductAttributeMapWithSegmentById(int id)
+        public PDD_ProductAttributeMap GetProductAttributeMapWithSegmentById(int id)
         {
             if (id == 0)
                 return null;
@@ -363,16 +363,16 @@ namespace GBS.Plugin.ProductManagement.Services
         /// <summary>
         /// Delete segment attribute map
         /// </summary>
-        /// <param name="gBS_ProductAttributeMap"></param>
-        public void DeleteProductAttributeMapWithSegment(GBS_ProductAttributeMap gBS_ProductAttributeMap)
+        /// <param name="PDD_ProductAttributeMap"></param>
+        public void DeleteProductAttributeMapWithSegment(PDD_ProductAttributeMap pdd_ProductAttributeMap)
         {
-            if (gBS_ProductAttributeMap == null)
-                throw new ArgumentNullException(nameof(gBS_ProductAttributeMap));
+            if (pdd_ProductAttributeMap == null)
+                throw new ArgumentNullException(nameof(pdd_ProductAttributeMap));
 
-            _productAttributeMapRepository.Delete(gBS_ProductAttributeMap);
+            _productAttributeMapRepository.Delete(pdd_ProductAttributeMap);
 
             //event notification
-            _eventPublisher.EntityDeleted(gBS_ProductAttributeMap);
+            _eventPublisher.EntityDeleted(pdd_ProductAttributeMap);
         }
         
 

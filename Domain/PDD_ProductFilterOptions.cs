@@ -1,12 +1,12 @@
 ﻿using Nop.Core;
 using System;
 
-namespace GBS.Plugin.ProductManagement.Domain
+namespace PDDeveloper.Plugin.ProductManagement.Domain
 {
     /// <summary>
     /// Represents a product segment opction(Condition for getting data)
     /// </summary>
-    public class GBS_ProductFilterOptions : BaseEntity
+    public class PDD_ProductFilterOptions : BaseEntity
     {
         /// <summary>
         /// Get or set ProductSegmentManager Identity

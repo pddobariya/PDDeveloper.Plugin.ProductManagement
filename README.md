@@ -1,2 +1,2 @@
-# GBS.Plugin.ProductManagement
+# PDDeveloper.Plugin.ProductManagement
 

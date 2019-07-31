@@ -1,9 +1,9 @@
 using Autofac;
 using Autofac.Core;
-using GBS.Plugin.ProductManagement.Data;
-using GBS.Plugin.ProductManagement.Domain;
-using GBS.Plugin.ProductManagement.Factories;
-using GBS.Plugin.ProductManagement.Services;
+using PDDeveloper.Plugin.ProductManagement.Data;
+using PDDeveloper.Plugin.ProductManagement.Domain;
+using PDDeveloper.Plugin.ProductManagement.Factories;
+using PDDeveloper.Plugin.ProductManagement.Services;
 using Nop.Core.Configuration;
 using Nop.Core.Data;
 using Nop.Core.Domain.Catalog;
@@ -12,7 +12,7 @@ using Nop.Core.Infrastructure.DependencyManagement;
 using Nop.Data;
 using Nop.Web.Framework.Infrastructure.Extensions;
 
-namespace GBS.Plugin.ProductManagement.Infrastructure
+namespace PDDeveloper.Plugin.ProductManagement.Infrastructure
 {
     /// <summary>
     /// Dependency registrar
@@ -38,19 +38,19 @@ namespace GBS.Plugin.ProductManagement.Infrastructure
             builder.RegisterPluginDataContext<ProductManagementObjectContext>("nop_object_context_product_segment");
 
             //override required repository with our custom context
-            builder.RegisterType<EfRepository<GBS_ProductSegment>>().As<IRepository<GBS_ProductSegment>>()
+            builder.RegisterType<EfRepository<PDD_ProductSegment>>().As<IRepository<PDD_ProductSegment>>()
                 .WithParameter(ResolvedParameter.ForNamed<IDbContext>("nop_object_context_product_segment"))
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<EfRepository<GBS_ProductFilterOptions>>().As<IRepository<GBS_ProductFilterOptions>>()
+            builder.RegisterType<EfRepository<PDD_ProductFilterOptions>>().As<IRepository<PDD_ProductFilterOptions>>()
                 .WithParameter(ResolvedParameter.ForNamed<IDbContext>("nop_object_context_product_segment"))
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<EfRepository<GBS_Product_Include_Exclude>>().As<IRepository<GBS_Product_Include_Exclude>>()
+            builder.RegisterType<EfRepository<PDD_Product_Include_Exclude>>().As<IRepository<PDD_Product_Include_Exclude>>()
                 .WithParameter(ResolvedParameter.ForNamed<IDbContext>("nop_object_context_product_segment"))
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<EfRepository<GBS_ProductAttributeMap>>().As<IRepository<GBS_ProductAttributeMap>>()
+            builder.RegisterType<EfRepository<PDD_ProductAttributeMap>>().As<IRepository<PDD_ProductAttributeMap>>()
                 .WithParameter(ResolvedParameter.ForNamed<IDbContext>("nop_object_context_product_segment"))
                 .InstancePerLifetimeScope();
         }

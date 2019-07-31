@@ -1,11 +1,11 @@
 ﻿using FluentValidation.Attributes;
-using GBS.Plugin.ProductManagement.Validators;
+using PDDeveloper.Plugin.ProductManagement.Validators;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Web.Framework.Models;
 using Nop.Web.Framework.Mvc.ModelBinding;
 using System.Collections.Generic;
 
-namespace GBS.Plugin.ProductManagement.Models
+namespace PDDeveloper.Plugin.ProductManagement.Models
 {
     [Validator(typeof(ProductSegmentValidator))]
     public class ProductSegmentModel : BaseNopEntityModel

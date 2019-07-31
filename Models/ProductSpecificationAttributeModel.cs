@@ -1,7 +1,7 @@
 ﻿using Nop.Web.Areas.Admin.Models.Catalog;
 using Nop.Web.Framework.Models;
 
-namespace GBS.Plugin.ProductManagement.Models
+namespace PDDeveloper.Plugin.ProductManagement.Models
 {
     public class ProductSpecificationAttributeModel : Nop.Web.Areas.Admin.Models.Catalog.ProductSpecificationAttributeModel
     {
@@ -20,6 +20,6 @@ namespace GBS.Plugin.ProductManagement.Models
 
         public int ProductSpecificationId { get; set; }
 
-        public int GBS_ProductAttributeMapId { get; set; }
+        public int PDD_ProductAttributeMapId { get; set; }
     }
 }

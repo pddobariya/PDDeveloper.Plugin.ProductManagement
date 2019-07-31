@@ -2,10 +2,10 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Nop.Core.Infrastructure;
-using GBS.Plugin.ProductManagement.Data;
+using PDDeveloper.Plugin.ProductManagement.Data;
 using Nop.Web.Framework.Infrastructure.Extensions;
 
-namespace GBS.Plugin.ProductManagement.Infrastructure
+namespace PDDeveloper.Plugin.ProductManagement.Infrastructure
 {
     /// <summary>
     /// Represents object for the configuring plugin DB context on application startup

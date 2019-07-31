@@ -1,4 +1,4 @@
-CREATE PROCEDURE GBS_GetProductBySegmentId
+CREATE PROCEDURE PDD_GetProductBySegmentId
 (
 	@ProductSegmentManagerId INT  = 0,
 	@PageIndex			int = 0, 
@@ -26,7 +26,7 @@ BEGIN
 	SELECT 
 		IndexId,
 		ProductId 
-	FROM GBS_GetProductIdBySegmentId(@ProductSegmentManagerId,@VendorId)
+	FROM PDD_GetProductIdBySegmentId(@ProductSegmentManagerId,@VendorId)
 	
 	--total records
 	SELECT @TotalRecords = COUNT(1) from @ProductIdsTable

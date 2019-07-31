@@ -1,4 +1,4 @@
-using GBS.Plugin.ProductManagement.Data;
+using PDDeveloper.Plugin.ProductManagement.Data;
 using Microsoft.AspNetCore.Routing;
 using Nop.Core;
 using Nop.Core.Data;
@@ -12,7 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
-namespace GBS.Plugin.ProductManagement
+namespace PDDeveloper.Plugin.ProductManagement
 {
     /// <summary>
     /// PLugin
@@ -72,39 +72,39 @@ namespace GBS.Plugin.ProductManagement
         }
 
         /// <summary>
-        /// Add menu in admin area base on condition if GBS is available then add chield menu in that or create GBS menu also
+        /// Add menu in admin area base on condition if PDD is available then add chield menu in that or create PDD menu also
         /// </summary>
         /// <param name="rootNode">Root menu of admin area</param>
         public void ManageSiteMap(SiteMapNode rootNode)
         {
             var menuItem = new SiteMapNode()
             {
-                SystemName = "GBS.ProductManagement",
-                Title = _localizationService.GetResource("Plugins.GBS.ProductManagement.Menu.Root.ProductManagement"),
+                SystemName = "PDDeveloper.ProductManagement",
+                Title = _localizationService.GetResource("Plugins.PDD.ProductManagement.Menu.Root.ProductManagement"),
                 ControllerName = "ProductSegment",
                 ActionName = "List",
                 Visible = true,
                 IconClass = "fa fa-dot-circle-o",
                 RouteValues = new RouteValueDictionary() { { "area", "Admin" } }
             };
-            var pluginNode = rootNode.ChildNodes.FirstOrDefault(x => x.SystemName == "GBS");
+            var pluginNode = rootNode.ChildNodes.FirstOrDefault(x => x.SystemName == "PDDeveloper");
             if (pluginNode != null)
             {
                 pluginNode.ChildNodes.Add(menuItem);
             }
             else
             {
-                var gbsRootNode = new SiteMapNode()
+                var pddRootNode = new SiteMapNode()
                 {
-                    SystemName = "GBS",
-                    Title = _localizationService.GetResource("Plugins.GBS.ProductManagement.Menu.Root"),
+                    SystemName = "PDDeveloper",
+                    Title = _localizationService.GetResource("Plugins.PDD.ProductManagement.Menu.Root"),
                     Visible = true,
                     IconClass = "fa fa-cube",
                     RouteValues = new RouteValueDictionary() { { "area", "Admin" } }
                 };
-                gbsRootNode.ChildNodes.Add(menuItem);
+                pddRootNode.ChildNodes.Add(menuItem);
 
-                rootNode.ChildNodes.Add(gbsRootNode);
+                rootNode.ChildNodes.Add(pddRootNode);
             }
         }
 
@@ -117,7 +117,7 @@ namespace GBS.Plugin.ProductManagement
             var language = _languageRepository.Table.FirstOrDefault(l => l.Name == "English");
 
             //save resources
-            foreach (var filePath in Directory.EnumerateFiles(_fileProvider.MapPath("~/Plugins/GBS.Plugin.ProductManagement/Localization/ResourceString"),
+            foreach (var filePath in Directory.EnumerateFiles(_fileProvider.MapPath("~/Plugins/PDD.Plugin.ProductManagement/Localization/ResourceString"),
                 "ResourceString.xml", SearchOption.TopDirectoryOnly))
             {
                 var localesXml = File.ReadAllText(filePath);
@@ -131,7 +131,7 @@ namespace GBS.Plugin.ProductManagement
         ///</summry>
         protected virtual void DeleteLocalResources()
         {
-            var file = Path.Combine(_fileProvider.MapPath("~/Plugins/GBS.Plugin.ProductManagement/Localization/ResourceString"), "ResourceString.xml");
+            var file = Path.Combine(_fileProvider.MapPath("~/Plugins/PDD.Plugin.ProductManagement/Localization/ResourceString"), "ResourceString.xml");
             var languageResourceNames = from name in XDocument.Load(file).Document.Descendants("LocaleResource")
                                         select name.Attribute("Name").Value;
 

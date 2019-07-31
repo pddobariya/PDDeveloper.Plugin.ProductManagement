@@ -1,206 +1,206 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Language Name="English">
-  <LocaleResource Name="Plugins.GBS.ProductManagement">
+  <LocaleResource Name="Plugins.PDD.ProductManagement">
     <Value>Product management</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Menu.Root">
-    <Value>GBS</Value>
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Menu.Root">
+    <Value>PD Developer</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Menu.Root.ProductManagement">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Menu.Root.ProductManagement">
     <Value>Product management</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentSearch.Name">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.SegmentSearch.Name">
     <Value>Segment Name</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentSearch.Name.Hint">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.SegmentSearch.Name.Hint">
     <Value>Segment Name</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentSearch.Store">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.SegmentSearch.Store">
     <Value>Stores</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentSearch.Store.hint">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.SegmentSearch.Store.hint">
     <Value>Stores</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Fields.Name">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Fields.Name">
     <Value>Name</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Fields.Name.Hint">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Fields.Name.Hint">
     <Value>Name of segment</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Fields.Name.Required">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Fields.Name.Required">
     <Value>Segment name is required</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Fields.Description">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Fields.Description">
     <Value>Description</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Fields.Description.Hint">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Fields.Description.Hint">
     <Value>Segment description</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Fields.DisplayOrder">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Fields.DisplayOrder">
     <Value>Display order</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Fields.DisplayOrder.Hint">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Fields.DisplayOrder.Hint">
     <Value>Display order</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Fields.StoreId">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Fields.StoreId">
     <Value>Store</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Fields.StoreId.Hint">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Fields.StoreId.Hint">
     <Value>Store</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.AddNew">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.AddNew">
     <Value>Create a new segment</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.BackToList">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.BackToList">
     <Value>back to product segment list</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.EditSegmentDetail">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.EditSegmentDetail">
     <Value>Edit product segment details</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Added">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Added">
     <Value>The new product segment has been added successfully.</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.ActivityLog.CreateSegment">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.ActivityLog.CreateSegment">
     <Value>Added a product segment ('{0}')</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Updated">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Updated">
     <Value>The product segment has been updated successfully.</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.ActivityLog.EditSegment">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.ActivityLog.EditSegment">
     <Value>Edited a product segment ('{0}')</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Deleted">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Deleted">
     <Value>The product segment has been deleted successfully.</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.ActivityLog.DeletedSegment">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.ActivityLog.DeletedSegment">
     <Value>Deleted a product segment ('{0}')</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentOption.Fields.ProductSegmentManagerId">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.SegmentOption.Fields.ProductSegmentManagerId">
     <Value>Product segment</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentOption.Fields.ProductSegmentManagerId.Hint">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.SegmentOption.Fields.ProductSegmentManagerId.Hint">
     <Value>Product segment</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentOption.Fields.BeginsWith">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.SegmentOption.Fields.BeginsWith">
     <Value>Begins with</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentOption.Fields.BeginsWith.Hint">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.SegmentOption.Fields.BeginsWith.Hint">
     <Value>Begins with</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentOption.Fields.EndsWith">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.SegmentOption.Fields.EndsWith">
     <Value>Ends with</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentOption.Fields.EndsWith.Hint">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.SegmentOption.Fields.EndsWith.Hint">
     <Value>Ends with</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentOption.Fields.DoesNotEndWith">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.SegmentOption.Fields.DoesNotEndWith">
     <Value>Does not ends with</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentOption.Fields.DoesNotEndWith.Hint">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.SegmentOption.Fields.DoesNotEndWith.Hint">
     <Value>Does not ends with</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentOption.Fields.Contains">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.SegmentOption.Fields.Contains">
     <Value>Contains</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.SegmentOption.Fields.Contains.Hint">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.SegmentOption.Fields.Contains.Hint">
     <Value>Contains</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.IncludeExclude.Product.AddNew">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Tab.IncludeExclude.Product.AddNew">
     <Value>Select product</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.ExcludeProduct.Fields.Name">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.ExcludeProduct.Fields.Name">
     <Value>Product name</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.ExcludeProduct.Fields.ProductType">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.ExcludeProduct.Fields.ProductType">
     <Value>Exclude</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Exclude.Product.AddNew">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Tab.Exclude.Product.AddNew">
     <Value>Add new Exclude product</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.IncludeProduct.Fields.Name">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.IncludeProduct.Fields.Name">
     <Value>Product name</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.IncludeProduct.Fields.ProductType">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.IncludeProduct.Fields.ProductType">
     <Value>Include</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Include.Product.AddNew">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Tab.Include.Product.AddNew">
     <Value>Add new Include product</Value>
   </LocaleResource>
 
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Products.Fields.Name">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Products.Fields.Name">
     <Value>Product Name</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Products.Fields.Sku">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Products.Fields.Sku">
     <Value>SKU</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Products.Fields.Sku">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Products.Fields.Sku">
     <Value>SKU</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Products.Fields.Exclude">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Products.Fields.Exclude">
     <Value>Exclude</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Products.Fields.ExcludeConfirmation">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Products.Fields.ExcludeConfirmation">
     <Value>Are you sure you want to exclude this product?</Value>
   </LocaleResource>
   
-  <LocaleResource Name="Plugins.GBS.ProductManagement.ProductAttributes.Fields.Name">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.ProductAttributes.Fields.Name">
     <Value>Name</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.ProductAttributes.Button.Add">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.ProductAttributes.Button.Add">
     <Value>Add to product</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.ProductAttributes.Button.Edit">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.ProductAttributes.Button.Edit">
     <Value>Edit attribute</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.ProductAttributes.BackToSegment">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.ProductAttributes.BackToSegment">
     <Value>back to segment</Value>
   </LocaleResource>
   
-  <LocaleResource Name="Plugins.GBS.ProductManagement.ProductSpecificationAttributes.Fields.Name">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.ProductSpecificationAttributes.Fields.Name">
     <Value>Name</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.ProductSpecificationAttributes.Button.Add">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.ProductSpecificationAttributes.Button.Add">
     <Value>Add to product</Value>
   </LocaleResource>
   
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Info">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Tab.Info">
     <Value>Info</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Condition">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Tab.Condition">
     <Value>Condition</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Include">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Tab.Include">
     <Value>Include</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Exclude">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Tab.Exclude">
     <Value>Exclude</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Product">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Tab.Product">
     <Value>Product</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.ProductAttributes">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Tab.ProductAttributes">
     <Value>Product attributes</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.ProductSpecificationAttributes">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Tab.ProductSpecificationAttributes">
     <Value>Specification attributes</Value>
   </LocaleResource>
 
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Condition.Message">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Tab.Condition.Message">
     <Value>Required to save a segment for add or update condition</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Include.Message">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Tab.Include.Message">
     <Value>Required to save a segment for add or remove include product</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Exclude.Message">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Tab.Exclude.Message">
     <Value>Required to save a segment for add or remove exclude product</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.Product.Message">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Tab.Product.Message">
     <Value>Required to save a segment for show products</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.ProductAttributes.Message">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Tab.ProductAttributes.Message">
     <Value>Required to save a segment for show product attributes</Value>
   </LocaleResource>
-  <LocaleResource Name="Plugins.GBS.ProductManagement.Segment.Tab.ProductSpecificationAttributes.Message">
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Tab.ProductSpecificationAttributes.Message">
     <Value>Required to save a segment for show product specification attributes</Value>
   </LocaleResource>
 </Language>

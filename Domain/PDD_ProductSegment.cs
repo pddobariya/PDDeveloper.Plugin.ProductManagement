@@ -1,12 +1,12 @@
 ﻿using Nop.Core;
 using System;
 
-namespace GBS.Plugin.ProductManagement.Domain
+namespace PDDeveloper.Plugin.ProductManagement.Domain
 {
     /// <summary>
     /// Represents a segment of product
     /// </summary>
-    public partial class GBS_ProductSegment : BaseEntity
+    public partial class PDD_ProductSegment : BaseEntity
     {
         /// <summary>
         /// Gets or sets a name

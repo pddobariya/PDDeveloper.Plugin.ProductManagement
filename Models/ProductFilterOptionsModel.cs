@@ -1,7 +1,7 @@
 ﻿using Nop.Web.Framework.Models;
 using Nop.Web.Framework.Mvc.ModelBinding;
 
-namespace GBS.Plugin.ProductManagement.Models
+namespace PDDeveloper.Plugin.ProductManagement.Models
 {
     //[Validator(typeof(ProductSegmentValidator))]
     public class ProductFilterOptionsModel : BaseNopEntityModel

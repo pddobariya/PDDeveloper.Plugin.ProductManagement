@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using GBS.Plugin.ProductManagement.Models;
+using PDDeveloper.Plugin.ProductManagement.Models;
 using Nop.Services.Localization;
 using Nop.Web.Framework.Validators;
 
-namespace GBS.Plugin.ProductManagement.Validators
+namespace PDDeveloper.Plugin.ProductManagement.Validators
 {
     public partial class ProductSegmentValidator : BaseNopValidator<ProductSegmentModel>
     {

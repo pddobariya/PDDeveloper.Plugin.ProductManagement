@@ -2,18 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <Copyright>Copyright © GBS</Copyright> 
-    <Company>GBS</Company> 
-    <Authors>GBS</Authors>
+    <Copyright>Copyright © PD Developer</Copyright> 
+    <Company>PD Developer</Company> 
+    <Authors>PD Developer</Authors>
     <PackageLicenseUrl></PackageLicenseUrl> 
-    <PackageProjectUrl>http://www.nopcommerce.com/</PackageProjectUrl> 
+    <PackageProjectUrl>http://pddeveloper.com/</PackageProjectUrl> 
     <RepositoryUrl></RepositoryUrl> 
     <RepositoryType>Git</RepositoryType>
   </PropertyGroup>
   
   <ItemGroup>
     <None Remove="Localization\ResourceString\ResourceString.xml" />
-    <None Remove="logo.jpg" />
     <None Remove="plugin.json" />
     <None Remove="Views\ProductAttribute\ProductAttributeMappingCreate.cshtml" />
     <None Remove="Views\ProductAttribute\ProductAttributeMappingEdit.cshtml" />
@@ -44,7 +43,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\..\Presentation\Nop.Web\Plugins\GBS.Plugin.ProductManagement</OutputPath>
+    <OutputPath>..\..\Presentation\Nop.Web\Plugins\PDDeveloper.Plugin.ProductManagement</OutputPath>
     <OutDir>$(OutputPath)</OutDir>
   </PropertyGroup>
 
@@ -52,9 +51,6 @@
     <Content Include="Localization\ResourceString\ResourceString.xml">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="logo.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="plugin.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -150,16 +146,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="SqlProcedure\GBS_Function_ProductIdsBySegmentId.sql">
+    <None Update="logo.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SqlProcedure\PDD_Function_ProductIdsBySegmentId.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="SqlProcedure\GBS_GetProductAttributeBySegmentId.sql">
+    <None Update="SqlProcedure\PDD_GetProductAttributeBySegmentId.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="SqlProcedure\GBS_GetProductBySegmentId.sql">
+    <None Update="SqlProcedure\PDD_GetProductBySegmentId.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="SqlProcedure\GBS_GetProductSpecificationAttributeBySegmentId.sql">
+    <None Update="SqlProcedure\PDD_GetProductSpecificationAttributeBySegmentId.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Views\ProductSegment\ProductAddPopup.cshtml">
