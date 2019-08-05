@@ -1,2 +1,0 @@
-# PDDeveloper.Plugin.ProductManagement
-
