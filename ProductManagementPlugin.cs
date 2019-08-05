@@ -1,11 +1,9 @@
 using PDDeveloper.Plugin.ProductManagement.Data;
 using Microsoft.AspNetCore.Routing;
-using Nop.Core;
 using Nop.Core.Data;
 using Nop.Core.Domain.Localization;
 using Nop.Core.Infrastructure;
 using Nop.Core.Plugins;
-using Nop.Services.Configuration;
 using Nop.Services.Localization;
 using Nop.Web.Framework.Menu;
 using System.IO;
@@ -21,22 +19,16 @@ namespace PDDeveloper.Plugin.ProductManagement
     {
         private readonly ILocalizationService _localizationService;
         private readonly IRepository<Language> _languageRepository;
-        private readonly ISettingService _settingService;
-        private readonly IWebHelper _webHelper;
         private readonly ProductManagementObjectContext _objectContext;
         private readonly INopFileProvider _fileProvider;
 
         public ProductManagementPlugin(ILocalizationService localizationService,
             IRepository<Language> languageRepository,
-            ISettingService settingService,
-            IWebHelper webHelper,
             ProductManagementObjectContext objectContext,
             INopFileProvider fileProvider)
         {
             this._localizationService = localizationService;
             this._languageRepository = languageRepository;
-            this._settingService = settingService;
-            this._webHelper = webHelper;
             this._objectContext = objectContext;
             this._fileProvider = fileProvider;
         }
@@ -117,7 +109,7 @@ namespace PDDeveloper.Plugin.ProductManagement
             var language = _languageRepository.Table.FirstOrDefault(l => l.Name == "English");
 
             //save resources
-            foreach (var filePath in Directory.EnumerateFiles(_fileProvider.MapPath("~/Plugins/PDD.Plugin.ProductManagement/Localization/ResourceString"),
+            foreach (var filePath in Directory.EnumerateFiles(_fileProvider.MapPath("~/Plugins/PDDeveloper.Plugin.ProductManagement/Localization/ResourceString"),
                 "ResourceString.xml", SearchOption.TopDirectoryOnly))
             {
                 var localesXml = File.ReadAllText(filePath);
@@ -131,7 +123,7 @@ namespace PDDeveloper.Plugin.ProductManagement
         ///</summry>
         protected virtual void DeleteLocalResources()
         {
-            var file = Path.Combine(_fileProvider.MapPath("~/Plugins/PDD.Plugin.ProductManagement/Localization/ResourceString"), "ResourceString.xml");
+            var file = Path.Combine(_fileProvider.MapPath("~/Plugins/PDDeveloper.Plugin.ProductManagement/Localization/ResourceString"), "ResourceString.xml");
             var languageResourceNames = from name in XDocument.Load(file).Document.Descendants("LocaleResource")
                                         select name.Attribute("Name").Value;
 

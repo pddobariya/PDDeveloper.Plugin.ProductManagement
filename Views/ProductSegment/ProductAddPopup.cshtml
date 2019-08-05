@@ -5,7 +5,7 @@
 	var popGridPageSize = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().PopupGridPageSize;
 
 	//page title
-	ViewBag.Title = T("Plugins.GBS.ProductManagement.Segment.Tab.IncludeExclude.Product.AddNew").Text;
+	ViewBag.Title = T("Plugins.PDD.ProductManagement.Segment.Tab.IncludeExclude.Product.AddNew").Text;
 }
 @if (ViewBag.RefreshPage == true)
 {
@@ -23,7 +23,7 @@
       asp-route-productType="@Context.Request.Query["productType"]">
 	<div class="content-header clearfix">
 		<h1 class="pull-left">
-			@T("Plugins.GBS.ProductManagement.Segment.Tab.IncludeExclude.Product.AddNew")
+			@T("Plugins.PDD.ProductManagement.Segment.Tab.IncludeExclude.Product.AddNew")
 		</h1>
 		<div class="pull-right">
 			&nbsp;

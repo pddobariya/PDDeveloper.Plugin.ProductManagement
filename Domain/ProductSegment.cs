@@ -1,7 +1,7 @@
 ﻿using Nop.Core;
 using System;
 
-namespace GBS.Plugin.ProductManagement.Domain
+namespace PDDeveloper.Plugin.ProductManagement.Domain
 {
     /// <summary>
     /// Represents a segment of product

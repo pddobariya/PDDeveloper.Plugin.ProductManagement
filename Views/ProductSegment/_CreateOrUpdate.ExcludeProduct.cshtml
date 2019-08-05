@@ -1,5 +1,5 @@
 @model ProductSegmentModel
-@using GBS.Plugin.ProductManagement.Domain.Enums
+@using PDDeveloper.Plugin.ProductManagement.Domain.Enums
 <input asp-for="Id" type="hidden" />
 
 <div class="panel-group">
@@ -75,10 +75,10 @@
                             columns: [
                                 {
                                     field: "ProductName",
-                                    title: "@T("Plugins.GBS.ProductManagement.ExcludeProduct.Fields.Name")"
+                                    title: "@T("Plugins.PDD.ProductManagement.ExcludeProduct.Fields.Name")"
                                 }, {
                                     field: "ProductType",
-                                    title: "@T("Plugins.GBS.ProductManagement.ExcludeProduct.Fields.ProductType")"
+                                    title: "@T("Plugins.PDD.ProductManagement.ExcludeProduct.Fields.ProductType")"
                                 }, {
                                     field: "ProductId",
                                     title: "@T("Admin.Common.View")",
@@ -107,7 +107,7 @@
             <button type="submit" id="btnAddNewExcludeProducts"
                     onclick="javascript:OpenWindow('@(Url.Action("ProductAddPopup", "ProductSegment", new {productSegmentId = Model.Id, btnId = "btnRefreshExcludeProducts", formId = "productsegment-form",productType= (int)SegmentProductType.Exclude}))', 800, 800, true); return false;"
                     class="btn btn-primary">
-                @T("Plugins.GBS.ProductManagement.Segment.Tab.Exclude.Product.AddNew")
+                @T("Plugins.PDD.ProductManagement.Segment.Tab.Exclude.Product.AddNew")
             </button>
             <input type="submit" id="btnRefreshExcludeProducts" style="display: none" />
             <script type="text/javascript">
@@ -129,7 +129,7 @@
     {
         <div class="panel panel-default">
             <div class="panel-body">
-                @T("Plugins.GBS.ProductManagement.Segment.Tab.Exclude.Message")
+                @T("Plugins.PDD.ProductManagement.Segment.Tab.Exclude.Message")
             </div>
         </div>
     }

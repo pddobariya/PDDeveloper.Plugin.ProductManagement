@@ -4,7 +4,7 @@
     Layout = "_AdminLayout";
 
     //page title
-    ViewBag.Title = T("Plugins.GBS.ProductManagement").Text;
+    ViewBag.Title = T("Plugins.PDD.ProductManagement").Text;
     //active menu item (system name)
     Html.SetActiveMenuItemSystemName("ProductManagement");
 }
@@ -12,7 +12,7 @@
 <nop-antiforgery-token />
 <div class="content-header clearfix">
     <h1 class="pull-left">
-        @T("Plugins.GBS.ProductManagement")
+        @T("Plugins.PDD.ProductManagement")
     </h1>
     <div class="pull-right">
         <a asp-action="Create" class="btn bg-blue">
@@ -118,11 +118,11 @@
                                 columns: [
                                     {
                                         field: "Name",
-                                        title: "@T("Plugins.GBS.ProductManagement.Segment.Fields.Name")"
+                                        title: "@T("Plugins.PDD.ProductManagement.Segment.Fields.Name")"
                                     },
                                     {
                                         field: "DisplayOrder",
-                                        title: "@T("Plugins.GBS.ProductManagement.Segment.Fields.DisplayOrder")",
+                                        title: "@T("Plugins.PDD.ProductManagement.Segment.Fields.DisplayOrder")",
                                         width: 150
                                     },
                                     @{ 
@@ -131,7 +131,7 @@
                                             <text>
                                                 {
                                                     field: "StoreName",
-                                                    title: "@T("Plugins.GBS.ProductManagement.Segment.Fields.StoreId")",
+                                                    title: "@T("Plugins.PDD.ProductManagement.Segment.Fields.StoreId")",
                                                     width: 150
                                                 },
                                             </text>

@@ -186,7 +186,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
             //prepare model
             var model = _segmentModelFactory.PrepareSegmentSearchModel(new ProductSegmentSearchModel());
 
-            return View("~/Plugins/GBS.Plugin.ProductManagement/Views/ProductSegment/List.cshtml", model);
+            return View("~/Plugins/PDDeveloper.Plugin.ProductManagement/Views/ProductSegment/List.cshtml", model);
         }
 
         [HttpPost]
@@ -212,7 +212,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
             //prepare model
             var model = _segmentModelFactory.PrepareProductSegmentModel(new ProductSegmentModel(), null);
 
-            return View("~/Plugins/GBS.Plugin.ProductManagement/Views/ProductSegment/Create.cshtml", model);
+            return View("~/Plugins/PDDeveloper.Plugin.ProductManagement/Views/ProductSegment/Create.cshtml", model);
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
@@ -236,9 +236,9 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("ProductSegmentAdded",
-                    string.Format(_localizationService.GetResource("Plugins.GBS.ProductManagement.Segment.ActivityLog.CreateSegment"), productSegment.Name), productSegment);
+                    string.Format(_localizationService.GetResource("Plugins.PDD.ProductManagement.Segment.ActivityLog.CreateSegment"), productSegment.Name), productSegment);
 
-                SuccessNotification(_localizationService.GetResource("Plugins.GBS.ProductManagement.Segment.Added"));
+                SuccessNotification(_localizationService.GetResource("Plugins.PDD.ProductManagement.Segment.Added"));
 
                 if (!continueEditing)
                     return RedirectToAction("List");
@@ -269,7 +269,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
             //prepare model
             var model = _segmentModelFactory.PrepareProductSegmentModel(null, productSegment);
 
-            return View("~/Plugins/GBS.Plugin.ProductManagement/Views/ProductSegment/Edit.cshtml", model);
+            return View("~/Plugins/PDDeveloper.Plugin.ProductManagement/Views/ProductSegment/Edit.cshtml", model);
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
@@ -295,9 +295,9 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("ProductSegmentEdit",
-                    string.Format(_localizationService.GetResource("Plugins.GBS.ProductManagement.Segment.ActivityLog.EditSegment"), productSegment.Name), productSegment);
+                    string.Format(_localizationService.GetResource("Plugins.PDD.ProductManagement.Segment.ActivityLog.EditSegment"), productSegment.Name), productSegment);
 
-                SuccessNotification(_localizationService.GetResource("Plugins.GBS.ProductManagement.Segment.Updated"));
+                SuccessNotification(_localizationService.GetResource("Plugins.PDD.ProductManagement.Segment.Updated"));
 
                 if (!continueEditing)
                     return RedirectToAction("List");
@@ -330,7 +330,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
 
             //activity log
             _customerActivityService.InsertActivity("ProductSegmentDelete",
-                string.Format(_localizationService.GetResource("Plugins.GBS.ProductManagement.Segment.ActivityLog.DeletedSegment"), segment.Name), segment);
+                string.Format(_localizationService.GetResource("Plugins.PDD.ProductManagement.Segment.ActivityLog.DeletedSegment"), segment.Name), segment);
 
             return new NullJsonResult();
         }
@@ -512,7 +512,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
             model.AvailableProductTypes = ProductType.SimpleProduct.ToSelectList(false).ToList();
             model.AvailableProductTypes.Insert(0, new SelectListItem { Text = _localizationService.GetResource("Admin.Common.All"), Value = "0" });
 
-            return View("~/Plugins/GBS.Plugin.ProductManagement/Views/ProductSegment/ProductAddPopup.cshtml", model);
+            return View("~/Plugins/PDDeveloper.Plugin.ProductManagement/Views/ProductSegment/ProductAddPopup.cshtml", model);
         }
 
         [HttpPost]
@@ -572,7 +572,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
             ViewBag.RefreshPage = true;
             ViewBag.btnId = btnId;
             ViewBag.formId = formId;
-            return View("~/Plugins/GBS.Plugin.ProductManagement/Views/ProductSegment/ProductAddPopup.cshtml", model);
+            return View("~/Plugins/PDDeveloper.Plugin.ProductManagement/Views/ProductSegment/ProductAddPopup.cshtml", model);
         }
 
         #endregion
@@ -657,7 +657,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
             if (model.ProductAttributeId == 0)
                 return RedirectToAction("Edit", new { id = model.ProductSegmentId });
 
-            return View("~/Plugins/GBS.Plugin.ProductManagement/Views/ProductAttribute/ProductAttributeMappingCreate.cshtml", model);
+            return View("~/Plugins/PDDeveloper.Plugin.ProductManagement/Views/ProductAttribute/ProductAttributeMappingCreate.cshtml", model);
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
@@ -674,7 +674,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
 
                 model = _segmentModelFactory.PrepareProductAttributeMappingModel(model, model.ProductAttributeId, model.ProductSegmentId, null, true);
 
-                return View("~/Plugins/GBS.Plugin.ProductManagement/Views/ProductAttribute/ProductAttributeMappingCreate.cshtml", model);
+                return View("~/Plugins/PDDeveloper.Plugin.ProductManagement/Views/ProductAttribute/ProductAttributeMappingCreate.cshtml", model);
             }
 
             var vendorId = _workContext.CurrentVendor != null ? _workContext.CurrentVendor.Id : 0;
@@ -799,7 +799,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
             if (model.ProductAttributeId == 0)
                 return RedirectToAction("Edit", new { id = model.ProductSegmentId });
 
-            return View("~/Plugins/GBS.Plugin.ProductManagement/Views/ProductAttribute/ProductAttributeMappingEdit.cshtml", model);
+            return View("~/Plugins/PDDeveloper.Plugin.ProductManagement/Views/ProductAttribute/ProductAttributeMappingEdit.cshtml", model);
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
@@ -985,7 +985,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
             model.AttributeMappedIds = productAttributeSegmentMapping.AttributeMapperId;
             model.ProductAttributeId = productAttributeId;
 
-            return View("~/Plugins/GBS.Plugin.ProductManagement/Views/ProductAttribute/ProductAttributeValueCreatePopup.cshtml", model);
+            return View("~/Plugins/PDDeveloper.Plugin.ProductManagement/Views/ProductAttribute/ProductAttributeValueCreatePopup.cshtml", model);
         }
 
         [HttpPost]
@@ -1065,7 +1065,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
 
             SuccessNotification(_localizationService.GetResource("Admin.Catalog.Products.ProductAttributes.Attributes.Added"));
             ViewBag.RefreshPage = true;
-            return View("~/Plugins/GBS.Plugin.ProductManagement/Views/ProductAttribute/ProductAttributeValueCreatePopup.cshtml", model);
+            return View("~/Plugins/PDDeveloper.Plugin.ProductManagement/Views/ProductAttribute/ProductAttributeValueCreatePopup.cshtml", model);
         }
 
         public virtual IActionResult ProductAttributeValueEditPopup(int id, int productSegmentId, int productAttributeId)
@@ -1094,7 +1094,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
             model.ProductAttributeId = productAttributeId;
             model.PDD_ProductAttributeMapId = productAttributeSegmentMapping.Id;
 
-            return View("~/Plugins/GBS.Plugin.ProductManagement/Views/ProductAttribute/ProductAttributeValueEditPopup.cshtml", model);
+            return View("~/Plugins/PDDeveloper.Plugin.ProductManagement/Views/ProductAttribute/ProductAttributeValueEditPopup.cshtml", model);
         }
 
         [HttpPost]
@@ -1220,7 +1220,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
 
             SuccessNotification(_localizationService.GetResource("Admin.Catalog.Products.ProductAttributes.Attributes.Added"));
             ViewBag.RefreshPage = true;
-            return View("~/Plugins/GBS.Plugin.ProductManagement/Views/ProductAttribute/ProductAttributeValueCreatePopup.cshtml", model);
+            return View("~/Plugins/PDDeveloper.Plugin.ProductManagement/Views/ProductAttribute/ProductAttributeValueCreatePopup.cshtml", model);
         }
 
         [HttpPost]
@@ -1298,7 +1298,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
             model.ProductSpecificationId = productSpecificationId;
             model.ProductSegmentId = productSegmentId;
 
-            return View("~/Plugins/GBS.Plugin.ProductManagement/Views/SpecificationAttribute/CreateOrUpdateSpecificationAttributes.cshtml", model);
+            return View("~/Plugins/PDDeveloper.Plugin.ProductManagement/Views/SpecificationAttribute/CreateOrUpdateSpecificationAttributes.cshtml", model);
         }
 
         [HttpPost]

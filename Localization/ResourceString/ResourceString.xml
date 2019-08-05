@@ -188,6 +188,9 @@
   <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Tab.Condition.Message">
     <Value>Required to save a segment for add or update condition</Value>
   </LocaleResource>
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Condition.Message">
+    <Value>You should enter SKU for starting with, End With, Does not end with and Contains. the product are search base on the SKU char. you can enter multiple condition with additing new row.</Value>
+  </LocaleResource>
   <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Tab.Include.Message">
     <Value>Required to save a segment for add or remove include product</Value>
   </LocaleResource>

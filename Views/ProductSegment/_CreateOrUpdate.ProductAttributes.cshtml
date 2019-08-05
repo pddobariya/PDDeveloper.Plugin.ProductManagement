@@ -62,7 +62,7 @@
                             columns: [
                                 {
                                     field: "Name",
-                                    title: "@T("Plugins.GBS.ProductManagement.ProductAttributes.Fields.Name")"
+                                    title: "@T("Plugins.PDD.ProductManagement.ProductAttributes.Fields.Name")"
                                 }, {
                                     field: "Id",
                                     title: "@T("Admin.Common.View")",
@@ -72,18 +72,18 @@
                                     template: '<a class="btn btn-default" href="@Url.Action("Edit", "ProductAttribute")/#=Id#"><i class="fa fa-eye"></i>@T("Admin.Common.View")</a>'
                                 }, {
                                     field: "Id",
-                                    title: "@T("Plugins.GBS.ProductManagement.ProductAttributes.Button.Add")",
+                                    title: "@T("Plugins.PDD.ProductManagement.ProductAttributes.Button.Add")",
                                     width: 100,
                                     headerAttributes: { style: "text-align:center" },
                                     attributes: { style: "text-align:center" },
-                                    template: '# if(!isAttributeAdded) {# <a class="btn btn-default" href="@Url.Content("~/Admin/ProductSegment/ProductAttributeMappingCreate?productSegmentId="+ Model.Id+ "&productAttributeId=")#=Id#"><i class="fa fa-plus-square"></i>@T("Plugins.GBS.ProductManagement.ProductAttributes.Button.Add")</a>#}#'
+                                    template: '# if(!isAttributeAdded) {# <a class="btn btn-default" href="@Url.Content("~/Admin/ProductSegment/ProductAttributeMappingCreate?productSegmentId="+ Model.Id+ "&productAttributeId=")#=Id#"><i class="fa fa-plus-square"></i>@T("Plugins.PDD.ProductManagement.ProductAttributes.Button.Add")</a>#}#'
                                 }, {
                                     field: "Id",
-                                    title: "@T("Plugins.GBS.ProductManagement.ProductAttributes.Button.Edit")",
+                                    title: "@T("Plugins.PDD.ProductManagement.ProductAttributes.Button.Edit")",
                                     width: 100,
                                     headerAttributes: { style: "text-align:center" },
                                     attributes: { style: "text-align:center" },
-                                    template: '# if(isAttributeAdded) {# <a class="btn btn-default" href="@Url.Content("~/Admin/ProductSegment/ProductAttributeMappingEdit?productSegmentId=" + Model.Id+ "&productAttributeId=")#=Id#"><i class="fa fa-pencil"></i>@T("Plugins.GBS.ProductManagement.ProductAttributes.Button.Edit")</a>#}#'
+                                    template: '# if(isAttributeAdded) {# <a class="btn btn-default" href="@Url.Content("~/Admin/ProductSegment/ProductAttributeMappingEdit?productSegmentId=" + Model.Id+ "&productAttributeId=")#=Id#"><i class="fa fa-pencil"></i>@T("Plugins.PDD.ProductManagement.ProductAttributes.Button.Edit")</a>#}#'
                                 }
                             ]
                         });
@@ -96,7 +96,7 @@
     {
         <div class="panel panel-default">
             <div class="panel-body">
-                @T("Plugins.GBS.ProductManagement.Segment.Tab.ProductAttributes.Message")
+                @T("Plugins.PDD.ProductManagement.Segment.Tab.ProductAttributes.Message")
             </div>
         </div>
     }

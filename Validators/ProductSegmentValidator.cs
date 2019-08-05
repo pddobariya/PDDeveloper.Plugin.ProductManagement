@@ -9,7 +9,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Validators
     {
         public ProductSegmentValidator(ILocalizationService localizationService)
         {
-            RuleFor(x => x.Name).NotEmpty().WithMessage(localizationService.GetResource("Plugins.GBS.ProductManagement.Segment.Fields.Name.Required"));
+            RuleFor(x => x.Name).NotEmpty().WithMessage(localizationService.GetResource("Plugins.PDD.ProductManagement.Segment.Fields.Name.Required"));
             
         }
     }

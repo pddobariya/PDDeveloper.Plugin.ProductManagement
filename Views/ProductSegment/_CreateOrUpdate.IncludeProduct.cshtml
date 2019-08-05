@@ -1,5 +1,5 @@
 @model ProductSegmentModel
-@using GBS.Plugin.ProductManagement.Domain.Enums
+@using PDDeveloper.Plugin.ProductManagement.Domain.Enums
 
 <input asp-for="Id" type="hidden" />
 
@@ -76,10 +76,10 @@
                             columns: [
                                 {
                                     field: "ProductName",
-                                    title: "@T("Plugins.GBS.ProductManagement.IncludeProduct.Fields.Name")"
+                                    title: "@T("Plugins.PDD.ProductManagement.IncludeProduct.Fields.Name")"
                                 }, {
                                     field: "ProductType",
-                                    title: "@T("Plugins.GBS.ProductManagement.IncludeProduct.Fields.ProductType")"
+                                    title: "@T("Plugins.PDD.ProductManagement.IncludeProduct.Fields.ProductType")"
                                 }, {
                                     field: "ProductId",
                                     title: "@T("Admin.Common.View")",
@@ -108,7 +108,7 @@
                 <button type="submit" id="btnAddNewIncludeProducts"
                         onclick="javascript:OpenWindow('@(Url.Action("ProductAddPopup", "ProductSegment", new {productSegmentId = Model.Id, btnId = "btnRefreshIncludeProducts", formId = "productsegment-form",productType= (int)SegmentProductType.Include}))', 800, 800, true); return false;"
                         class="btn btn-primary">
-                    @T("Plugins.GBS.ProductManagement.Segment.Tab.Include.Product.AddNew")
+                    @T("Plugins.PDD.ProductManagement.Segment.Tab.Include.Product.AddNew")
                 </button>
                 <input type="submit" id="btnRefreshIncludeProducts" style="display: none" />
                 <script type="text/javascript">
@@ -130,7 +130,7 @@
     {
         <div class="panel panel-default">
             <div class="panel-body">
-               @T("Plugins.GBS.ProductManagement.Segment.Tab.Include.Message")
+               @T("Plugins.PDD.ProductManagement.Segment.Tab.Include.Message")
             </div>
         </div>
     }

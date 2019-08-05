@@ -18,17 +18,17 @@ namespace PDDeveloper.Plugin.ProductManagement.Models
         #endregion
 
         #region Properties
-        [NopResourceDisplayName("Plugins.GBS.ProductManagement.Segment.Fields.Name")]
+        [NopResourceDisplayName("Plugins.PDD.ProductManagement.Segment.Fields.Name")]
         public string Name { get; set; }
 
-        [NopResourceDisplayName("Plugins.GBS.ProductManagement.Segment.Fields.Description")]
+        [NopResourceDisplayName("Plugins.PDD.ProductManagement.Segment.Fields.Description")]
         public string Description { get; set; }
 
-        [NopResourceDisplayName("Plugins.GBS.ProductManagement.Segment.Fields.DisplayOrder")]
+        [NopResourceDisplayName("Plugins.PDD.ProductManagement.Segment.Fields.DisplayOrder")]
         public int DisplayOrder { get; set; }
         
         public List<SelectListItem> AvailableStores { get; set; }
-        [NopResourceDisplayName("Plugins.GBS.ProductManagement.Segment.Fields.StoreId")]
+        [NopResourceDisplayName("Plugins.PDD.ProductManagement.Segment.Fields.StoreId")]
         public int StoreId { get; set; }
         public string StoreName { get; set; }
         

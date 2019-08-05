@@ -1,5 +1,4 @@
 ﻿using Nop.Web.Areas.Admin.Models.Catalog;
-using Nop.Web.Framework.Models;
 
 namespace PDDeveloper.Plugin.ProductManagement.Models
 {

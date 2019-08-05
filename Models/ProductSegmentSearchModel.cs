@@ -18,10 +18,10 @@ namespace PDDeveloper.Plugin.ProductManagement.Models
 
         #region Properties
 
-        [NopResourceDisplayName("Plugins.GBS.ProductManagement.SegmentSearch.Name")]
+        [NopResourceDisplayName("Plugins.PDD.ProductManagement.SegmentSearch.Name")]
         public string SearchSegmentName { get; set; }
 
-        [NopResourceDisplayName("Plugins.GBS.ProductManagement.SegmentSearch.Store")]
+        [NopResourceDisplayName("Plugins.PDD.ProductManagement.SegmentSearch.Store")]
         public int SearchStoreId { get; set; }
         public IList<SelectListItem> AvailableStores { get; set; }
 

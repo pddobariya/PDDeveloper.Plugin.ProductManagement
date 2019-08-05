@@ -66,17 +66,17 @@
                                 @Html.Partial("_GridPagerMessages")
                             },
                             editable: {
-                                confirmation: "@T("Plugins.GBS.ProductManagement.Products.Fields.ExcludeConfirmation")",
+                                confirmation: "@T("Plugins.PDD.ProductManagement.Products.Fields.ExcludeConfirmation")",
                                 mode: "inline"
                             },
                             scrollable: false,
                             columns: [
                                 {
                                     field: "Name",
-                                    title: "@T("Plugins.GBS.ProductManagement.Products.Fields.Name")"
+                                    title: "@T("Plugins.PDD.ProductManagement.Products.Fields.Name")"
                                 }, {
                                     field: "Sku",
-                                    title: "@T("Plugins.GBS.ProductManagement.Products.Fields.Sku")"
+                                    title: "@T("Plugins.PDD.ProductManagement.Products.Fields.Sku")"
                                 }, {
                                     field: "Id",
                                     title: "@T("Admin.Common.View")",
@@ -85,13 +85,13 @@
                                     attributes: { style: "text-align:center" },
                                     template: '<a class="btn btn-default" href="@Url.Action("Edit", "Product")/#=Id#"><i class="fa fa-eye"></i>@T("Admin.Common.View")</a>'
                                 }, {
-                                    title: "@T("Plugins.GBS.ProductManagement.Products.Fields.Exclude")",
+                                    title: "@T("Plugins.PDD.ProductManagement.Products.Fields.Exclude")",
                                     width: 100,
                                     headerAttributes: { style: "text-align:center" },
                                     command: [
                                         {
                                             name: "destroy",
-                                            text: "@T("Plugins.GBS.ProductManagement.Products.Fields.Exclude")"
+                                            text: "@T("Plugins.PDD.ProductManagement.Products.Fields.Exclude")"
                                         }
                                     ]
                                 }
@@ -106,7 +106,7 @@
     {
         <div class="panel panel-default">
             <div class="panel-body">
-                @T("Plugins.GBS.ProductManagement.Segment.Tab.Product.Message")
+                @T("Plugins.PDD.ProductManagement.Segment.Tab.Product.Message")
             </div>
         </div>
     }

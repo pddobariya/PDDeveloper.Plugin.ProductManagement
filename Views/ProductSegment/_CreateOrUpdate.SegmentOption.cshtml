@@ -3,6 +3,7 @@
 <div class="panel-group">
     @if (Model.Id > 0)
     {
+        @T("Plugins.PDD.ProductManagement.Segment.Condition.Message")
         <div class="panel panel-default">
             <div class="panel-body">
                 <div id="productSegmentOpction-grid"></div>
@@ -81,21 +82,21 @@
                             columns: [
                                 {
                                     field: "BeginsWith",
-                                    title: "@T("Plugins.GBS.ProductManagement.SegmentOption.Fields.BeginsWith")",
+                                    title: "@T("Plugins.PDD.ProductManagement.SegmentOption.Fields.BeginsWith")",
                                     width: 300
                                 }, {
                                     field: "EndsWith",
-                                    title: "@T("Plugins.GBS.ProductManagement.SegmentOption.Fields.EndsWith")",
+                                    title: "@T("Plugins.PDD.ProductManagement.SegmentOption.Fields.EndsWith")",
                                     width: 300
 
                                 }, {
                                     field: "DoesNotEndWith",
-                                    title: "@T("Plugins.GBS.ProductManagement.SegmentOption.Fields.DoesNotEndWith")",
+                                    title: "@T("Plugins.PDD.ProductManagement.SegmentOption.Fields.DoesNotEndWith")",
                                     width: 300
 
                                 }, {
                                     field: "Contains",
-                                    title: "@T("Plugins.GBS.ProductManagement.SegmentOption.Fields.Contains")",
+                                    title: "@T("Plugins.PDD.ProductManagement.SegmentOption.Fields.Contains")",
                                     width: 300
 
                                 }, {
@@ -125,7 +126,7 @@
     {
         <div class="panel panel-default">
             <div class="panel-body">
-                @T("Plugins.GBS.ProductManagement.Segment.Tab.Condition.Message")
+                @T("Plugins.PDD.ProductManagement.Segment.Tab.Condition.Message")
             </div>
         </div>
     }

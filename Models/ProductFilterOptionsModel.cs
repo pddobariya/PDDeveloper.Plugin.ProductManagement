@@ -13,19 +13,19 @@ namespace PDDeveloper.Plugin.ProductManagement.Models
         #endregion
 
         #region Properties
-        [NopResourceDisplayName("Plugins.GBS.ProductManagement.SegmentOption.Fields.ProductSegmentManagerId")]
+        [NopResourceDisplayName("Plugins.PDD.ProductManagement.SegmentOption.Fields.ProductSegmentManagerId")]
         public int ProductSegmentManagerId { get; set; }
 
-        [NopResourceDisplayName("Plugins.GBS.ProductManagement.SegmentOption.Fields.BeginsWith")]
+        [NopResourceDisplayName("Plugins.PDD.ProductManagement.SegmentOption.Fields.BeginsWith")]
         public string BeginsWith { get; set; }
 
-        [NopResourceDisplayName("Plugins.GBS.ProductManagement.SegmentOption.Fields.EndsWith")]
+        [NopResourceDisplayName("Plugins.PDD.ProductManagement.SegmentOption.Fields.EndsWith")]
         public string EndsWith { get; set; }
 
-        [NopResourceDisplayName("Plugins.GBS.ProductManagement.SegmentOption.Fields.DoesNotEndWith")]
+        [NopResourceDisplayName("Plugins.PDD.ProductManagement.SegmentOption.Fields.DoesNotEndWith")]
         public string DoesNotEndWith { get; set; }
 
-        [NopResourceDisplayName("Plugins.GBS.ProductManagement.SegmentOption.Fields.Contains")]
+        [NopResourceDisplayName("Plugins.PDD.ProductManagement.SegmentOption.Fields.Contains")]
         public string Contains { get; set; }
         #endregion
     }

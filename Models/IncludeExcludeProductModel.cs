@@ -11,10 +11,10 @@ namespace PDDeveloper.Plugin.ProductManagement.Models
 
         public int ProductId { get; set; }
 
-        [NopResourceDisplayName("Plugins.GBS.ProductManagement.IncludeProduct.Fields.Name")]
+        [NopResourceDisplayName("Plugins.PDD.ProductManagement.IncludeProduct.Fields.Name")]
         public string ProductName { get; set; }
 
-        [NopResourceDisplayName("Plugins.GBS.ProductManagement.IncludeProduct.Fields.ProductType")]
+        [NopResourceDisplayName("Plugins.PDD.ProductManagement.IncludeProduct.Fields.ProductType")]
         public string ProductType { get; set; }
     }
 
@@ -56,16 +56,16 @@ namespace PDDeveloper.Plugin.ProductManagement.Models
     public class Products
     {
         public int Id { get; set; }
-        [NopResourceDisplayName("Plugins.GBS.ProductManagement.Products.Fields.Name")]
+        [NopResourceDisplayName("Plugins.PDD.ProductManagement.Products.Fields.Name")]
         public string Name { get; set; }
-        [NopResourceDisplayName("Plugins.GBS.ProductManagement.Products.Fields.Sku")]
+        [NopResourceDisplayName("Plugins.PDD.ProductManagement.Products.Fields.Sku")]
         public string Sku { get; set; }
     }
 
     public class ProductAttributes
     {
         public int Id { get; set; }
-        [NopResourceDisplayName("Plugins.GBS.ProductManagement.ProductAttributes.Fields.Name")]
+        [NopResourceDisplayName("Plugins.PDD.ProductManagement.ProductAttributes.Fields.Name")]
         public string Name { get; set; }
         public bool isAttributeAdded { get; set; }
     }
@@ -73,7 +73,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Models
     public class ProductSpecificationAttributes
     {
         public int Id { get; set; }
-        [NopResourceDisplayName("Plugins.GBS.ProductManagement.ProductSpecificationAttributes.Fields.Name")]
+        [NopResourceDisplayName("Plugins.PDD.ProductManagement.ProductSpecificationAttributes.Fields.Name")]
         public string Name { get; set; }
     }
 }

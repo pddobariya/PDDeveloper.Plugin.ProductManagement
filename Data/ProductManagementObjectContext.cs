@@ -19,10 +19,10 @@ namespace PDDeveloper.Plugin.ProductManagement.Data
     {
         #region Const
 
-        private const string procedure_PDD_GetProductAttributeBySegmentId = "~/Plugins/GBS.Plugin.ProductManagement/SqlProcedure/PDD_GetProductAttributeBySegmentId.sql";
-        private const string procedure_PDD_GetProductBySegmentId = "~/Plugins/GBS.Plugin.ProductManagement/SqlProcedure/PDD_GetProductBySegmentId.sql";
-        private const string procedure_PDD_GetProductSpecificationAttributeBySegmentId = "~/Plugins/GBS.Plugin.ProductManagement/SqlProcedure/PDD_GetProductSpecificationAttributeBySegmentId.sql";
-        private const string function_PDD_ProductIdsBySegmentId = "~/Plugins/GBS.Plugin.ProductManagement/SqlProcedure/PDD_Function_ProductIdsBySegmentId.sql";
+        private const string procedure_PDD_GetProductAttributeBySegmentId = "~/Plugins/PDDeveloper.Plugin.ProductManagement/SqlProcedure/PDD_GetProductAttributeBySegmentId.sql";
+        private const string procedure_PDD_GetProductBySegmentId = "~/Plugins/PDDeveloper.Plugin.ProductManagement/SqlProcedure/PDD_GetProductBySegmentId.sql";
+        private const string procedure_PDD_GetProductSpecificationAttributeBySegmentId = "~/Plugins/PDDeveloper.Plugin.ProductManagement/SqlProcedure/PDD_GetProductSpecificationAttributeBySegmentId.sql";
+        private const string function_PDD_ProductIdsBySegmentId = "~/Plugins/PDDeveloper.Plugin.ProductManagement/SqlProcedure/PDD_Function_ProductIdsBySegmentId.sql";
 
         #endregion
 

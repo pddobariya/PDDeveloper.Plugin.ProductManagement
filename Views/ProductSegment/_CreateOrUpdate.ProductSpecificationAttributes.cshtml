@@ -63,7 +63,7 @@
                             columns: [
                                 {
                                     field: "Name",
-                                    title: "@T("Plugins.GBS.ProductManagement.ProductSpecificationAttributes.Fields.Name")"
+                                    title: "@T("Plugins.PDD.ProductManagement.ProductSpecificationAttributes.Fields.Name")"
                                 }, {
                                     field: "Id",
                                     title: "@T("Admin.Common.View")",
@@ -73,11 +73,11 @@
                                     template: '<a class="btn btn-default" href="@Url.Action("Edit", "SpecificationAttribute")/#=Id#"><i class="fa fa-eye"></i>@T("Admin.Common.View")</a>'
                                 },{
                                     field: "Id",
-                                    title: "@T("Plugins.GBS.ProductManagement.ProductSpecificationAttributes.Button.Add")",
+                                    title: "@T("Plugins.PDD.ProductManagement.ProductSpecificationAttributes.Button.Add")",
                                     width: 100,
                                     headerAttributes: { style: "text-align:center" },
                                     attributes: { style: "text-align:center" },
-                                    template: '<a class="btn btn-default" href="@Url.Content("~/Admin/ProductSegment/AddSpecificationAttributeToProduct?productSegmentId=" + Model.Id+ "&productSpecificationId=")#=Id#"><i class="fa fa-plus-square"></i>@T("Plugins.GBS.ProductManagement.ProductSpecificationAttributes.Button.Add")</a>'
+                                    template: '<a class="btn btn-default" href="@Url.Content("~/Admin/ProductSegment/AddSpecificationAttributeToProduct?productSegmentId=" + Model.Id+ "&productSpecificationId=")#=Id#"><i class="fa fa-plus-square"></i>@T("Plugins.PDD.ProductManagement.ProductSpecificationAttributes.Button.Add")</a>'
                                 }
                             ]
                         });
@@ -90,7 +90,7 @@
     {
         <div class="panel panel-default">
             <div class="panel-body">
-                @T("Plugins.GBS.ProductManagement.Segment.Tab.ProductSpecificationAttributes.Message")
+                @T("Plugins.PDD.ProductManagement.Segment.Tab.ProductSpecificationAttributes.Message")
             </div>
         </div>
     }

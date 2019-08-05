@@ -3,7 +3,7 @@
     Layout = "_AdminLayout";
 
     //page title
-    ViewBag.Title = T("Plugins.GBS.ProductManagement.Segment.AddNew").Text;
+    ViewBag.Title = T("Plugins.PDD.ProductManagement.Segment.AddNew").Text;
     //active menu item (system name)
     Html.SetActiveMenuItemSystemName("ProductManagement");
 }
@@ -11,10 +11,10 @@
 <form asp-controller="ProductSegment" asp-action="Create" method="post" id="productsegment-form">
     <div class="content-header clearfix">
         <h1 class="pull-left">
-            @T("Plugins.GBS.ProductManagement.Segment.AddNew")
+            @T("Plugins.PDD.ProductManagement.Segment.AddNew")
             <small>
                 <i class="fa fa-arrow-circle-left"></i>
-                <a asp-action="List">@T("Plugins.GBS.ProductManagement.Segment.BackToList")</a>
+                <a asp-action="List">@T("Plugins.PDD.ProductManagement.Segment.BackToList")</a>
             </small>
         </h1>
         <div class="pull-right">
@@ -28,5 +28,5 @@
             </button>
         </div>
     </div>
-    @await Html.PartialAsync("~/Plugins/GBS.Plugin.ProductManagement/Views/ProductSegment/_CreateOrUpdate.cshtml", Model)
+    @await Html.PartialAsync("~/Plugins/PDDeveloper.Plugin.ProductManagement/Views/ProductSegment/_CreateOrUpdate.cshtml", Model)
 </form>
