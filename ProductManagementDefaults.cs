@@ -3,12 +3,12 @@
     /// <summary>
     /// Represents constants for the Product management plugin
     /// </summary>
-    public static class ProductManagementDefault
+    public static class ProductManagementDefaults
     {
         /// <summary>
         /// Admin view Path
         /// </summary>
-        public const string AdminViewPath = "";
+        public const string AdminViewPath = "~/Plugins/PDDeveloper.Plugin.ProductManagement/Views/";
 
         /// <summary>
         /// Resource string file path

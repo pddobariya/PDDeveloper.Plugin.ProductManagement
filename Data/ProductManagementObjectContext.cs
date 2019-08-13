@@ -3,7 +3,7 @@ using System.Data;
 using System.Data.Common;
 using System.IO;
 using System.Linq;
-//using PDDeveloper.Plugin.ProductManagement.Domain;
+using PDDeveloper.Plugin.ProductManagement.Domain;
 using Microsoft.EntityFrameworkCore;
 using Nop.Core;
 using Nop.Core.Infrastructure;
@@ -12,6 +12,9 @@ using Nop.Data.Extensions;
 
 namespace PDDeveloper.Plugin.ProductManagement.Data
 {
+    /// <summary>
+    /// Represents plugin object context
+    /// </summary>
     public class ProductManagementObjectContext : DbContext, IDbContext
     {
         #region Ctor
@@ -30,10 +33,10 @@ namespace PDDeveloper.Plugin.ProductManagement.Data
         /// <param name="modelBuilder">Model muilder</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.ApplyConfiguration(new ProductSegmentMap());
-            //modelBuilder.ApplyConfiguration(new ProductFilterOptionsMap());
-            //modelBuilder.ApplyConfiguration(new Product_Include_ExcludeMap());
-            //modelBuilder.ApplyConfiguration(new PDD_ProductAttributeMap_Map());
+            modelBuilder.ApplyConfiguration(new ProductSegmentMap());
+            modelBuilder.ApplyConfiguration(new ProductFilterOptionsMap());
+            modelBuilder.ApplyConfiguration(new Product_Include_ExcludeMap());
+            modelBuilder.ApplyConfiguration(new PDD_ProductAttributeMap_Map());
             base.OnModelCreating(modelBuilder);
         }
 
@@ -106,7 +109,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Data
         {
             return this.Set<TEntity>().FromSql(CreateSqlWithParameters(sql, parameters), parameters);
         }
-
+        
         /// <summary>
         /// Executes the given SQL against the database
         /// </summary>
@@ -216,20 +219,20 @@ namespace PDDeveloper.Plugin.ProductManagement.Data
                 dbInstallationScript += "END";
                 dbInstallationScript += Environment.NewLine;
                 dbInstallationScript += "GO";
-
+                
+                this.ExecuteSqlScript(dbInstallationScript);
+                
+                var fileProvider = EngineContext.Current.Resolve<INopFileProvider>();
+                dbInstallationScript = File.ReadAllText(fileProvider.MapPath(ProductManagementDefaults.ProcedureFilePath + "PDD_GetProductAttributeBySegmentId.sql"));
                 this.ExecuteSqlScript(dbInstallationScript);
 
-                var _fileProvider = EngineContext.Current.Resolve<INopFileProvider>();
-                dbInstallationScript = File.ReadAllText(_fileProvider.MapPath(ProductManagementDefault.ProcedureFilePath + "PDD_GetProductAttributeBySegmentId.sql"));
+                dbInstallationScript = File.ReadAllText(fileProvider.MapPath(ProductManagementDefaults.ProcedureFilePath + "PDD_GetProductBySegmentId.sql"));
                 this.ExecuteSqlScript(dbInstallationScript);
 
-                dbInstallationScript = File.ReadAllText(_fileProvider.MapPath(ProductManagementDefault.ProcedureFilePath + "PDD_GetProductBySegmentId.sql"));
+                dbInstallationScript = File.ReadAllText(fileProvider.MapPath(ProductManagementDefaults.ProcedureFilePath + "PDD_GetProductSpecificationAttributeBySegmentId.sql"));
                 this.ExecuteSqlScript(dbInstallationScript);
-
-                dbInstallationScript = File.ReadAllText(_fileProvider.MapPath(ProductManagementDefault.ProcedureFilePath + "PDD_GetProductSpecificationAttributeBySegmentId.sql"));
-                this.ExecuteSqlScript(dbInstallationScript);
-
-                dbInstallationScript = File.ReadAllText(_fileProvider.MapPath(ProductManagementDefault.ProcedureFilePath + "PDD_Function_ProductIdsBySegmentId.sql"));
+                
+                dbInstallationScript = File.ReadAllText(fileProvider.MapPath(ProductManagementDefaults.ProcedureFilePath + "PDD_Function_ProductIdsBySegmentId.sql"));
                 this.ExecuteSqlScript(dbInstallationScript);
 
                 //End Function or Procedure
@@ -247,14 +250,14 @@ namespace PDDeveloper.Plugin.ProductManagement.Data
         public void Uninstall()
         {
             //drop the table
-            //this.DropPluginTable(nameof(PDD_ProductSegment));
-            //this.DropPluginTable(nameof(PDD_ProductFilterOptions));
-            //this.DropPluginTable(nameof(PDD_Product_Include_Exclude));
-            //this.DropPluginTable(nameof(PDD_ProductAttributeMap));
+            this.DropPluginTable(nameof(PDD_ProductSegment));
+            this.DropPluginTable(nameof(PDD_ProductFilterOptions));
+            this.DropPluginTable(nameof(PDD_Product_Include_Exclude));
+            this.DropPluginTable(nameof(PDD_ProductAttributeMap));
 
             //Drop Function or Procedure Create
             string dbInstallationScript = string.Empty;
-
+            
             dbInstallationScript = string.Empty;
             dbInstallationScript += "IF EXISTS (SELECT * FROM sys.objects WHERE type = 'TF' AND OBJECT_ID = OBJECT_ID('dbo.PDD_GetProductIdBySegmentId'))";
             dbInstallationScript += Environment.NewLine;

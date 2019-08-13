@@ -1,0 +1,47 @@
+@model ProductSegmentModel
+
+<div class="panel-body">
+    <div class="sub-panel">
+        @if (Model.Id > 0)
+        {
+            @await Html.PartialAsync("Table", new DataTablesModel
+       {
+           Name = "segmentOpction-grid",
+           UrlRead = new DataUrl("ProductSegmentOpctionList", "ProductSegment",new RouteValueDictionary {[nameof(Model.ProductSegmentOptionSearchModel.ProductSegmentId)] = Model.Id}),
+           SearchButtonId = "search-segmentOpction",
+           Length = Model.ProductSegmentOptionSearchModel.PageSize,
+           LengthMenu = Model.ProductSegmentOptionSearchModel.AvailablePageSizes,
+           ColumnCollection = new List<ColumnProperty>
+                {
+                    new ColumnProperty(nameof(ProductFilterOptionsModel.BeginsWith))
+                    {
+                        Title = T("Plugins.PDD.ProductManagement.SegmentOption.Fields.BeginsWith").Text
+                    },
+                    new ColumnProperty(nameof(ProductFilterOptionsModel.EndsWith))
+                    {
+                        Title = T("Plugins.PDD.ProductManagement.SegmentOption.Fields.EndsWith").Text
+                    },
+                    new ColumnProperty(nameof(ProductFilterOptionsModel.DoesNotEndWith))
+                    {
+                        Title = T("Plugins.PDD.ProductManagement.SegmentOption.Fields.DoesNotEndWith").Text
+                    },
+                     new ColumnProperty(nameof(ProductFilterOptionsModel.Contains))
+                    {
+                        Title = T("Plugins.PDD.ProductManagement.SegmentOption.Fields.Contains").Text
+                    },
+                    new ColumnProperty(nameof(ProductFilterOptionsModel.Id))
+                    {
+                        Title = T("Admin.Common.Edit").Text,
+                        Width = "100",
+                        ClassName =  NopColumnClassDefaults.Button,
+                        Render = new RenderButtonEdit(new DataUrl("Edit"))
+                    }
+                }
+       });
+        }
+        else
+        {
+            @T("Plugins.PDD.ProductManagement.Segment.Tab.Condition.Message")
+        }
+    </div>
+</div>

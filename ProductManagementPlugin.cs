@@ -47,7 +47,7 @@ namespace PDDeveloper.Plugin.ProductManagement
             var language = _languageRepository.Table.Single(l => l.Name == "English");
 
             //save resources
-            foreach (var filePath in Directory.EnumerateFiles(_fileProvider.MapPath(ProductManagementDefault.ResourceFilePath),
+            foreach (var filePath in Directory.EnumerateFiles(_fileProvider.MapPath(ProductManagementDefaults.ResourceFilePath),
                 "ResourceString.xml", SearchOption.TopDirectoryOnly))
             {
                 var localizationService = EngineContext.Current.Resolve<ILocalizationService>();
@@ -63,7 +63,7 @@ namespace PDDeveloper.Plugin.ProductManagement
         ///</summry>
         protected virtual void DeleteLocalResources()
         {
-            var file = Path.Combine(_fileProvider.MapPath(ProductManagementDefault.ResourceFilePath), "ResourceString.xml");
+            var file = Path.Combine(_fileProvider.MapPath(ProductManagementDefaults.ResourceFilePath), "ResourceString.xml");
             var languageResourceNames = from name in XDocument.Load(file).Document.Descendants("LocaleResource")
                                         select name.Attribute("Name").Value;
 
