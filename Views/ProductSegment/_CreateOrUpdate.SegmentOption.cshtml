@@ -1,43 +1,157 @@
-@model ProductSegmentModel
+@model SegmentModel
 
 <div class="panel-body">
     <div class="sub-panel">
         @if (Model.Id > 0)
         {
+            <div class="panel panel-default no-margin">
+                <div class="panel-heading">
+                    @T("Admin.Common.AddNewRecord")
+                </div>
+                <div class="panel-body">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <nop-label asp-for="@Model.ProductSegmentOptionSearchModel.ProductFilterOptionsModel.BeginsWith" />
+                            </div>
+                            <div class="col-md-8">
+                                <nop-editor asp-for="@Model.ProductSegmentOptionSearchModel.ProductFilterOptionsModel.BeginsWith" />
+                                <span asp-validation-for="@Model.ProductSegmentOptionSearchModel.ProductFilterOptionsModel.BeginsWith"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <nop-label asp-for="@Model.ProductSegmentOptionSearchModel.ProductFilterOptionsModel.EndsWith" />
+                            </div>
+                            <div class="col-md-8">
+                                <nop-editor asp-for="@Model.ProductSegmentOptionSearchModel.ProductFilterOptionsModel.EndsWith" />
+                                <span asp-validation-for="@Model.ProductSegmentOptionSearchModel.ProductFilterOptionsModel.EndsWith"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <nop-label asp-for="@Model.ProductSegmentOptionSearchModel.ProductFilterOptionsModel.DoesNotEndWith" />
+                            </div>
+                            <div class="col-md-8">
+                                <nop-editor asp-for="@Model.ProductSegmentOptionSearchModel.ProductFilterOptionsModel.DoesNotEndWith" />
+                                <span asp-validation-for="@Model.ProductSegmentOptionSearchModel.ProductFilterOptionsModel.DoesNotEndWith"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <nop-label asp-for="@Model.ProductSegmentOptionSearchModel.ProductFilterOptionsModel.Contains" />
+                            </div>
+                            <div class="col-md-8">
+                                <nop-editor asp-for="@Model.ProductSegmentOptionSearchModel.ProductFilterOptionsModel.Contains" />
+                                <span asp-validation-for="@Model.ProductSegmentOptionSearchModel.ProductFilterOptionsModel.Contains"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <div class="col-md-6 col-md-offset-5">
+                                <button type="button" id="addSegmentOpction" class="btn btn-primary">@T("Admin.Common.AddNewRecord")</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <script>
+                    $(document).ready(function () {
+                        $('#addSegmentOpction').click(function () {
+                            $('#addSegmentOpction').attr('disabled', true);
+                            var postData = {
+                                ProductSegmentManagerId: $("#@Html.IdFor(model => model.Id)").val(),
+                                BeginsWith: $("#@Html.IdFor(model => model.ProductSegmentOptionSearchModel.ProductFilterOptionsModel.BeginsWith)").val(),
+                                EndsWith: $("#@Html.IdFor(model => model.ProductSegmentOptionSearchModel.ProductFilterOptionsModel.EndsWith)").val(),
+                                DoesNotEndWith: $("#@Html.IdFor(model => model.ProductSegmentOptionSearchModel.ProductFilterOptionsModel.DoesNotEndWith)").val(),
+                                Contains: $("#@Html.IdFor(model => model.ProductSegmentOptionSearchModel.ProductFilterOptionsModel.Contains)").val()
+                            };
+                            addAntiForgeryToken(postData);
+
+                            $.ajax({
+                                cache: false,
+                                type: "POST",
+                                url: "@Html.Raw(Url.Action("ProductFilterOptionAdd", "ProductSegment", new { productSegmentId = Model.Id }))",
+                                data: postData,
+                                success: function (data, textStatus, jqXHR) {
+                                    if (data.Result) {
+                                        //reload grid
+                                        updateTable('#segmentOpction-grid');
+
+                                        //clear input value
+                                        $("#@Html.IdFor(model => model.ProductSegmentOptionSearchModel.ProductFilterOptionsModel.BeginsWith)").val('');
+                                        $("#@Html.IdFor(model => model.ProductSegmentOptionSearchModel.ProductFilterOptionsModel.EndsWith)").val('');
+                                        $("#@Html.IdFor(model => model.ProductSegmentOptionSearchModel.ProductFilterOptionsModel.DoesNotEndWith)").val('');
+                                        $("#@Html.IdFor(model => model.ProductSegmentOptionSearchModel.ProductFilterOptionsModel.Contains)").val('');
+                                    } else {
+                                        //display errors if returned
+                                        display_nop_error(data);
+                                    }
+                                },
+                                complete: function (jqXHR, textStatus) {
+                                    $('#addSegmentOpction').attr('disabled', false);
+                                }
+                            });
+                        });
+                    });
+                </script>
+            </div>
+
             @await Html.PartialAsync("Table", new DataTablesModel
-       {
-           Name = "segmentOpction-grid",
-           UrlRead = new DataUrl("ProductSegmentOpctionList", "ProductSegment",new RouteValueDictionary {[nameof(Model.ProductSegmentOptionSearchModel.ProductSegmentId)] = Model.Id}),
-           SearchButtonId = "search-segmentOpction",
-           Length = Model.ProductSegmentOptionSearchModel.PageSize,
-           LengthMenu = Model.ProductSegmentOptionSearchModel.AvailablePageSizes,
-           ColumnCollection = new List<ColumnProperty>
-                {
-                    new ColumnProperty(nameof(ProductFilterOptionsModel.BeginsWith))
+            {
+               Name = "segmentOpction-grid",
+               UrlRead = new DataUrl("ProductSegmentOpctionList", "ProductSegment", new RouteValueDictionary { [nameof(Model.ProductSegmentOptionSearchModel.ProductSegmentId)] = Model.Id }),
+               UrlUpdate = new DataUrl("ProductFilterOptionUpdate", "ProductSegment", new RouteValueDictionary { [nameof(Model.ProductSegmentOptionSearchModel.ProductSegmentId)] = Model.Id }),
+               UrlDelete = new DataUrl("ProductFilterOptionDelete", "ProductSegment", new RouteValueDictionary { [nameof(Model.ProductSegmentOptionSearchModel.ProductSegmentId)] = Model.Id }),
+               SearchButtonId = "search-segmentOpction",
+               Length = Model.ProductSegmentOptionSearchModel.PageSize,
+               LengthMenu = Model.ProductSegmentOptionSearchModel.AvailablePageSizes,
+               ColumnCollection = new List<ColumnProperty>
                     {
-                        Title = T("Plugins.PDD.ProductManagement.SegmentOption.Fields.BeginsWith").Text
-                    },
-                    new ColumnProperty(nameof(ProductFilterOptionsModel.EndsWith))
-                    {
-                        Title = T("Plugins.PDD.ProductManagement.SegmentOption.Fields.EndsWith").Text
-                    },
-                    new ColumnProperty(nameof(ProductFilterOptionsModel.DoesNotEndWith))
-                    {
-                        Title = T("Plugins.PDD.ProductManagement.SegmentOption.Fields.DoesNotEndWith").Text
-                    },
-                     new ColumnProperty(nameof(ProductFilterOptionsModel.Contains))
-                    {
-                        Title = T("Plugins.PDD.ProductManagement.SegmentOption.Fields.Contains").Text
-                    },
-                    new ColumnProperty(nameof(ProductFilterOptionsModel.Id))
-                    {
-                        Title = T("Admin.Common.Edit").Text,
-                        Width = "100",
-                        ClassName =  NopColumnClassDefaults.Button,
-                        Render = new RenderButtonEdit(new DataUrl("Edit"))
+                        new ColumnProperty(nameof(ProductFilterOptionsModel.BeginsWith))
+                        {
+                            Title = T("Plugins.PDD.ProductManagement.SegmentOption.Fields.BeginsWith").Text,
+                            Editable = true,
+                            EditType = EditType.String
+                        },
+                        new ColumnProperty(nameof(ProductFilterOptionsModel.EndsWith))
+                        {
+                            Title = T("Plugins.PDD.ProductManagement.SegmentOption.Fields.EndsWith").Text,
+                            Editable = true,
+                            EditType = EditType.String
+                        },
+                        new ColumnProperty(nameof(ProductFilterOptionsModel.DoesNotEndWith))
+                        {
+                            Title = T("Plugins.PDD.ProductManagement.SegmentOption.Fields.DoesNotEndWith").Text,
+                            Editable = true,
+                            EditType = EditType.String
+                        },
+                         new ColumnProperty(nameof(ProductFilterOptionsModel.Contains))
+                        {
+                            Title = T("Plugins.PDD.ProductManagement.SegmentOption.Fields.Contains").Text,
+                            Editable = true,
+                            EditType = EditType.String
+                        },
+                        new ColumnProperty(nameof(ProductFilterOptionsModel.Id))
+                        {
+                            Title = T("Admin.Common.Edit").Text,
+                            Width = "200",
+                            ClassName =  NopColumnClassDefaults.Button,
+                            Render = new RenderButtonsInlineEdit()
+                        },
+                        new ColumnProperty(nameof(ProductFilterOptionsModel.Id))
+                        {
+                            Title = T("Admin.Common.Delete").Text,
+                            Width = "100",
+                            ClassName =  NopColumnClassDefaults.Button,
+                            Render = new RenderButtonRemove(T("Admin.Common.Delete").Text)
+                        }
                     }
-                }
-       });
+           });
         }
         else
         {

@@ -1,0 +1,28 @@
+﻿@model ProductAttributeMappingModel
+
+@inject Nop.Services.Common.IGenericAttributeService genericAttributeService
+@inject IWorkContext workContext
+@{
+
+    const string hideInfoBlockAttributeName = "ProductAttributePage.HideInfoBlock";
+    var hideInfoBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideInfoBlockAttributeName);
+
+    
+    const string hidePredefinedValuesBlockAttributeName = "ProductAttributePage.HidePredefinedValuesBlock";
+    var hidePredefinedValuesBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hidePredefinedValuesBlockAttributeName, defaultValue: true);
+
+}
+
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+<div class="content">
+    <div class="form-horizontal">
+        <div id="product-attribute-mapping-edit">
+            <nop-panels id="product-attribute-panels">
+                <nop-panel asp-name="product-attribute-info" asp-icon="fa fa-info" asp-title="@T("Admin.Catalog.Products.ProductAttributes.Attributes.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">@await Html.PartialAsync(ProductManagementDefaults.AdminViewPath + "ProductAttribute/_CreateOrUpdateProductAttributeMapping.Info.cshtml", Model)</nop-panel>
+                <nop-panel asp-name="product-attribute-predefined-values" asp-icon="fa fa-check-square-o" asp-title="@T("Admin.Catalog.Products.ProductAttributes.Attributes.Values")" asp-hide-block-attribute-name="@hidePredefinedValuesBlockAttributeName" asp-hide="@hidePredefinedValuesBlock" asp-advanced="true">@await Html.PartialAsync(ProductManagementDefaults.AdminViewPath + "ProductAttribute/_CreateOrUpdateProductAttributeMapping.Values.cshtml", Model)</nop-panel>
+            </nop-panels>
+        </div>
+    </div>
+</div>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Web.Framework.Models;
 using Nop.Web.Framework.Mvc.ModelBinding;
+using PDDeveloper.Plugin.ProductManagement.Domain.Enums;
 using System.Collections.Generic;
 
 namespace PDDeveloper.Plugin.ProductManagement.Models
@@ -18,9 +19,9 @@ namespace PDDeveloper.Plugin.ProductManagement.Models
         public string ProductType { get; set; }
     }
 
-    public partial class AddIncludeExcludeProductModel : BaseNopModel
+    public partial class IncludeExcludeProductSearchModel : BaseSearchModel
     {
-        public AddIncludeExcludeProductModel()
+        public IncludeExcludeProductSearchModel()
         {
             AvailableCategories = new List<SelectListItem>();
             AvailableManufacturers = new List<SelectListItem>();
@@ -48,12 +49,17 @@ namespace PDDeveloper.Plugin.ProductManagement.Models
         public IList<SelectListItem> AvailableVendors { get; set; }
         public IList<SelectListItem> AvailableProductTypes { get; set; }
 
+        public int ProductSegmentId { get; set; }
+
+        public SegmentProductType ProductType { get; set; }
+
         public int WidgetId { get; set; }
 
         public int[] SelectedProductIds { get; set; }
+
     }
 
-    public class Products
+    public class SegmentProducts : BaseNopModel
     {
         public int Id { get; set; }
         [NopResourceDisplayName("Plugins.PDD.ProductManagement.Products.Fields.Name")]
@@ -62,15 +68,17 @@ namespace PDDeveloper.Plugin.ProductManagement.Models
         public string Sku { get; set; }
     }
 
-    public class ProductAttributes
+    public class ProductAttributes : BaseNopModel
     {
         public int Id { get; set; }
         [NopResourceDisplayName("Plugins.PDD.ProductManagement.ProductAttributes.Fields.Name")]
         public string Name { get; set; }
+
+        public int ProductId { get; set; }
         public bool isAttributeAdded { get; set; }
     }
 
-    public class ProductSpecificationAttributes
+    public class ProductSpecificationAttributes : BaseNopModel
     {
         public int Id { get; set; }
         [NopResourceDisplayName("Plugins.PDD.ProductManagement.ProductSpecificationAttributes.Fields.Name")]

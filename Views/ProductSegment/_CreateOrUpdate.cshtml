@@ -1,4 +1,4 @@
-﻿@model ProductSegmentModel
+﻿@model SegmentModel
 
 @{
     const string hideInfoName = "ProductSegmentPage.HideInfoBlock";
@@ -7,14 +7,20 @@
     const string hideSegmentOptionPageName = "ProductSegmentPage.HideSegmentOptionBlock";
     var hideSegmentOptionBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideSegmentOptionPageName);
 
-    //const string hideMappingsBlockAttributeName = "CategoryPage.HideMappingsBlock";
-    //var hideMappingsBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideMappingsBlockAttributeName, defaultValue: true);
+    const string hideIncludeProductName = "ProductSegmentPage.HideIncludeProductBlock";
+    var hideIncludeProductBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideIncludeProductName);
 
-    //const string hideSeoBlockAttributeName = "CategoryPage.HideSEOBlock";
-    //var hideSeoBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideSeoBlockAttributeName, defaultValue: true);
+    const string hideExcludeProductName = "ProductSegmentPage.HideExcludeBlock";
+    var hideExcludeProductBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideExcludeProductName);
 
-    //const string hideProductsBlockAttributeName = "CategoryPage.HideProductsBlock";
-    //var hideProductsBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideProductsBlockAttributeName, defaultValue: true);
+    const string hideSegmentProductName = "ProductSegmentPage.HideSegmentProductBlock";
+    var hideSegmentProductBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideSegmentProductName);
+
+    const string hideSegmentProductAttributeName = "ProductSegmentPage.HideSegmentProductAttributeNBlock";
+    var hideSegmentProductAttributeBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideSegmentProductAttributeName);
+
+    const string hideSegmentProductSpecAttributeName = "ProductSegmentPage.HideSegmentProductSpecAttributeNBlock";
+    var hideSegmentProductSpecAttributeBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideSegmentProductSpecAttributeName);
 }
 
 <div asp-validation-summary="All"></div>
@@ -23,9 +29,13 @@
 <div class="content">
     <div class="form-horizontal">
         <nop-panels id="segment-panels">
-            <nop-panel asp-name="segment-info" asp-icon="fa fa-info" asp-title="@T("Admin.Catalog.Categories.Info")" asp-hide-block-attribute-name="@hideInfoName" asp-hide="@hideInfoBlock">@await Html.PartialAsync(ProductManagementDefaults.AdminViewPath +"ProductSegment/_CreateOrUpdate.Info.cshtml", Model)</nop-panel>
-
-            <nop-panel asp-name="segment-SegmentOption" asp-icon="fa fa-television" asp-title="@T("Admin.Catalog.Categories.Display")" asp-hide-block-attribute-name="@hideSegmentOptionPageName" asp-hide="@hideSegmentOptionBlock">@await Html.PartialAsync(ProductManagementDefaults.AdminViewPath +"ProductSegment/_CreateOrUpdate.SegmentOption.cshtml", Model)</nop-panel>
+            <nop-panel asp-name="segment-info" asp-icon="fa fa-info" asp-title="@T("Plugins.PDD.ProductManagement.Segment.Tab.Info")" asp-hide-block-attribute-name="@hideInfoName" asp-hide="@hideInfoBlock">@await Html.PartialAsync(ProductManagementDefaults.AdminViewPath + "ProductSegment/_CreateOrUpdate.Info.cshtml", Model)</nop-panel>
+            <nop-panel asp-name="segment-SegmentOption" asp-icon="fa fa-th-list panel-icon" asp-title="@T("Plugins.PDD.ProductManagement.Segment.Tab.Condition")" asp-hide-block-attribute-name="@hideSegmentOptionPageName" asp-hide="@hideSegmentOptionBlock">@await Html.PartialAsync(ProductManagementDefaults.AdminViewPath + "ProductSegment/_CreateOrUpdate.SegmentOption.cshtml", Model)</nop-panel>
+            <nop-panel asp-name="segment-IncludeProduct" asp-icon="fa fa-th-list panel-icon" asp-title="@T("Plugins.PDD.ProductManagement.Segment.Tab.Include")" asp-hide-block-attribute-name="@hideIncludeProductName" asp-hide="@hideIncludeProductBlock">@await Html.PartialAsync(ProductManagementDefaults.AdminViewPath + "ProductSegment/_CreateOrUpdate.IncludeProduct.cshtml", Model)</nop-panel>
+            <nop-panel asp-name="segment-ExcludeProduct" asp-icon="fa fa-th-list panel-icon" asp-title="@T("Plugins.PDD.ProductManagement.Segment.Tab.Exclude")" asp-hide-block-attribute-name="@hideExcludeProductName" asp-hide="@hideExcludeProductBlock">@await Html.PartialAsync(ProductManagementDefaults.AdminViewPath + "ProductSegment/_CreateOrUpdate.ExcludeProduct.cshtml", Model)</nop-panel>
+            <nop-panel asp-name="segment-SegmentProduct" asp-icon="fa fa-th-list panel-icon" asp-title="@T("Plugins.PDD.ProductManagement.Segment.Tab.Product")" asp-hide-block-attribute-name="@hideSegmentProductName" asp-hide="@hideSegmentProductBlock">@await Html.PartialAsync(ProductManagementDefaults.AdminViewPath + "ProductSegment/_CreateOrUpdate.Products.cshtml", Model)</nop-panel>
+            <nop-panel asp-name="segment-SegmentProductAttribute" asp-icon="fa fa-th-list panel-icon" asp-title="@T("Plugins.PDD.ProductManagement.Segment.Tab.ProductAttributes")" asp-hide-block-attribute-name="@hideSegmentProductAttributeName" asp-hide="@hideSegmentProductAttributeBlock">@await Html.PartialAsync(ProductManagementDefaults.AdminViewPath + "ProductSegment/_CreateOrUpdate.ProductAttributes.cshtml", Model)</nop-panel>
+            <nop-panel asp-name="segment-SegmentProductSpecAttribute" asp-icon="fa fa-th-list panel-icon" asp-title="@T("Plugins.PDD.ProductManagement.Segment.Tab.ProductSpecificationAttributes")" asp-hide-block-attribute-name="@hideSegmentProductSpecAttributeName" asp-hide="@hideSegmentProductSpecAttributeBlock">@await Html.PartialAsync(ProductManagementDefaults.AdminViewPath + "ProductSegment/_CreateOrUpdate.ProductSpecificationAttributes.cshtml", Model)</nop-panel>
         </nop-panels>
     </div>
 </div>

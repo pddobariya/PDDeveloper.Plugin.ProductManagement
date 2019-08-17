@@ -5,7 +5,7 @@ using Nop.Web.Framework.Validators;
 
 namespace PDDeveloper.Plugin.ProductManagement.Validators
 {
-    public partial class ProductSegmentValidator : BaseNopValidator<ProductSegmentModel>
+    public partial class ProductSegmentValidator : BaseNopValidator<SegmentModel>
     {
         public ProductSegmentValidator(ILocalizationService localizationService)
         {

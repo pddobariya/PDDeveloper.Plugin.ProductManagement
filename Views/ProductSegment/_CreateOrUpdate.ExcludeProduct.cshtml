@@ -1,0 +1,77 @@
+@model SegmentModel
+@using PDDeveloper.Plugin.ProductManagement.Domain.Enums
+
+<input asp-for="Id" type="hidden" />
+
+<div class="panel-body">
+    <div class="sub-panel">
+        @if (Model.Id > 0)
+        {
+            @await Html.PartialAsync("Table", new DataTablesModel
+            {
+                Name = "excludeProduct-grid",
+                UrlRead = new DataUrl("IncludeExcludeProductList", "ProductSegment", new RouteValueDictionary
+                {
+                    [nameof(Model.IncludeExcludeProductSearchModel.ProductSegmentId)] = Model.Id,
+                    [nameof(Model.IncludeExcludeProductSearchModel.ProductType)] = SegmentProductType.Exclude
+                }),
+                UrlDelete = new DataUrl("ProductDelete", "ProductSegment", new RouteValueDictionary
+                {
+                    [nameof(Model.IncludeExcludeProductSearchModel.ProductSegmentId)] = Model.Id,
+                    [nameof(Model.IncludeExcludeProductSearchModel.ProductType)] = SegmentProductType.Exclude
+                }),
+                SearchButtonId = "search-excludeProduct",
+                Length = Model.IncludeExcludeProductSearchModel.PageSize,
+                LengthMenu = Model.IncludeExcludeProductSearchModel.AvailablePageSizes,
+                ColumnCollection = new List<ColumnProperty>
+                {
+                    new ColumnProperty(nameof(IncludeExcludeProductModel.ProductName))
+                    {
+                        Title = T("Plugins.PDD.ProductManagement.ExcludeProduct.Fields.Name").Text
+                    },
+                    new ColumnProperty(nameof(IncludeExcludeProductModel.ProductType))
+                    {
+                        Title = T("Plugins.PDD.ProductManagement.ExcludeProduct.Fields.ProductType").Text
+                    },
+                    new ColumnProperty(nameof(IncludeExcludeProductModel.ProductId))
+                    {
+                        Title = T("Admin.Common.View").Text,
+                        Width = "150",
+                        ClassName = NopColumnClassDefaults.Button,
+                        Render = new RenderButtonView(new DataUrl("~/Admin/Product/Edit/", nameof(IncludeExcludeProductModel.ProductId)))
+                    },
+                    new ColumnProperty(nameof(IncludeExcludeProductModel.Id))
+                    {
+                        Title = T("Admin.Common.Delete").Text,
+                        Width = "100",
+                        ClassName =  NopColumnClassDefaults.Button,
+                        Render = new RenderButtonRemove(T("Admin.Common.Delete").Text)
+                    }
+                }
+            });
+        }
+        else
+        {
+            @T("Plugins.PDD.ProductManagement.Segment.Tab.Exclude.Message")
+        }
+    </div>
+</div>
+<div class="panel-footer">
+    <button type="submit" id="btnAddNewIncludeProducts"
+            onclick="javascript:OpenWindow('@(Url.Action("ProductAddPopup", "ProductSegment", new {productSegmentId = Model.Id, btnId = "btnRefreshExcludeProducts", formId = "productsegment-form",productType= (int)SegmentProductType.Exclude}))', 800, 800, true); return false;"
+            class="btn btn-primary">
+        @T("Plugins.PDD.ProductManagement.Segment.Tab.Exclude.Product.AddNew")
+    </button>
+    <input type="submit" id="btnRefreshExcludeProducts" style="display: none" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#btnRefreshExcludeProducts').click(function () {
+                //refresh grid
+                updateTable('#excludeProduct-grid');
+
+                //return false to don't reload a page
+                return false;
+            });
+        });
+    </script>
+</div>

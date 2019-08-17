@@ -1,0 +1,72 @@
+﻿@model SegmentModel
+
+<input asp-for="Id" type="hidden" />
+
+<div class="panel-body">
+    <div class="sub-panel">
+        @if (Model.Id > 0)
+        {
+            @await Html.PartialAsync("Table", new DataTablesModel
+           {
+               Name = "ProductAttributes-grid",
+               UrlRead = new DataUrl("ProductAttributeList", "ProductSegment", new RouteValueDictionary
+               {
+                   [nameof(Model.SegmentProductAttributeSearchModel.ProductSegmentId)] = Model.Id
+               }),
+               SearchButtonId = "search-ProductAttributes",
+               Length = Model.SegmentProductAttributeSearchModel.PageSize,
+               LengthMenu = Model.SegmentProductAttributeSearchModel.AvailablePageSizes,
+               ColumnCollection = new List<ColumnProperty>
+                    {
+                        new ColumnProperty(nameof(ProductAttributes.Name))
+                        {
+                            Title = T("Plugins.PDD.ProductManagement.Products.Fields.Name").Text
+                        },
+                        new ColumnProperty(nameof(ProductAttributes.Id))
+                        {
+                            Title = T("Admin.Common.View").Text,
+                            Width = "100",
+                            ClassName = NopColumnClassDefaults.Button,
+                            Render = new RenderButtonEdit(new DataUrl("~/Admin/ProductAttribute/Edit/", nameof(ProductAttributes.Id)))
+                        },
+                        new ColumnProperty(nameof(SegmentProducts.Id))
+                        {
+                            Title = T("Plugins.PDD.ProductManagement.ProductAttributes.Button.Add").Text,
+                            Width = "100",
+                            ClassName = NopColumnClassDefaults.Button,
+                            Render = new RenderCustom("renderColumnAddToProductAttribute")
+                        },
+                        new ColumnProperty(nameof(SegmentProducts.Id))
+                        {
+                            Title = T("Plugins.PDD.ProductManagement.ProductAttributes.Button.Edit").Text,
+                            Width = "100",
+                            ClassName =  NopColumnClassDefaults.Button,
+                            Render = new RenderCustom("renderColumnEditToProductAttribute")
+                        }
+                    }
+           });
+        }
+        else
+        {
+            @T("Plugins.PDD.ProductManagement.Segment.Tab.ProductAttributes.Message")
+        }
+        <script>
+            function renderColumnAddToProductAttribute(data, type, row, meta) {
+                if (!row.isAttributeAdded) {
+                    return '<a class="btn btn-default"  href="@Url.Content("~/Admin/ProductSegment/ProductAttributeMappingCreate?productSegmentId="+ Model.Id+ "&productAttributeId=")' + row.Id + '"><i class="fa fa-plus-square"></i>@T("Plugins.PDD.ProductManagement.ProductAttributes.Button.Add")</a>';
+                }
+                else {
+                    return '';
+                }
+            }
+             function renderColumnEditToProductAttribute(data, type, row, meta) {
+                if (row.isAttributeAdded) {
+                    return '<a class="btn btn-default"  href="@Url.Content("~/Admin/ProductSegment/ProductAttributeMappingEdit?productSegmentId=" + Model.Id+ "&productAttributeId=")' + row.Id + '"><i class="fa fa-pencil"></i>@T("Plugins.PDD.ProductManagement.ProductAttributes.Button.Edit")</a>';
+                }
+                else {
+                    return '';
+                }
+            }
+        </script>
+    </div>
+</div>

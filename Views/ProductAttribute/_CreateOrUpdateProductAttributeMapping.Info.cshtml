@@ -1,0 +1,169 @@
+﻿@model ProductAttributeMappingModel
+
+@using Nop.Core.Domain.Catalog
+@using Nop.Services
+
+<script>
+    $(document).ready(function() {
+        $("#@Html.IdFor(model => model.AttributeControlTypeId)").change(toggleAttributeControlType);
+
+        toggleAttributeControlType();
+    });
+
+    function toggleAttributeControlType() {
+        var selectedAttributeControlTypeId = $("#@Html.IdFor(model => model.AttributeControlTypeId)").val();
+        //validation
+        if (selectedAttributeControlTypeId == @(((int) AttributeControlType.TextBox).ToString())) {
+            $('#pnlValidationMinLength').show();
+            $('#pnlValidationMaxLength').show();
+            $('#pnlValidationFileMaximumSize').hide();
+            $('#pnlValidationFileAllowedExtensions').hide();
+            $('#pnlDefaultValue').show();
+        } else if (selectedAttributeControlTypeId == @(((int) AttributeControlType.MultilineTextbox).ToString())) {
+            $('#pnlValidationMinLength').show();
+            $('#pnlValidationMaxLength').show();
+            $('#pnlValidationFileMaximumSize').hide();
+            $('#pnlValidationFileAllowedExtensions').hide();
+            $('#pnlDefaultValue').show();
+        } else if (selectedAttributeControlTypeId == @(((int) AttributeControlType.FileUpload).ToString())) {
+            $('#pnlValidationMinLength').hide();
+            $('#pnlValidationMaxLength').hide();
+            $('#pnlValidationFileMaximumSize').show();
+            $('#pnlValidationFileAllowedExtensions').show();
+            $('#pnlDefaultValue').hide();
+        } else {
+            $('#pnlValidationMinLength').hide();
+            $('#pnlValidationMaxLength').hide();
+            $('#pnlValidationFileMaximumSize').hide();
+            $('#pnlValidationFileAllowedExtensions').hide();
+            $('#pnlDefaultValue').hide();
+        }
+
+        //values
+        if (selectedAttributeControlTypeId == @(((int) AttributeControlType.DropdownList).ToString()) ||
+            selectedAttributeControlTypeId == @(((int) AttributeControlType.RadioList).ToString()) ||
+            selectedAttributeControlTypeId == @(((int) AttributeControlType.Checkboxes).ToString()) ||
+            selectedAttributeControlTypeId == @(((int) AttributeControlType.ColorSquares).ToString()) ||
+            selectedAttributeControlTypeId == @(((int) AttributeControlType.ImageSquares).ToString()) ||
+            selectedAttributeControlTypeId == @(((int) AttributeControlType.ReadonlyCheckboxes).ToString())) {
+            $('[data-tab-name=tab-values]').show();
+        } else {
+            $('[data-tab-name=tab-values]').hide();
+        }
+    }
+</script>
+<input asp-for="ProductSegmentId" type="hidden" />
+<input asp-for="ProductAttributeId" type="hidden" />
+<input asp-for="AttributeMappedIds" type="hidden" />
+<div class="panel-group">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="form-group">
+                <div class="col-md-3">
+                    <nop-label asp-for="@Model.ProductAttributeId" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="@Model.ProductAttribute" asp-disabled="true" />
+                </div>
+            </div>
+            @(Html.LocalizedEditor<ProductAttributeMappingModel, Nop.Web.Areas.Admin.Models.Catalog.ProductAttributeMappingLocalizedModel>("productattribute-localized",
+                    @<div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <nop-label asp-for="@Model.Locales[item].TextPrompt" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="@Model.Locales[item].TextPrompt" />
+                                <span asp-validation-for="@Model.Locales[item].TextPrompt"></span>
+                            </div>
+                        </div>
+                        <input type="hidden" asp-for="@Model.Locales[item].LanguageId" />
+                    </div>
+                        ,
+                                @<div>
+                                    <div class="form-group">
+                                        <div class="col-md-3">
+                                            <nop-label asp-for="@Model.TextPrompt" />
+                                        </div>
+                                        <div class="col-md-9">
+                                            <nop-editor asp-for="@Model.TextPrompt" />
+                                            <span asp-validation-for="@Model.TextPrompt"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                                  ))
+            <div class="form-group">
+                <div class="col-md-3">
+                    <nop-label asp-for="@Model.IsRequired" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="@Model.IsRequired" />
+                    <span asp-validation-for="@Model.IsRequired"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-3">
+                    <nop-label asp-for="@Model.AttributeControlTypeId" />
+                </div>
+                <div class="col-md-9">
+                    <nop-select asp-for="@Model.AttributeControlTypeId" asp-items="@(((AttributeControlType)Model.AttributeControlTypeId).ToSelectList())" />
+                    <span asp-validation-for="@Model.AttributeControlTypeId"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-3">
+                    <nop-label asp-for="@Model.DisplayOrder" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="@Model.DisplayOrder" />
+                    <span asp-validation-for="@Model.DisplayOrder"></span>
+                </div>
+            </div>
+            <div class="form-group" id="pnlValidationMinLength">
+                <div class="col-md-3">
+                    <nop-label asp-for="@Model.ValidationMinLength" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="@Model.ValidationMinLength" />
+                    <span asp-validation-for="@Model.ValidationMinLength"></span>
+                </div>
+            </div>
+            <div class="form-group" id="pnlValidationMaxLength">
+                <div class="col-md-3">
+                    <nop-label asp-for="@Model.ValidationMaxLength" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="@Model.ValidationMaxLength" />
+                    <span asp-validation-for="@Model.ValidationMaxLength"></span>
+                </div>
+            </div>
+            <div class="form-group" id="pnlValidationFileAllowedExtensions">
+                <div class="col-md-3">
+                    <nop-label asp-for="@Model.ValidationFileAllowedExtensions" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="@Model.ValidationFileAllowedExtensions" />
+                    <span asp-validation-for="@Model.ValidationFileAllowedExtensions"></span>
+                </div>
+            </div>
+            <div class="form-group" id="pnlValidationFileMaximumSize">
+                <div class="col-md-3">
+                    <nop-label asp-for="@Model.ValidationFileMaximumSize" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="@Model.ValidationFileMaximumSize" />
+                    <span asp-validation-for="@Model.ValidationFileMaximumSize"></span>
+                </div>
+            </div>
+            <div class="form-group" id="pnlDefaultValue">
+                <div class="col-md-3">
+                    <nop-label asp-for="@Model.DefaultValue" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="@Model.DefaultValue" />
+                    <span asp-validation-for="@Model.DefaultValue"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

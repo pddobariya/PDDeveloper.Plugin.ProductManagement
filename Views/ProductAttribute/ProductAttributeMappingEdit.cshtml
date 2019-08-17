@@ -1,0 +1,38 @@
+@model ProductAttributeMappingModel
+
+@{
+    Layout = "_AdminLayout";
+
+    //page title
+    ViewBag.Title = T("Admin.Catalog.Products.ProductAttributes.Attributes.EditAttributeDetails").Text;
+    //active menu item (system name)
+    Html.SetActiveMenuItemSystemName("ProductManagement");
+}
+
+<form asp-controller="ProductSegment" asp-action="ProductAttributeMappingEdit" method="post" id="productattribute-form">
+    <div class="content-header clearfix">
+        <h1 class="pull-left">
+            @T("Admin.Catalog.Products.ProductAttributes.Attributes.EditAttributeDetails")
+            <small>
+                <i class="fa fa-arrow-circle-left"></i>
+                <a asp-action="Edit" asp-route-id="@Model.ProductSegmentId">@T("Plugins.PDD.ProductManagement.ProductAttributes.BackToSegment")</a>
+            </small>
+        </h1>
+        <div class="pull-right">
+            <button type="submit" name="save" class="btn bg-blue">
+                <i class="fa fa-floppy-o"></i>
+                @T("Admin.Common.Save")
+            </button>
+            <button type="submit" name="save-continue" class="btn bg-blue">
+                <i class="fa fa-floppy-o"></i>
+                @T("Admin.Common.SaveContinue")
+            </button>
+            <span id="productattribute-delete" class="btn bg-red">
+                <i class="fa fa-trash-o"></i>
+                @T("Admin.Common.Delete")
+            </span>
+        </div>
+    </div>
+    @await Html.PartialAsync(ProductManagementDefaults.AdminViewPath + "ProductAttribute/_CreateOrUpdateProductAttributeMapping.cshtml", Model)
+</form>
+<nop-delete-confirmation asp-model-id="@Model.PDD_ProductAttributeMapId" asp-action="ProductAttributeMappingDelete" asp-button-id="productattribute-delete" />

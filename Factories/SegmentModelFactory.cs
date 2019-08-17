@@ -213,7 +213,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Factories
         /// </summary>
         /// <param name="searchModel">Product segment search model</param>
         /// <returns>Product segment list model</returns>
-        public virtual ProductSegmentListModel PrepareProductSegmentListModel(ProductSegmentSearchModel searchModel)
+        public virtual SegmentListModel PrepareProductSegmentListModel(ProductSegmentSearchModel searchModel)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
@@ -224,13 +224,13 @@ namespace PDDeveloper.Plugin.ProductManagement.Factories
                 pageIndex: searchModel.Page - 1, 
                 pageSize: searchModel.PageSize);
 
-            var model = new ProductSegmentListModel().PrepareToGrid(searchModel, segments, () =>
+            var model = new SegmentListModel().PrepareToGrid(searchModel, segments, () =>
             {
                 //fill in model values from the entity
                 return segments.Select(segment =>
                 {
                     var store = _storeService.GetStoreById(segment.StoreId);
-                    return new ProductSegmentModel
+                    return new SegmentModel
                     {
                         Id = segment.Id,
                         Name = segment.Name,
@@ -251,13 +251,13 @@ namespace PDDeveloper.Plugin.ProductManagement.Factories
         /// <param name="model">Product segment model</param>
         /// <param name="productSegment">productSegment</param>
         /// <returns>ProductSegmentModel</returns>
-        public virtual ProductSegmentModel PrepareProductSegmentModel(ProductSegmentModel model, PDD_ProductSegment productSegment)
+        public virtual SegmentModel PrepareProductSegmentModel(SegmentModel model, PDD_ProductSegment productSegment)
         {
             if (productSegment != null)
             {
                 //fill in model values from the entity
                 var store = _storeService.GetStoreById(productSegment.StoreId);
-                model =  new ProductSegmentModel
+                model =  new SegmentModel
                 {
                     Id = productSegment.Id,
                     Name = productSegment.Name,
@@ -526,21 +526,21 @@ namespace PDDeveloper.Plugin.ProductManagement.Factories
             productSpecificationAttributes = productSpecificationAttributes.Where(p => p.SpecificationAttributeOption.SpecificationAttributeId == searchModel.ProductSpecificationId).ToList();
 
             bool isRecordAdd = true;
-            List<int> PDD_ProductAttributeMapIdList = new List<int>();
+            var productAttributeMapIdList = new List<int>();
             var productSpecificationAttributeModelList = new List<Models.ProductSpecificationAttributeModel>();
             foreach (var attribute in productSpecificationAttributes)
             {
                 var specificationMapper = _productFilterOptionService.GetProductAttributeMapWithSegmentByAttributeMapperId(attribute.Id, searchModel.ProductSpecificationId, Domain.Enums.EntityTypeEnum.ProductSpecificationMapValue, searchModel.ProductSegmentId);
 
-                var PDD_ProductAttributeMapId = 0;
+                var productAttributeMapId = 0;
 
                 if (specificationMapper != null)
                 {
-                    if (!PDD_ProductAttributeMapIdList.Contains(specificationMapper.Id))
+                    if (!productAttributeMapIdList.Contains(specificationMapper.Id))
                     {
                         isRecordAdd = true;
-                        PDD_ProductAttributeMapId = specificationMapper.Id;
-                        PDD_ProductAttributeMapIdList.Add(specificationMapper.Id);
+                        productAttributeMapId = specificationMapper.Id;
+                        productAttributeMapIdList.Add(specificationMapper.Id);
                     }
 
                 }
@@ -560,7 +560,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Factories
                         DisplayOrder = attribute.DisplayOrder,
                         ProductSegmentId = searchModel.ProductSegmentId,
                         ProductSpecificationId = searchModel.ProductSpecificationId,
-                        PDD_ProductAttributeMapId = PDD_ProductAttributeMapId
+                        PDD_ProductAttributeMapId = productAttributeMapId
                     };
 
                     //fill in additional values (not existing in the entity)
@@ -587,12 +587,17 @@ namespace PDDeveloper.Plugin.ProductManagement.Factories
                 }
             }
 
+            var segmentSearch = new ProductSegmentSearchModel();
+            var pageList = productSpecificationAttributeModelList.ToPagedList(segmentSearch);
+
             //prepare grid model
-            var model = new Models.ProductSpecificationAttributeListModel
+            var model = new Models.ProductSpecificationAttributeListModel().PrepareToGrid(segmentSearch, pageList, () =>
             {
-                Data = productSpecificationAttributeModelList,
-                Total = productSpecificationAttributeModelList.Count
-            };
+                return pageList.Select(productAttribute =>
+                {
+                    return productAttribute;
+                });
+            });
 
             return model;
         }

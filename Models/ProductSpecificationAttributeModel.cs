@@ -1,4 +1,5 @@
 ﻿using Nop.Web.Areas.Admin.Models.Catalog;
+using Nop.Web.Framework.Mvc.ModelBinding;
 
 namespace PDDeveloper.Plugin.ProductManagement.Models
 {
@@ -6,15 +7,19 @@ namespace PDDeveloper.Plugin.ProductManagement.Models
     {
         public ProductSpecificationAttributeModel()
         {
-            //AddSpecificationAttributeModel = new AddSpecificationAttributeToProductModel();
+            AddSpecificationAttributeModel = new AddSpecificationAttributeModel();
             ProductSpecificationAttributeSearchModel = new ProductSpecificationAttributeSearchModel();
         }
 
         //add specification attribute model
-        //public AddSpecificationAttributeToProductModel AddSpecificationAttributeModel { get; set; }
+        public AddSpecificationAttributeModel AddSpecificationAttributeModel { get; set; }
 
         public ProductSpecificationAttributeSearchModel ProductSpecificationAttributeSearchModel { get; set; }
-        
+
+        [NopResourceDisplayName("Admin.Catalog.Products.SpecificationAttributes.Fields.SpecificationAttribute")]
+        public int SpecificationAttributeId { get; set; }
+        public string SpecificationAttributeName { get; set; }
+
         public int ProductSegmentId { get; set; }
 
         public int ProductSpecificationId { get; set; }

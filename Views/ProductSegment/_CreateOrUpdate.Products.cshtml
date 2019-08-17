@@ -1,0 +1,55 @@
+﻿@model SegmentModel
+
+<input asp-for="Id" type="hidden" />
+
+<div class="panel-body">
+    <div class="sub-panel">
+        @if (Model.Id > 0)
+        {
+            @await Html.PartialAsync("Table", new DataTablesModel
+            {
+               Name = "segmentProduct-grid",
+               UrlRead = new DataUrl("ProductList", "ProductSegment", new RouteValueDictionary
+               {
+                   [nameof(Model.ProductSegmentSearchModel.ProductSegmentId)] = Model.Id
+               }),
+               UrlDelete = new DataUrl("ProductExclude", "ProductSegment", new RouteValueDictionary
+               {
+                   [nameof(Model.ProductSegmentSearchModel.ProductSegmentId)] = Model.Id
+               }),
+               SearchButtonId = "search-segmentProduct",
+               Length = Model.IncludeExcludeProductSearchModel.PageSize,
+               LengthMenu = Model.IncludeExcludeProductSearchModel.AvailablePageSizes,
+               ColumnCollection = new List<ColumnProperty>
+                {
+                    new ColumnProperty(nameof(SegmentProducts.Name))
+                    {
+                        Title = T("Plugins.PDD.ProductManagement.Products.Fields.Name").Text
+                    },
+                    new ColumnProperty(nameof(SegmentProducts.Sku))
+                    {
+                        Title = T("Plugins.PDD.ProductManagement.Products.Fields.Sku").Text
+                    },
+                    new ColumnProperty(nameof(SegmentProducts.Id))
+                    {
+                        Title = T("Admin.Common.View").Text,
+                        Width = "150",
+                        ClassName = NopColumnClassDefaults.Button,
+                        Render = new RenderButtonView(new DataUrl("~/Admin/Product/Edit/", nameof(SegmentProducts.Id)))
+                    },
+                    new ColumnProperty(nameof(SegmentProducts.Id))
+                    {
+                        Title = T("Plugins.PDD.ProductManagement.Products.Fields.Exclude").Text,
+                        Width = "100",
+                        ClassName =  NopColumnClassDefaults.Button,
+                        Render = new RenderButtonRemove(T("Plugins.PDD.ProductManagement.Products.Fields.Exclude").Text)
+                    }
+                }
+            });
+        }
+        else
+        {
+            @T("Plugins.PDD.ProductManagement.Segment.Tab.Product.Message")
+        }
+    </div>
+</div>

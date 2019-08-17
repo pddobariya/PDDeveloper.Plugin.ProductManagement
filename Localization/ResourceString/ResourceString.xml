@@ -206,4 +206,7 @@
   <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.Tab.ProductSpecificationAttributes.Message">
     <Value>Required to save a segment for show product specification attributes</Value>
   </LocaleResource>
+  <LocaleResource Name="Plugins.PDD.ProductManagement.Segment.SpecificationAttribute.Manage">
+    <Value>Manage product specification attribute</Value>
+  </LocaleResource>
 </Language>

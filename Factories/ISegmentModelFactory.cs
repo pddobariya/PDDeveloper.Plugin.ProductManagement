@@ -20,7 +20,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Factories
         /// </summary>
         /// <param name="searchModel">Product segment search model</param>
         /// <returns>Product segment list model</returns>
-        ProductSegmentListModel PrepareProductSegmentListModel(ProductSegmentSearchModel searchModel);
+        SegmentListModel PrepareProductSegmentListModel(ProductSegmentSearchModel searchModel);
 
         /// <summary>
         /// Prepare product segment model
@@ -28,7 +28,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Factories
         /// <param name="model">Product segment model</param>
         /// <param name="productSegment">productSegment</param>
         /// <returns>ProductSegmentModel</returns>
-        ProductSegmentModel PrepareProductSegmentModel(ProductSegmentModel model, PDD_ProductSegment productSegment);
+        SegmentModel PrepareProductSegmentModel(SegmentModel model, PDD_ProductSegment productSegment);
 
         /// <summary>
         /// Prepare product attribute mapping model

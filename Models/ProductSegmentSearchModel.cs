@@ -25,6 +25,8 @@ namespace PDDeveloper.Plugin.ProductManagement.Models
         public int SearchStoreId { get; set; }
         public IList<SelectListItem> AvailableStores { get; set; }
 
+        public int ProductSegmentId { get; set; }
+
         public bool HideStoresList { get; set; }
 
         #endregion

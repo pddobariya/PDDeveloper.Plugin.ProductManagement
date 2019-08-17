@@ -1,20 +1,21 @@
-@model SegmentModel
+@model ProductAttributeMappingModel
+
 @{
     Layout = "_AdminLayout";
 
     //page title
-    ViewBag.Title = T("Plugins.PDD.ProductManagement.Segment.EditSegmentDetail").Text;
+    ViewBag.Title = T("Admin.Catalog.Products.ProductAttributes.Attributes.AddNew").Text;
     //active menu item (system name)
     Html.SetActiveMenuItemSystemName("ProductManagement");
 }
 
-<form asp-controller="ProductSegment" asp-action="Edit" method="post" id="productsegment-form">
+<form asp-controller="ProductSegment" asp-action="ProductAttributeMappingCreate" method="post" id="productattribute-form">
     <div class="content-header clearfix">
         <h1 class="pull-left">
-            @T("Plugins.PDD.ProductManagement.Segment.EditSegmentDetail") - @Model.Name
+            @T("Admin.Catalog.Products.ProductAttributes.Attributes.AddNew")
             <small>
                 <i class="fa fa-arrow-circle-left"></i>
-                <a asp-action="List">@T("Plugins.PDD.ProductManagement.Segment.BackToList")</a>
+                <a asp-action="Edit" asp-route-id="@Model.ProductSegmentId">@T("Plugins.PDD.ProductManagement.ProductAttributes.BackToSegment")</a>
             </small>
         </h1>
         <div class="pull-right">
@@ -28,5 +29,5 @@
             </button>
         </div>
     </div>
-    @await Html.PartialAsync(ProductManagementDefaults.AdminViewPath + "ProductSegment/_CreateOrUpdate.cshtml", Model)
+    @await Html.PartialAsync(ProductManagementDefaults.AdminViewPath + "ProductAttribute/_CreateOrUpdateProductAttributeMapping.cshtml", Model)
 </form>
