@@ -19,11 +19,16 @@
   
   <ItemGroup>
     <None Remove="plugin.json" />
+    <None Remove="Views\SpecificationAttribute\ProductSpecAttributeAddOrEdit.cshtml" />
     <None Remove="Views\_ViewImports.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="plugin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\SpecificationAttribute\ProductSpecAttributeAddOrEdit.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Views\_ViewImports.cshtml">

@@ -7,7 +7,7 @@
     Layout = "_AdminLayout";
 
     //active menu item (system name)
-    Html.SetActiveMenuItemSystemName("ProductManagement");
+    Html.SetActiveMenuItemSystemName("PDDeveloper.ProductManagement");
 
     //page title
     ViewBag.Title = T("Admin.Catalog.Products.ProductAttributes.Attributes.Values.EditValueDetails").Text;
@@ -39,7 +39,7 @@
                             @await Html.PartialAsync("Table", new DataTablesModel
                             {
                                 Name = "specificationattributes-grid",
-                                UrlRead = new DataUrl("ProductSpecAttrList", "ProductSegment", new RouteValueDictionary { [nameof(Model.ProductSpecificationId)] = Model.ProductSpecificationId,[nameof(Model.ProductSegmentId)] = Model.ProductSegmentId}),
+                                UrlRead = new DataUrl("ProductSpecAttrList", "ProductSegment", new RouteValueDictionary { [nameof(Model.SpecificationAttributeId)] = Model.SpecificationAttributeId, [nameof(Model.ProductSegmentId)] = Model.ProductSegmentId }),
                                 Length = Model.ProductSpecificationAttributeSearchModel.PageSize,
                                 LengthMenu = Model.ProductSpecificationAttributeSearchModel.AvailablePageSizes,
                                 ColumnCollection = new List<ColumnProperty>
@@ -79,282 +79,26 @@
                                         Title = T("Admin.Catalog.Products.SpecificationAttributes.Fields.DisplayOrder").Text,
                                         Width = "150",
                                         ClassName =  NopColumnClassDefaults.CenterAll
+                                    },
+                                    new ColumnProperty(nameof(ProductSpecificationAttributeModel.Id))
+                                    {
+                                        Title = T("Admin.Common.Edit").Text,
+                                        Width = "100",
+                                        ClassName =  NopColumnClassDefaults.Button,
+                                        Render = new RenderCustom("renderColumnEditSpecification")
                                     }
                                 }
                             })
                         </div>
-                    </div>
-
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            @T("Admin.Catalog.Products.SpecificationAttributes.AddNew")
-                        </div>
-                        <div class="panel-body">
-                            <script>
-                                $(document).ready(function () {
-                                    var selectedAttributeId = @Model.SpecificationAttributeId;
-                                    $.ajax({
-                                        cache: false,
-                                        type: "GET",
-                                        url: "@(Url.Action("GetOptionsByAttributeId", "SpecificationAttribute"))",
-                                        data: { "attributeId": selectedAttributeId },
-                                        success: function (data) {
-                                            var ddlSpecOptions = $("#@Html.IdFor(model => model.AddSpecificationAttributeModel.SpecificationAttributeOptionId)");
-                                            ddlSpecOptions.html('');
-                                            $.each(data, function (id, option) {
-                                                ddlSpecOptions.append($('<option></option>').val(option.id).html(option.name));
-                                            });
-                                        },
-                                        error: function (xhr, ajaxOptions, thrownError) {
-                                            alert('Failed to retrieve specification options.');
-                                        }
-                                    });
-                                });
-
-                                $(document).ready(function () {
-                                    $('#addProductSpec').click(function () {
-
-                                        var attributeTypeId = $("#@Html.IdFor(model => model.AddSpecificationAttributeModel.AttributeTypeId)").val();
-                                        var specificationAttributeOptionId = $("#@Html.IdFor(model => model.AddSpecificationAttributeModel.SpecificationAttributeOptionId)").val();
-                                        var value = $("#@Html.IdFor(model => model.AddSpecificationAttributeModel.Value)").val();
-                                        var valueRaw = $("#@Html.IdFor(model => model.AddSpecificationAttributeModel.ValueRaw)").val();
-                                        var allowFiltering = $("#@Html.IdFor(model => model.AddSpecificationAttributeModel.AllowFiltering)").is(':checked');
-                                        var showOnProductPage = $("#@Html.IdFor(model => model.AddSpecificationAttributeModel.ShowOnProductPage)").is(':checked');
-                                        var displayOrder = $("#@Html.IdFor(model => model.AddSpecificationAttributeModel.DisplayOrder)").val();
-
-                                        if (specificationAttributeOptionId === null) {
-                                            //some validation
-                                            if (attributeTypeId == @(((int) SpecificationAttributeType.Option).ToString())) {
-                                                //option
-                                                alert('@T("Admin.Catalog.Products.SpecificationAttributes.SelectOption")');
-                                            } else {
-                                                //other (text, hyperlink, etc)
-                                                alert('@T("Admin.Catalog.Products.SpecificationAttributes.NoAttributeOptions")');
-                                            }
-                                        } else {
-                                            $('#addProductSpec').attr('disabled', true);
-
-                                            var postData = {
-                                                productSegmentId: @Model.ProductSegmentId,
-                                                productSpecificationId : @Model.ProductSpecificationId,
-                                                attributeTypeId: attributeTypeId,
-                                                specificationAttributeOptionId: specificationAttributeOptionId,
-                                                value: value,
-                                                valueRaw:valueRaw,
-                                                allowFiltering: allowFiltering,
-                                                showOnProductPage: showOnProductPage,
-                                                displayOrder: displayOrder
-                                            };
-                                            addAntiForgeryToken(postData);
-
-                                            $.ajax({
-                                                cache: false,
-                                                type: "POST",
-                                                url: "@(Url.Action("ProductSpecificationAttributeAdd", "ProductSegment"))",
-                                                data: postData,
-                                                success: function (data) {
-                                                    updateTable('#specificationattributes-grid');
-                                                    $('#addProductSpec').attr('disabled', false);
-                                                },
-                                                error: function (xhr, ajaxOptions, thrownError) {
-                                                    alert('Failed to add specification attribute.');
-                                                    $('#addProductSpec').attr('disabled', false);
-                                                }
-                                            });
-                                        }
-                                    });
-                                });
-
-
-                                $(document).ready(function () {
-                                    $("#@Html.IdFor(model => model.AddSpecificationAttributeModel.AttributeTypeId)").change(toggleAttributeType);
-                                    toggleAttributeType();
-                                });
-
-                                function toggleAttributeType() {
-                                    var selectedTypeId = $("#@Html.IdFor(model => model.AddSpecificationAttributeModel.AttributeTypeId)").val();
-                                    if (selectedTypeId == @(((int) SpecificationAttributeType.Option).ToString())) {
-                                        $('#pnlSpecificationAttributeOptionId').show();
-                                        $('#pnlCustomValue').hide();
-                                        $('#pnlAllowFiltering').show();
-                                    } else if (selectedTypeId == @(((int) SpecificationAttributeType.CustomText).ToString())) {
-                                        $('#pnlSpecificationAttributeOptionId').hide();
-                                        $('#pnlCustomValue').show();
-                                        $('#pnlAllowFiltering').hide();
-                                    } else if (selectedTypeId == @(((int) SpecificationAttributeType.CustomHtmlText).ToString())) {
-                                        $('#pnlSpecificationAttributeOptionId').hide();
-                                        $('#pnlCustomValue').show();
-                                        $('#pnlAllowFiltering').hide();
-                                    } else if (selectedTypeId == @(((int) SpecificationAttributeType.Hyperlink).ToString())) {
-                                        $('#pnlSpecificationAttributeOptionId').hide();
-                                        $('#pnlCustomValue').show();
-                                        $('#pnlAllowFiltering').hide();
-                                    }
-                                }
-                            </script>
-                            <div class="form-group">
-                                <div class="col-md-3">
-                                    <nop-label asp-for="@Model.AddSpecificationAttributeModel.AttributeTypeName" />
-                                </div>
-                                <div class="col-md-9">
-                                    <nop-select asp-for="@Model.AddSpecificationAttributeModel.AttributeTypeId" asp-items="@(((SpecificationAttributeType) Model.AttributeTypeId).ToSelectList())" />
-                                    <span asp-validation-for="@Model.AddSpecificationAttributeModel.AttributeTypeId"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-3">
-                                    <nop-label asp-for="@Model.SpecificationAttributeId" />
-                                </div>
-                                <div class="col-md-9">
-                                    @Html.HiddenFor(model => model.SpecificationAttributeId)
-                                    <nop-editor asp-for="@Model.SpecificationAttributeName" asp-disabled="true" />
-                                </div>
-                            </div>
-
-                            <script>
-                            $(document).ready(function() {
-                                var valueContainers = {
-                                    @((int) SpecificationAttributeType.Option): $('#AttributeValueOptionSection'),
-                                    @((int) SpecificationAttributeType.CustomText): $('#AttributeValueCustomTextSection'),
-                                    @((int) SpecificationAttributeType.CustomHtmlText): $('#AttributeValueCustomHtmlTextSection'),
-                                    @((int) SpecificationAttributeType.Hyperlink): $('#AttributeValueHyperlinkSection')
-                                }
-
-                                $('#@Html.IdFor(model => model.AddSpecificationAttributeModel.AttributeTypeId)').on('change',
-                                    function() {
-                                        var attrTypeId = $('#@Html.IdFor(model => model.AddSpecificationAttributeModel.AttributeTypeId)').val();
-
-                                        var values = Object.values(valueContainers);
-                                        values.forEach(function(value) {
-                                            value.hide();
-                                            value.find("input").prop("disabled", true);
-                                        });
-                                        valueContainers[attrTypeId].show();
-                                        valueContainers[attrTypeId].find("input").prop("disabled", false);
-
-                                        var allowFilteringSection = $('#AllowFilteringSection');
-                                        var allowFilteringField = $('#@Html.IdFor(model => model.AddSpecificationAttributeModel.AllowFiltering)');
-
-                                        if (attrTypeId == '@((int) SpecificationAttributeType.Option)') {
-                                            allowFilteringSection.show();
-                                        } else {
-                                            allowFilteringField.prop('checked', false);
-                                            allowFilteringSection.hide();
-                                        }
-                                    });
-
-                                $('#@Html.IdFor(model => model.AddSpecificationAttributeModel.AttributeTypeId)').trigger('change');
-                            });
-                            </script>
-
-                            <script>
-                                $(document).ready(function() {
-                                    $("#@Html.IdFor(model => model.AddSpecificationAttributeModel.AttributeId)").change(function() {
-                                        var selectedAttributeId = $(this).val();
-                                        //get options list
-                                        $.ajax({
-                                            cache: false,
-                                            type: "GET",
-                                            url: "@(Url.Action("GetOptionsByAttributeId", "SpecificationAttribute"))",
-                                            data: {
-                                                "attributeId": selectedAttributeId
-                                            },
-                                            success: function (data, textStatus, jqXHR) {
-                                                var ddlSpecOptions = $("#@Html.IdFor(model => model.AddSpecificationAttributeModel.SpecificationAttributeOptionId)");
-                                                ddlSpecOptions.html('');
-                                                $.each(data,
-                                                    function(id, option) {
-                                                        ddlSpecOptions.append($('<option></option>').val(option.id)
-                                                            .html(option.name));
-                                                    });
-                                            },
-                                            error: function (jqXHR, textStatus, errorThrown) {
-                                                $("#getOptionsByAttributeIdAlert").click();
-                                            }
-                                        });
-                                    });
-                                    $("#@Html.IdFor(model => model.AddSpecificationAttributeModel.AttributeId)").trigger('change');
-                                })
-                            </script>
-
-
-                            <div class="form-group" id="AttributeValueOptionSection">
-                                <div class="col-md-3">
-                                    <nop-label asp-for="@Model.AddSpecificationAttributeModel.SpecificationAttributeOptionId" />
-                                </div>
-                                <div class="col-md-9">
-                                    <nop-select asp-for="@Model.AddSpecificationAttributeModel.SpecificationAttributeOptionId" asp-items="@Model.AddSpecificationAttributeModel.AvailableOptions" />
-                                    <span asp-validation-for="@Model.AddSpecificationAttributeModel.SpecificationAttributeOptionId"></span>
-                                </div>
-                            </div>
-
-                            <div id="AttributeValueCustomHtmlTextSection">
-                                <div class="form-group">
-                                    <div class="col-md-3">
-                                        <nop-label asp-for="@Model.AddSpecificationAttributeModel.ValueRaw" />
-                                    </div>
-                                    <div class="col-md-9">
-                                        <nop-editor asp-for="@Model.AddSpecificationAttributeModel.ValueRaw" asp-template="RichEditor" />
-                                        <span asp-validation-for="@Model.AddSpecificationAttributeModel.ValueRaw"></span>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div id="AttributeValueCustomTextSection">
-                                <div class="form-group">
-                                    <div class="col-md-3">
-                                        <nop-label asp-for="@Model.AddSpecificationAttributeModel.Value" />
-                                    </div>
-                                    <div class="col-md-9">
-                                        <nop-editor asp-for="@Model.AddSpecificationAttributeModel.Value" />
-                                        <span asp-validation-for="@Model.AddSpecificationAttributeModel.Value"></span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group" id="AttributeValueHyperlinkSection">
-                                <div class="col-md-3">
-                                    <nop-label asp-for="@Model.AddSpecificationAttributeModel.Value" />
-                                </div>
-                                <div class="col-md-9">
-                                    <nop-editor asp-for="@Model.AddSpecificationAttributeModel.Value" />
-                                    <span asp-validation-for="@Model.AddSpecificationAttributeModel.Value"></span>
-                                </div>
-                            </div>
-                            <div class="form-group" id="AllowFilteringSection">
-                                <div class="col-md-3">
-                                    <nop-label asp-for="@Model.AddSpecificationAttributeModel.AllowFiltering" />
-                                </div>
-                                <div class="col-md-9">
-                                    <nop-editor asp-disabled="@(Model.AddSpecificationAttributeModel.AttributeTypeId != (int) SpecificationAttributeType.Option)"
-                                                asp-for="@Model.AddSpecificationAttributeModel.AllowFiltering" />
-                                    <span asp-validation-for="@Model.AddSpecificationAttributeModel.AllowFiltering"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-3">
-                                    <nop-label asp-for="@Model.AddSpecificationAttributeModel.ShowOnProductPage" />
-                                </div>
-                                <div class="col-md-9">
-                                    <nop-editor asp-for="@Model.AddSpecificationAttributeModel.ShowOnProductPage" />
-                                    <span asp-validation-for="@Model.AddSpecificationAttributeModel.ShowOnProductPage"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-3">
-                                    <nop-label asp-for="@Model.AddSpecificationAttributeModel.DisplayOrder" />
-                                </div>
-                                <div class="col-md-9">
-                                    <nop-editor asp-for="@Model.AddSpecificationAttributeModel.DisplayOrder" />
-                                    <span asp-validation-for="@Model.AddSpecificationAttributeModel.DisplayOrder"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-9 col-md-offset-3">
-                                    <button type="button" id="addProductSpec" class="btn btn-primary">@T("Admin.Catalog.Products.SpecificationAttributes.AddButton")</button>
-                                </div>
-                            </div>
+                        <div class="panel-footer">
+                            <a asp-action="ProductSpecAttributeAddOrEdit"
+                               asp-route-specificationAttributeId="@Model.SpecificationAttributeId"
+                               asp-route-productSegmentId="@Model.ProductSegmentId"
+                               asp-route-pDD_ProductAttributeMapId="@Model.PDD_ProductAttributeMapId"
+                               class="btn bg-blue">
+                                <i class="fa fa-plus-square"></i>
+                                @T("Admin.Catalog.Products.SpecificationAttributes.AddButton")
+                            </a>
                         </div>
                     </div>
                 }
@@ -368,6 +112,11 @@
                 }
 
             </div>
+            <script>
+                function renderColumnEditSpecification(data, type, row, meta) {
+                    return '<a class="btn btn-default"  href="@Url.Content("~/Admin/ProductSegment/ProductSpecAttributeAddOrEdit?productSegmentId="+ Model.ProductSegmentId+ "&specificationAttributeId="+ Model.SpecificationAttributeId + "&pDD_ProductAttributeMapId=")' + row.PDD_ProductAttributeMapId + '&id=' + row.Id + '"><i class="fa fa-pencil"></i>@T("Admin.Common.Edit")</a>';
+                }
+            </script>
         </div>
     </div>
 

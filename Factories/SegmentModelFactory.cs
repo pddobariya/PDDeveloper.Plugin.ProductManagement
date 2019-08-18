@@ -523,14 +523,14 @@ namespace PDDeveloper.Plugin.ProductManagement.Factories
                 productSpecificationAttributes.AddRange(_specificationAttributeService.GetProductSpecificationAttributes(products[i].Id));
             }
 
-            productSpecificationAttributes = productSpecificationAttributes.Where(p => p.SpecificationAttributeOption.SpecificationAttributeId == searchModel.ProductSpecificationId).ToList();
+            productSpecificationAttributes = productSpecificationAttributes.Where(p => p.SpecificationAttributeOption.SpecificationAttributeId == searchModel.SpecificationAttributeId).ToList();
 
             bool isRecordAdd = true;
             var productAttributeMapIdList = new List<int>();
             var productSpecificationAttributeModelList = new List<Models.ProductSpecificationAttributeModel>();
             foreach (var attribute in productSpecificationAttributes)
             {
-                var specificationMapper = _productFilterOptionService.GetProductAttributeMapWithSegmentByAttributeMapperId(attribute.Id, searchModel.ProductSpecificationId, Domain.Enums.EntityTypeEnum.ProductSpecificationMapValue, searchModel.ProductSegmentId);
+                var specificationMapper = _productFilterOptionService.GetProductAttributeMapWithSegmentByAttributeMapperId(attribute.Id, searchModel.SpecificationAttributeId, Domain.Enums.EntityTypeEnum.ProductSpecificationMapValue, searchModel.ProductSegmentId);
 
                 var productAttributeMapId = 0;
 
@@ -559,7 +559,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Factories
                         ShowOnProductPage = attribute.ShowOnProductPage,
                         DisplayOrder = attribute.DisplayOrder,
                         ProductSegmentId = searchModel.ProductSegmentId,
-                        ProductSpecificationId = searchModel.ProductSpecificationId,
+                        SpecificationAttributeId = searchModel.SpecificationAttributeId,
                         PDD_ProductAttributeMapId = productAttributeMapId
                     };
 

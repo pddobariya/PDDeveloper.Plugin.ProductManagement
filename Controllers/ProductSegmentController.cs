@@ -31,6 +31,8 @@ using System.Linq;
 using Nop.Services.Messages;
 using Nop.Web.Framework.Models.Extensions;
 using Nop.Web.Framework.Mvc.ModelBinding;
+using System.Net;
+using Nop.Web.Framework.Factories;
 
 namespace PDDeveloper.Plugin.ProductManagement.Controllers
 {
@@ -59,6 +61,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
         private readonly IWorkContext _workContext;
         private readonly INotificationService _notificationService;
         private readonly IBaseAdminModelFactory _baseAdminModelFactory;
+        private readonly ILocalizedModelFactory _localizedModelFactory;
         #endregion
 
         #region Ctor
@@ -81,7 +84,8 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
             ISpecificationAttributeService specificationAttributeService,
             IWorkContext workContext,
             INotificationService notificationService,
-            IBaseAdminModelFactory baseAdminModelFactory)
+            IBaseAdminModelFactory baseAdminModelFactory,
+            ILocalizedModelFactory localizedModelFactory)
         {
             _permissionService = permissionService;
             _segmentModelFactory = segmentModelFactory;
@@ -103,6 +107,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
             _workContext = workContext;
             _notificationService = notificationService;
             _baseAdminModelFactory = baseAdminModelFactory;
+            _localizedModelFactory = localizedModelFactory;
         }
         #endregion
 
@@ -134,40 +139,115 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
         /// </summary>
         /// <param name="model">Specification attribute model to add to the product</param>
         /// <returns>Specification attribute model to add to the product</returns>
-        protected virtual Models.ProductSpecificationAttributeModel PrepareAddSpecificationAttributeToProductModel(
-            Models.ProductSpecificationAttributeModel model, int productSpecificationId)
+        protected virtual ProductSegmentAddSpecificationAttributeModel PrepareAddSpecificationAttributeToProductModel(
+            ProductSegmentAddSpecificationAttributeModel model, int productSpecificationId,int? id)
         {
+            Action<AddSpecificationAttributeLocalizedModel, int> localizedModelConfiguration = null;
+
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
 
-            model.AddSpecificationAttributeModel.ShowOnProductPage = true;
-
-            if (productSpecificationId == 0)
+            if (!id.HasValue)
             {
-                model.AddSpecificationAttributeModel.AvailableAttributes = _cacheManager.Get(NopModelCacheDefaults.SpecAttributesModelKey, () =>
+                model.ShowOnProductPage = true;
+
+                var attribute = _specificationAttributeService.GetSpecificationAttributeById(productSpecificationId);
+
+                if (attribute != null)
+                {
+                    //options of preselected specification attribute
+                    model.AvailableOptions = _specificationAttributeService
+                        .GetSpecificationAttributeOptionsBySpecificationAttribute(attribute.Id)
+                        .Select(option => new SelectListItem { Text = option.Name, Value = option.Id.ToString() }).ToList();
+
+                    model.SpecificationAttributeName = attribute != null ? attribute.Name : "";
+                }
+                model.SpecificationAttributeId = productSpecificationId;
+                model.Locales = _localizedModelFactory.PrepareLocalizedModels(localizedModelConfiguration);
+
+                return model;
+            }
+            else
+            {
+                var attribute = _specificationAttributeService.GetProductSpecificationAttributeById(id.Value);
+
+                if (attribute == null)
+                {
+                    throw new ArgumentException("No specification attribute found with the specified id");
+                }
+
+                //a vendor should have access only to his products
+                if (_workContext.CurrentVendor != null && attribute.Product.VendorId != _workContext.CurrentVendor.Id)
+                    throw new UnauthorizedAccessException("This is not your product");
+
+                model.AttributeTypeId = attribute.AttributeTypeId;
+                model.ProductId = attribute.ProductId;
+                model.AllowFiltering = attribute.AllowFiltering;
+                model.ShowOnProductPage = attribute.ShowOnProductPage;
+                model.DisplayOrder = attribute.DisplayOrder;
+                model.SpecificationAttributeOptionId = attribute.SpecificationAttributeOptionId;
+
+                model.SpecificationId = attribute.Id;
+                model.AttributeId = attribute.SpecificationAttributeOption.SpecificationAttribute.Id;
+                model.AttributeTypeName = _localizationService.GetLocalizedEnum(attribute.AttributeType);
+                model.AttributeName = attribute.SpecificationAttributeOption.SpecificationAttribute.Name;
+                model.SpecificationAttributeName = attribute.SpecificationAttributeOption.SpecificationAttribute.Name;
+
+                model.AvailableAttributes = _cacheManager.Get(NopModelCacheDefaults.SpecAttributesModelKey, () =>
                 {
                     return _specificationAttributeService.GetSpecificationAttributesWithOptions()
                         .Select(attributeWithOption => new SelectListItem(attributeWithOption.Name, attributeWithOption.Id.ToString()))
                         .ToList();
                 });
-            }
-            else
-            {
-                var attribute = _specificationAttributeService.GetSpecificationAttributeById(productSpecificationId);
 
-                //options of preselected specification attribute
-                if (model.AddSpecificationAttributeModel.AvailableAttributes.Any() && int.TryParse(model.AddSpecificationAttributeModel.AvailableAttributes.FirstOrDefault()?.Value, out var selectedAttributeId))
+                model.AvailableOptions = _specificationAttributeService
+                    .GetSpecificationAttributeOptionsBySpecificationAttribute(model.AttributeId)
+                    .Select(option => new SelectListItem { Text = option.Name, Value = option.Id.ToString() })
+                    .ToList();
+
+                switch (attribute.AttributeType)
                 {
-                    model.AddSpecificationAttributeModel.AvailableOptions = _specificationAttributeService
-                        .GetSpecificationAttributeOptionsBySpecificationAttribute(selectedAttributeId)
-                        .Select(option => new SelectListItem { Text = option.Name, Value = option.Id.ToString() }).ToList();
+                    case SpecificationAttributeType.Option:
+                        model.ValueRaw = WebUtility.HtmlEncode(attribute.SpecificationAttributeOption.Name);
+                        model.SpecificationAttributeOptionId = attribute.SpecificationAttributeOptionId;
+                        break;
+                    case SpecificationAttributeType.CustomText:
+                        model.Value = WebUtility.HtmlDecode(attribute.CustomValue);
+                        break;
+                    case SpecificationAttributeType.CustomHtmlText:
+                        model.ValueRaw = attribute.CustomValue;
+                        break;
+                    case SpecificationAttributeType.Hyperlink:
+                        model.Value = attribute.CustomValue;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(attribute.AttributeType));
                 }
 
-                model.SpecificationAttributeName = attribute != null ? attribute.Name : "";
+                localizedModelConfiguration = (locale, languageId) =>
+                {
+                    switch (attribute.AttributeType)
+                    {
+                        case SpecificationAttributeType.CustomHtmlText:
+                            locale.ValueRaw = _localizationService.GetLocalized(attribute, entity => entity.CustomValue, languageId, false, false);
+                            break;
+                        case SpecificationAttributeType.CustomText:
+                            locale.Value = _localizationService.GetLocalized(attribute, entity => entity.CustomValue, languageId, false, false);
+                            break;
+                        case SpecificationAttributeType.Option:
+                            break;
+                        case SpecificationAttributeType.Hyperlink:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                };
+
+                model.SpecificationAttributeId = productSpecificationId;
+                model.Locales = _localizedModelFactory.PrepareLocalizedModels(localizedModelConfiguration);
+
+                return model;
             }
-            model.SpecificationAttributeId = productSpecificationId;
-            
-            return model;
         }
 
         /// <summary>
@@ -233,7 +313,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
             //prepare model
             var model = _segmentModelFactory.PrepareProductSegmentModel(new SegmentModel(), null);
 
-            return View(ProductManagementDefaults.AdminViewPath +  "ProductSegment/Create.cshtml", model);
+            return View(ProductManagementDefaults.AdminViewPath + "ProductSegment/Create.cshtml", model);
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
@@ -366,7 +446,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
                 return AccessDeniedDataTablesJson();
 
-            
+
             //prepare model
             var segmentOpctions = _productFilterOptionService.GetAllFilterOptionBySegmentId(searchModel.ProductSegmentId).ToPagedList(searchModel);
 
@@ -450,7 +530,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
                 return AccessDeniedDataTablesJson();
 
             var includeproducts = _productFilterOptionService.GetAllIncludeExcludeProductBySegmentId(searchModel.ProductSegmentId, searchModel.ProductType).ToPagedList(searchModel);
-           
+
             //prepare grid model
             var model = new IncludeExcludeProductListModel().PrepareToGrid(searchModel, includeproducts, () =>
             {
@@ -648,11 +728,11 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
                     {
                         Id = productAttribute.Id,
                         Name = productAttribute.Name,
-                        isAttributeAdded = _productFilterOptionService.GetProductAttributeMapWithSegment(productAttribute.Id, EntityTypeEnum.ProductAttributeMap,searchModel.ProductSegmentId).Count() > 0
+                        isAttributeAdded = _productFilterOptionService.GetProductAttributeMapWithSegment(productAttribute.Id, EntityTypeEnum.ProductAttributeMap, searchModel.ProductSegmentId).Count() > 0
                     };
                 });
             });
-            
+
             return Json(model);
         }
 
@@ -1305,17 +1385,17 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
         public virtual IActionResult AddSpecificationAttributeToProduct(int productSegmentId, int productSpecificationId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
-                return Content("Access denied");
+                return AccessDeniedView();
 
             var model = new Models.ProductSpecificationAttributeModel();
 
             //prepare specification attribute model to add to the product
-            PrepareAddSpecificationAttributeToProductModel(model, productSpecificationId);
+            //PrepareAddSpecificationAttributeToProductModel(model, productSpecificationId);
 
             PrepareProductSpecificationAttributeSearchModel(model.ProductSpecificationAttributeSearchModel);
 
-            model.ProductSpecificationId = productSpecificationId;
             model.ProductSegmentId = productSegmentId;
+            model.SpecificationAttributeId = productSpecificationId;
 
             return View(ProductManagementDefaults.AdminViewPath + "SpecificationAttribute/CreateOrUpdateSpecificationAttributes.cshtml", model);
         }
@@ -1332,31 +1412,46 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
 
             //Prepare specification list
             var model = _segmentModelFactory.PrepareProductSpecificationAttributeListModel(searchModel, products);
-
             return Json(model);
         }
 
-        public virtual IActionResult ProductSpecificationAttributeAdd(int productSegmentId, int productSpecificationId, int attributeTypeId, int specificationAttributeOptionId,
-           string value, string valueRaw, bool allowFiltering, bool showOnProductPage, int displayOrder)
+        public virtual IActionResult ProductSpecAttributeAddOrEdit(int specificationAttributeId, int productSegmentId, int pDD_ProductAttributeMapId, int? id)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
+                return AccessDeniedView();
+
+
+            var model = new ProductSegmentAddSpecificationAttributeModel();
+
+            //prepare specification attribute model to add to the product
+            PrepareAddSpecificationAttributeToProductModel(model, specificationAttributeId,id);
+
+            model.ProductSegmentId = productSegmentId;
+
+            return View(ProductManagementDefaults.AdminViewPath + "SpecificationAttribute/ProductSpecAttributeAddOrEdit.cshtml", model);
+        }
+
+        [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
+        public virtual IActionResult ProductSpecificationAttributeAdd(ProductSegmentAddSpecificationAttributeModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
                 return Content("Access denied");
 
             var vendorId = _workContext.CurrentVendor != null ? _workContext.CurrentVendor.Id : 0;
             int totalRecord = 0;
-            var products = _productFilterOptionService.GetProductsBySegmentId(productSegmentId, out totalRecord, vendorId: vendorId);
+            var products = _productFilterOptionService.GetProductsBySegmentId(model.ProductSegmentId, out totalRecord, vendorId: vendorId);
 
             //we allow filtering only for "Option" attribute type
-            if (attributeTypeId != (int)SpecificationAttributeType.Option)
-                allowFiltering = false;
+            if (model.AttributeTypeId != (int)SpecificationAttributeType.Option)
+                model.AllowFiltering = false;
 
             //we don't allow CustomValue for "Option" attribute type
-            if (attributeTypeId == (int)SpecificationAttributeType.Option)
-                valueRaw = null;
+            if (model.AttributeTypeId == (int)SpecificationAttributeType.Option)
+                model.ValueRaw = null;
 
             //store raw html if field allow this
-            if (attributeTypeId == (int)SpecificationAttributeType.CustomText || attributeTypeId == (int)SpecificationAttributeType.Hyperlink)
-                valueRaw = value;
+            if (model.AttributeTypeId == (int)SpecificationAttributeType.CustomText || model.AttributeTypeId == (int)SpecificationAttributeType.Hyperlink)
+                model.ValueRaw = model.Value;
 
 
             string specificationValuesId = "";
@@ -1364,13 +1459,13 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
             {
                 var psa = new ProductSpecificationAttribute
                 {
-                    AttributeTypeId = attributeTypeId,
-                    SpecificationAttributeOptionId = specificationAttributeOptionId,
+                    AttributeTypeId = model.AttributeTypeId,
+                    SpecificationAttributeOptionId = model.SpecificationAttributeOptionId,
                     ProductId = products[i].Id,
-                    CustomValue = valueRaw,
-                    AllowFiltering = allowFiltering,
-                    ShowOnProductPage = showOnProductPage,
-                    DisplayOrder = displayOrder
+                    CustomValue = model.ValueRaw,
+                    AllowFiltering = model.AllowFiltering,
+                    ShowOnProductPage = model.ShowOnProductPage,
+                    DisplayOrder = model.DisplayOrder
                 };
                 _specificationAttributeService.InsertProductSpecificationAttribute(psa);
 
@@ -1384,17 +1479,30 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
             var mapper = new PDD_ProductAttributeMap()
             {
                 EntityType = EntityTypeEnum.ProductSpecificationMapValue.ToString(),
-                EntityId = productSpecificationId,
-                SegmentId = productSegmentId,
+                EntityId = model.SpecificationAttributeId,
+                SegmentId = model.ProductSegmentId,
                 AttributeMapperId = specificationValuesId
             };
             _productFilterOptionService.InsertProductAttributeMapWithSegment(mapper);
 
-            return Json(new { Result = true });
+            if (continueEditing)
+                return RedirectToAction("ProductSpecAttributeAddOrEdit", new
+                {
+                    specificationAttributeId = model.SpecificationAttributeId,
+                    productSegmentId = model.ProductSegmentId,
+                    pDD_ProductAttributeMapId = model.PDD_ProductAttributeMapId
+                });
+
+            return RedirectToAction("AddSpecificationAttributeToProduct", new
+            {
+                productSpecificationId = model.SpecificationAttributeId,
+                productSegmentId = model.ProductSegmentId
+            });
+
         }
 
-        [HttpPost]
-        public virtual IActionResult ProductSpecAttrUpdate(Models.ProductSpecificationAttributeModel model)
+        [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
+        public virtual IActionResult ProductSpecAttrUpdate(ProductSegmentAddSpecificationAttributeModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
                 return Content("Access denied");
@@ -1470,7 +1578,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
             }
             else
             {
-                var psa = _specificationAttributeService.GetProductSpecificationAttributeById(model.Id);
+                var psa = _specificationAttributeService.GetProductSpecificationAttributeById(model.SpecificationId);
 
                 for (int i = 0; i < products.Count; i++)
                 {
@@ -1522,7 +1630,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
                 var mapper = new PDD_ProductAttributeMap()
                 {
                     EntityType = EntityTypeEnum.ProductSpecificationMapValue.ToString(),
-                    EntityId = model.ProductSpecificationId,
+                    EntityId = model.SpecificationAttributeId,
                     SegmentId = model.ProductSegmentId,
                     AttributeMapperId = specificationValuesId
                 };
@@ -1530,11 +1638,23 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
 
             }
 
-            return new NullJsonResult();
+            if (continueEditing)
+                return RedirectToAction("ProductSpecAttributeAddOrEdit", new
+                {
+                    specificationAttributeId = model.SpecificationAttributeId,
+                    productSegmentId = model.ProductSegmentId,
+                    pDD_ProductAttributeMapId = model.PDD_ProductAttributeMapId
+                });
+
+            return RedirectToAction("AddSpecificationAttributeToProduct", new
+            {
+                productSpecificationId = model.SpecificationAttributeId,
+                productSegmentId = model.ProductSegmentId
+            });
         }
 
         [HttpPost]
-        public virtual IActionResult ProductSpecAttrDelete(Models.ProductSpecificationAttributeModel model)
+        public virtual IActionResult ProductSpecAttrDelete(ProductSegmentAddSpecificationAttributeModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
                 return Content("Access denied");
@@ -1558,7 +1678,14 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
                 if (psa != null)
                     _specificationAttributeService.DeleteProductSpecificationAttribute(psa);
             }
-            return new NullJsonResult();
+
+            //select an appropriate panel
+            SaveSelectedPanelName("segment-SegmentProductSpecAttribute");
+            return RedirectToAction("AddSpecificationAttributeToProduct", new
+            {
+                productSpecificationId = model.SpecificationAttributeId,
+                productSegmentId = model.ProductSegmentId
+            });
         }
 
         #endregion
