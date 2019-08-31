@@ -1,11 +1,11 @@
 ﻿{
   "Group": "PD Developer",
   "FriendlyName": "Product Management",
-  "SystemName": "PDDeveloper.Product.Management",
+  "SystemName": "PDDeveloper.Plugin.ProductManagement",
   "Version": "1.0",
   "SupportedVersions": [ "4.20" ],
   "Author": "PD Developer",
   "DisplayOrder": 1,
   "FileName": "PDDeveloper.Plugin.ProductManagement.dll",
-  "Description": "This plugin allow you to manage product group of product"
+  "Description": "This plugin allow you to create a group of product base on SKU and on that group you can add update and delete product attribute and product specification attribute"
 }

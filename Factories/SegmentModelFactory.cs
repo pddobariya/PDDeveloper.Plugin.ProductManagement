@@ -170,7 +170,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Factories
         /// <param name="searchModel">Product attribute value search model</param>
         /// <param name="productAttributeMapping">Product attribute mapping</param>
         /// <returns>Product attribute value search model</returns>
-        protected virtual ProductAttributeValueSearchModel PrepareProductAttributeValueSearchModel(ProductAttributeValueSearchModel searchModel,
+        protected virtual Models.ProductAttributeValueSearchModel PrepareProductAttributeValueSearchModel(Models.ProductAttributeValueSearchModel searchModel,
             ProductAttributeMapping productAttributeMapping)
         {
             if (searchModel == null)
@@ -325,7 +325,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Factories
                 };
 
                 //prepare nested search model
-                PrepareProductAttributeValueSearchModel(model.ProductAttributeValueSearchModel, productAttributeMapping);
+                PrepareProductAttributeValueSearchModel(model.PDD_ProductAttributeValueSearchModel, productAttributeMapping);
             }
             
             //prepare localized models

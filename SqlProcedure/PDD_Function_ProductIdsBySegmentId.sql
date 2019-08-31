@@ -52,7 +52,7 @@ BEGIN
 		WHERE (ISNULL(@BeginsWith,'') = '' OR p.Sku like @BeginsWith + '%')
 		AND (ISNULL(@EndsWith,'') = '' OR  p.Sku like '%' + @EndsWith)
 		AND (ISNULL(@DoesNotEndWith,'') = '' OR  p.Sku not like '%' + @DoesNotEndWith)
-		AND (ISNULL(@Contains,'') = '' OR  p.Sku not like '%' + @Contains + '%')
+		AND (ISNULL(@Contains,'') = '' OR  p.Sku like '%' + @Contains + '%')
 		AND p.Published = 1 AND p.Deleted  = 0
 		AND(@VendorId = 0 OR p.VendorId = @VendorId)
 

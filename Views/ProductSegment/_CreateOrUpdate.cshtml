@@ -1,26 +1,26 @@
-﻿@model SegmentModel
+﻿    @model SegmentModel
 
 @{
     const string hideInfoName = "ProductSegmentPage.HideInfoBlock";
-    var hideInfoBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideInfoName, defaultValue: true);
+    var hideInfoBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideInfoName);
 
     const string hideSegmentOptionPageName = "ProductSegmentPage.HideSegmentOptionBlock";
-    var hideSegmentOptionBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideSegmentOptionPageName);
+    var hideSegmentOptionBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideSegmentOptionPageName, defaultValue: true);
 
     const string hideIncludeProductName = "ProductSegmentPage.HideIncludeProductBlock";
-    var hideIncludeProductBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideIncludeProductName);
+    var hideIncludeProductBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideIncludeProductName, defaultValue: true);
 
     const string hideExcludeProductName = "ProductSegmentPage.HideExcludeBlock";
-    var hideExcludeProductBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideExcludeProductName);
+    var hideExcludeProductBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideExcludeProductName, defaultValue: true);
 
     const string hideSegmentProductName = "ProductSegmentPage.HideSegmentProductBlock";
-    var hideSegmentProductBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideSegmentProductName);
+    var hideSegmentProductBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideSegmentProductName, defaultValue: true);
 
     const string hideSegmentProductAttributeName = "ProductSegmentPage.HideSegmentProductAttributeNBlock";
-    var hideSegmentProductAttributeBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideSegmentProductAttributeName);
+    var hideSegmentProductAttributeBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideSegmentProductAttributeName, defaultValue: true);
 
     const string hideSegmentProductSpecAttributeName = "ProductSegmentPage.HideSegmentProductSpecAttributeNBlock";
-    var hideSegmentProductSpecAttributeBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideSegmentProductSpecAttributeName);
+    var hideSegmentProductSpecAttributeBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideSegmentProductSpecAttributeName, defaultValue: true);
 }
 
 <div asp-validation-summary="All"></div>

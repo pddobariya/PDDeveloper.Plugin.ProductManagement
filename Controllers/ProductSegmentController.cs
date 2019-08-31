@@ -1021,7 +1021,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
 
 
         [HttpPost]
-        public virtual IActionResult ProductAttributeValueList(ProductAttributeValueSearchModel productAttributeValueSearchModel)
+        public virtual IActionResult ProductAttributeValueList(Models.ProductAttributeValueSearchModel productAttributeValueSearchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
                 return AccessDeniedView();
@@ -1033,12 +1033,12 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
 
             if (attributeMapIds != null && attributeMapIds.Count > 0)
             {
-                ProductAttributeValueSearchModel searchModel = null;
+                Models.ProductAttributeValueSearchModel searchModel = null;
                 ProductAttributeMapping productAttributeMapping = null;
 
                 for (int i = 0; i < attributeMapIds.Count; i++)
                 {
-                    searchModel = new ProductAttributeValueSearchModel()
+                    searchModel = new Models.ProductAttributeValueSearchModel()
                     {
                         ProductAttributeMappingId = attributeMapIds[i]
                     };
@@ -1167,12 +1167,11 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
                 return AccessDeniedView();
 
             //try to get a product attribute mapping with the specified id
-            var productAttributeSegmentMapping = _productFilterOptionService.GetProductAttributeMapWithSegmentByAttributeMapperId(id, productAttributeId, EntityTypeEnum.ProductAttributeMapValue, productSegmentId)
-                ?? throw new ArgumentException("No product attribute mapping found with the specified id");
+            var productAttributeSegmentMapping = _productFilterOptionService.GetProductAttributeMapWithSegmentByAttributeMapperId(id, productAttributeId, EntityTypeEnum.ProductAttributeMapValue, productSegmentId);
 
 
             //try to get a product attribute value with the specified id
-            var productAttributeValue = _productAttributeService.GetProductAttributeValueById(productAttributeSegmentMapping.AttributeMapperIdList.FirstOrDefault());
+            var productAttributeValue = _productAttributeService.GetProductAttributeValueById(id);
             if (productAttributeValue == null)
                 return RedirectToAction("Edit", "ProductSegment", new { id = productSegmentId });
 
@@ -1183,9 +1182,9 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
             //prepare model
             var model = _segmentModelFactory.PrepareProductAttributeValueModel(null, productAttributeMapping, productAttributeValue);
             model.ProductSegmentId = productSegmentId;
-            model.AttributeMappedIds = productAttributeSegmentMapping.AttributeMapperId;
+            model.AttributeMappedIds = productAttributeSegmentMapping != null ? productAttributeSegmentMapping.AttributeMapperId : id.ToString();
             model.ProductAttributeId = productAttributeId;
-            model.PDD_ProductAttributeMapId = productAttributeSegmentMapping.Id;
+            model.PDD_ProductAttributeMapId = productAttributeSegmentMapping != null? productAttributeSegmentMapping.Id : 0;
 
             return View(ProductManagementDefaults.AdminViewPath + "ProductAttribute/ProductAttributeValueEditPopup.cshtml", model);
         }
@@ -1196,7 +1195,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
                 return AccessDeniedView();
 
-            var attributeValueMapIds = model.AttributeMappedIds.Split(',').Select(int.Parse).ToList();
+            var attributeValueMapIds = model.AttributeMappedIds != null? model.AttributeMappedIds.Split(',').Select(int.Parse).ToList(): new List<int>();
 
             var productAttributeSegmentMapping = _productFilterOptionService.GetProductAttributeMapWithSegment(model.ProductAttributeId, EntityTypeEnum.ProductAttributeMap, model.ProductSegmentId).FirstOrDefault();
 
@@ -1305,19 +1304,33 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
             if (!string.IsNullOrEmpty(attributeValuesId))
                 attributeValuesId = attributeValuesId.Substring(0, attributeValuesId.Length - 1);
 
-            var mapper = _productFilterOptionService.GetProductAttributeMapWithSegmentById(model.PDD_ProductAttributeMapId);
-            //Update attribute mapping with segment
-            mapper.AttributeMapperId = attributeValuesId;
+            if (model.PDD_ProductAttributeMapId > 0)
+            {
+                var mapper = _productFilterOptionService.GetProductAttributeMapWithSegmentById(model.PDD_ProductAttributeMapId);
+                //Update attribute mapping with segment
+                mapper.AttributeMapperId = attributeValuesId;
 
-            _productFilterOptionService.UpdateProductAttributeMapWithSegment(mapper);
-
+                _productFilterOptionService.UpdateProductAttributeMapWithSegment(mapper);
+            }
+            else
+            {
+                //Insert attribute mapping with segment
+                var mapper = new PDD_ProductAttributeMap()
+                {
+                    EntityType = EntityTypeEnum.ProductAttributeMapValue.ToString(),
+                    EntityId = model.ProductAttributeId,
+                    SegmentId = model.ProductSegmentId,
+                    AttributeMapperId = attributeValuesId
+                };
+                _productFilterOptionService.InsertProductAttributeMapWithSegment(mapper);
+            }
             _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Catalog.Products.ProductAttributes.Attributes.Added"));
             ViewBag.RefreshPage = true;
             return View(ProductManagementDefaults.AdminViewPath + "ProductAttribute/ProductAttributeValueCreatePopup.cshtml", model);
         }
 
         [HttpPost]
-        public virtual IActionResult ProductAttributeValueDelete(int id, ProductAttributeValueSearchModel productAttributeValueSearchModel)
+        public virtual IActionResult ProductAttributeValueDelete(int id, Models.ProductAttributeValueSearchModel productAttributeValueSearchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
                 return AccessDeniedView();

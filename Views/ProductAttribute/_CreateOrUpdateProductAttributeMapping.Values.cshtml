@@ -1,4 +1,4 @@
-@model ProductAttributeMappingModel
+@model PDDeveloper.Plugin.ProductManagement.Models.ProductAttributeMappingModel
 
 
 @if (Model.Id > 0)
@@ -7,10 +7,10 @@
         @await Html.PartialAsync("Table", new DataTablesModel
    {
        Name = "productattributevalues-grid",
-       UrlRead = new DataUrl("ProductAttributeValueList", "ProductSegment", new RouteValueDictionary { [nameof(Model.ProductAttributeValueSearchModel.AttributeMappedIds)] = Model.AttributeMappedIds}),
-       UrlDelete = new DataUrl("ProductAttributeValueDelete", "ProductSegment", new RouteValueDictionary { [nameof(Model.ProductAttributeValueSearchModel.ProductSegmentId)] = Model.ProductSegmentId,[nameof(Model.ProductAttributeValueSearchModel.ProductAttributeId)] = Model.ProductAttributeId}),
-       Length = Model.ProductAttributeValueSearchModel.PageSize,
-       LengthMenu = Model.ProductAttributeValueSearchModel.AvailablePageSizes,
+       UrlRead = new DataUrl("ProductAttributeValueList", "ProductSegment", new RouteValueDictionary { [nameof(Model.AttributeMappedIds)] = Model.AttributeMappedIds}),
+       UrlDelete = new DataUrl("ProductAttributeValueDelete", "ProductSegment", new RouteValueDictionary { [nameof(Model.ProductSegmentId)] = Model.ProductSegmentId,[nameof(Model.ProductAttributeId)] = Model.ProductAttributeId}),
+       Length = Model.PDD_ProductAttributeValueSearchModel.PageSize,
+       LengthMenu = Model.PDD_ProductAttributeValueSearchModel.AvailablePageSizes,
        ColumnCollection = new List<ColumnProperty>
             {
                 new ColumnProperty(nameof(ProductAttributeValueModel.AttributeValueTypeName))

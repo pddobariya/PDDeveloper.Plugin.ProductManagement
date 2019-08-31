@@ -39,7 +39,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Factories
         /// <param name="excludeProperties">Whether to exclude populating of some properties of model</param>
         /// <returns>Product attribute mapping model</returns>
         Models.ProductAttributeMappingModel PrepareProductAttributeMappingModel(Models.ProductAttributeMappingModel model,
-            int productSegmentId, int productAttributeId,ProductAttributeMapping productAttributeMapping, bool excludeProperties = false);
+            int productSegmentId, int productAttributeId, ProductAttributeMapping productAttributeMapping, bool excludeProperties = false);
 
         /// <summary>
         /// Prepare product attribute value model
