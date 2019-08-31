@@ -10,7 +10,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Models
         #region Ctor
         public SegmentModel()
         {
-            AvailableStores = new List<SelectListItem>();
+            //AvailableStores = new List<SelectListItem>();
             ProductSegmentOptionSearchModel = new ProductSegmentOptionSearchModel();
             IncludeExcludeProductSearchModel = new IncludeExcludeProductSearchModel();
             ProductSegmentSearchModel = new ProductSegmentSearchModel();
@@ -28,10 +28,10 @@ namespace PDDeveloper.Plugin.ProductManagement.Models
         [NopResourceDisplayName("Plugins.PDD.ProductManagement.Segment.Fields.DisplayOrder")]
         public int DisplayOrder { get; set; }
         
-        public List<SelectListItem> AvailableStores { get; set; }
-        [NopResourceDisplayName("Plugins.PDD.ProductManagement.Segment.Fields.StoreId")]
-        public int StoreId { get; set; }
-        public string StoreName { get; set; }
+        //public List<SelectListItem> AvailableStores { get; set; }
+        //[NopResourceDisplayName("Plugins.PDD.ProductManagement.Segment.Fields.StoreId")]
+        //public int StoreId { get; set; }
+        //public string StoreName { get; set; }
         
         public ProductSegmentOptionSearchModel ProductSegmentOptionSearchModel { get; set; }
 

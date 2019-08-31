@@ -11,7 +11,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Models
 
         public ProductSegmentSearchModel()
         {
-            AvailableStores = new List<SelectListItem>();
+            //AvailableStores = new List<SelectListItem>();
         }
 
         #endregion
@@ -22,8 +22,8 @@ namespace PDDeveloper.Plugin.ProductManagement.Models
         public string SearchSegmentName { get; set; }
 
         [NopResourceDisplayName("Plugins.PDD.ProductManagement.SegmentSearch.Store")]
-        public int SearchStoreId { get; set; }
-        public IList<SelectListItem> AvailableStores { get; set; }
+        //public int SearchStoreId { get; set; }
+        //public IList<SelectListItem> AvailableStores { get; set; }
 
         public int ProductSegmentId { get; set; }
 

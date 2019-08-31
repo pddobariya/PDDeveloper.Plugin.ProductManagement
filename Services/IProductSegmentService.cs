@@ -13,7 +13,7 @@ namespace PDDeveloper.Plugin.ProductManagement.Services
         /// <param name="pageSize">Page size</param>
         /// <param name="name">segment name</param>
         /// <returns>Product segmetns</returns>
-        IPagedList<PDD_ProductSegment> GetAllProductSegment(string name, int storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue);
+        IPagedList<PDD_ProductSegment> GetAllProductSegment(string name, int pageIndex = 0, int pageSize = int.MaxValue);
 
         /// <summary>
         /// Inserts product segment

@@ -129,7 +129,7 @@ namespace PDDeveloper.Plugin.ProductManagement
                 var pddRootNode = new SiteMapNode()
                 {
                     SystemName = "PDDeveloper",
-                    Title = _localizationService.GetResource("Plugins.PDD.ProductManagement.Menu.Root"),
+                    Title = _localizationService.GetResource("Plugins.PDD.RootMenu"),
                     Visible = true,
                     IconClass = "fa fa-cube",
                     RouteValues = new RouteValueDictionary() { { "area", "Admin" } }

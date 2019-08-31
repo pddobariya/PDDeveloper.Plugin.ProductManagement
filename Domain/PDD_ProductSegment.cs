@@ -24,11 +24,6 @@ namespace PDDeveloper.Plugin.ProductManagement.Domain
         public int DisplayOrder { get; set; }
 
         /// <summary>
-        /// Gets or sets a store identifier
-        /// </summary>
-        public int StoreId { get; set; }
-        
-        /// <summary>
         /// Get or set created on
         /// </summary>
         public DateTime CreatedOnUtc { get; set; }

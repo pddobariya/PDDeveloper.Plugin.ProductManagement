@@ -34,12 +34,10 @@ namespace PDDeveloper.Plugin.ProductManagement.Services
         /// <param name="pageSize">Page size</param>
         /// <param name="name">Segment name</param>
         /// <returns>Pickup points</returns>
-        public virtual IPagedList<PDD_ProductSegment> GetAllProductSegment(string name, int storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
+        public virtual IPagedList<PDD_ProductSegment> GetAllProductSegment(string name, int pageIndex = 0, int pageSize = int.MaxValue)
         {
             var query = _productSegmentRepository.Table;
-            if (storeId > 0)
-                query = query.Where(segment => segment.StoreId == storeId || segment.StoreId == 0);
-
+            
             if (name != null && name.Length > 0)
                 query = query.Where(segment => segment.Name.Contains(name));
 

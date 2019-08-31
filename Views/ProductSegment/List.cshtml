@@ -50,14 +50,6 @@
                                         <nop-editor asp-for="@Model.SearchSegmentName" />
                                     </div>
                                 </div>
-                                <div class="form-group" @(Model.HideStoresList ? Html.Raw("style=\"display:none\"") : null)>
-                                    <div class="col-md-4">
-                                        <nop-label asp-for="@Model.SearchStoreId" />
-                                    </div>
-                                    <div class="col-md-8">
-                                        <nop-select asp-for="@Model.SearchStoreId" asp-items="@Model.AvailableStores" />
-                                    </div>
-                                </div>
                                 <div class="form-group">
                                     <div class="col-md-8 col-md-offset-4">
                                         <button type="button" id="search-categories" class="btn btn-primary btn-search"><i class="fa fa-search"></i>@T("Admin.Common.Search")</button>
@@ -80,20 +72,13 @@
                         LengthMenu = Model.AvailablePageSizes,
                         Filters = new List<FilterParameter>
                         {
-                            new FilterParameter(nameof(Model.SearchSegmentName)),
-                            new FilterParameter(nameof(Model.SearchStoreId))
+                            new FilterParameter(nameof(Model.SearchSegmentName))
                         },
                         ColumnCollection = new List<ColumnProperty>
                         {
                             new ColumnProperty(nameof(SegmentModel.Name))
                             {
                                 Title = T("Plugins.PDD.ProductManagement.Segment.Fields.Name").Text
-                            },
-                            new ColumnProperty(nameof(SegmentModel.StoreName))
-                            {
-                                Title = T("Plugins.PDD.ProductManagement.Segment.Fields.StoreId").Text,
-                                Width = "150",
-                                ClassName =  NopColumnClassDefaults.CenterAll
                             },
                             new ColumnProperty(nameof(SegmentModel.DisplayOrder))
                             {

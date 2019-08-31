@@ -329,7 +329,6 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
                     Name = model.Name,
                     Description = model.Description,
                     DisplayOrder = model.DisplayOrder,
-                    StoreId = model.StoreId,
                     CreatedOnUtc = DateTime.UtcNow
                 };
 
@@ -389,7 +388,6 @@ namespace PDDeveloper.Plugin.ProductManagement.Controllers
                 productSegment.Name = model.Name;
                 productSegment.Description = model.Description;
                 productSegment.DisplayOrder = model.DisplayOrder;
-                productSegment.StoreId = model.StoreId;
                 productSegment.UpdatedOnUtc = DateTime.UtcNow;
 
                 _productSegmentService.UpdateProductSegment(productSegment);

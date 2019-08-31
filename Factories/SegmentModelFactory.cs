@@ -199,9 +199,6 @@ namespace PDDeveloper.Plugin.ProductManagement.Factories
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
 
-            //prepare available stores
-            _baseAdminModelFactory.PrepareStores(searchModel.AvailableStores);
-
             //prepare page parameters
             searchModel.SetGridPageSize();
 
@@ -220,7 +217,6 @@ namespace PDDeveloper.Plugin.ProductManagement.Factories
 
             //get product segment
             var segments = _productSegmentService.GetAllProductSegment(name : searchModel.SearchSegmentName,
-                storeId: searchModel.SearchStoreId,
                 pageIndex: searchModel.Page - 1, 
                 pageSize: searchModel.PageSize);
 
@@ -229,15 +225,12 @@ namespace PDDeveloper.Plugin.ProductManagement.Factories
                 //fill in model values from the entity
                 return segments.Select(segment =>
                 {
-                    var store = _storeService.GetStoreById(segment.StoreId);
                     return new SegmentModel
                     {
                         Id = segment.Id,
                         Name = segment.Name,
                         Description = segment.Description,
-                        DisplayOrder = segment.DisplayOrder,
-                        StoreId = segment.StoreId,
-                        StoreName = store?.Name ?? (segment.StoreId == 0 ? _localizationService.GetResource("Admin.Configuration.Settings.StoreScope.AllStores") : string.Empty)
+                        DisplayOrder = segment.DisplayOrder
                     };
                 });
             });
@@ -255,24 +248,15 @@ namespace PDDeveloper.Plugin.ProductManagement.Factories
         {
             if (productSegment != null)
             {
-                //fill in model values from the entity
-                var store = _storeService.GetStoreById(productSegment.StoreId);
                 model =  new SegmentModel
                 {
                     Id = productSegment.Id,
                     Name = productSegment.Name,
                     Description = productSegment.Description,
-                    DisplayOrder = productSegment.DisplayOrder,
-                    StoreId = productSegment.StoreId,
-                    StoreName = store?.Name ?? (productSegment.StoreId == 0 ? _localizationService.GetResource("Admin.Configuration.Settings.StoreScope.AllStores") : string.Empty)
+                    DisplayOrder = productSegment.DisplayOrder
                 };
             }
             
-            //prepare storelist
-            model.AvailableStores.Add(new SelectListItem { Text = _localizationService.GetResource("Admin.Configuration.Settings.StoreScope.AllStores"), Value = "0" });
-            foreach (var store in _storeService.GetAllStores())
-                model.AvailableStores.Add(new SelectListItem { Text = store.Name, Value = store.Id.ToString() });
-
             return model;
         }
 
